@@ -50,9 +50,6 @@ func simpleAcceptor(start rune, end rune, after func(int), inState int) acceptFn
 }
 
 func processStep(parser *specParser, token *token) (error, bool) {
-	if !isInState(parser.currentState, specScope) {
-		return &syntaxError{lineNo: token.lineNo, lineText: token.lineText, message: "Spec heading is not present"}, true
-	}
 
 	if len(token.value) == 0 {
 		return &syntaxError{lineNo: token.lineNo, lineText: token.lineText, message: "Step should not be blank"}, true

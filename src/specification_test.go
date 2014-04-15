@@ -4,6 +4,36 @@ import (
 	. "launchpad.net/gocheck"
 )
 
+func (s *MySuite) TestThrowsErrorForMultipleSpecHeading(c *C) {
+	tokens := []*token{
+		&token{kind: specKind, value: "Spec Heading", lineNo: 1},
+		&token{kind: scenarioKind, value: "Scenario Heading", lineNo: 2},
+		&token{kind: stepKind, value: "Example step", lineNo: 3},
+		&token{kind: specKind, value: "Another Heading", lineNo: 4},
+	}
+
+	_, result := new(specParser).createSpecification(tokens)
+
+	c.Assert(result.ok, Equals, false)
+
+	c.Assert(result.error.message, Equals, "Parse error: syntax error, Multiple spec headings found in same file")
+	c.Assert(result.error.lineNo, Equals, 4)
+}
+
+func (s *MySuite) TestThrowsErrorForScenarioWithoutSpecHeading(c *C) {
+	tokens := []*token{
+		&token{kind: scenarioKind, value: "Scenario Heading", lineNo: 1},
+		&token{kind: stepKind, value: "Example step", lineNo: 2},
+	}
+
+	_, result := new(specParser).createSpecification(tokens)
+
+	c.Assert(result.ok, Equals, false)
+
+	c.Assert(result.error.message, Equals, "Parse error: syntax error, Scenario should be defined after the spec heading")
+	c.Assert(result.error.lineNo, Equals, 1)
+}
+
 func (s *MySuite) TestSpecWithHeadingAndSimpleSteps(c *C) {
 	tokens := []*token{
 		&token{kind: specKind, value: "Spec Heading", lineNo: 1},
@@ -93,13 +123,14 @@ func (s *MySuite) TestStepsWithKeywords(c *C) {
 
 	c.Assert(result, NotNil)
 	c.Assert(result.ok, Equals, false)
-	c.Assert(result.error.message, Equals, "Step text should not have '{static}' or '{dynamic}' or '{special}' on line: 3")
+	c.Assert(result.error.message, Equals, "Step text should not have '{static}' or '{dynamic}' or '{special}'")
+	c.Assert(result.error.lineNo, Equals, 3)
 }
 
 func (s *MySuite) TestContextWithKeywords(c *C) {
 	tokens := []*token{
 		&token{kind: specKind, value: "Spec Heading", lineNo: 1},
-		&token{kind: context, value: "sample {static} and {dynamic}", lineNo: 3, args: []string{"name"}},
+		&token{kind: stepKind, value: "sample {static} and {dynamic}", lineNo: 3, args: []string{"name"}},
 		&token{kind: scenarioKind, value: "Scenario Heading", lineNo: 2},
 	}
 
@@ -107,7 +138,8 @@ func (s *MySuite) TestContextWithKeywords(c *C) {
 
 	c.Assert(result, NotNil)
 	c.Assert(result.ok, Equals, false)
-	c.Assert(result.error.message, Equals, "Step text should not have '{static}' or '{dynamic}' or '{special}' on line: 3")
+	c.Assert(result.error.message, Equals, "Step text should not have '{static}' or '{dynamic}' or '{special}'")
+	c.Assert(result.error.lineNo, Equals, 3)
 }
 
 func (s *MySuite) TestSpecWithDataTable(c *C) {
@@ -158,7 +190,7 @@ func (s *MySuite) TestStepWithInlineTable(c *C) {
 func (s *MySuite) TestContextWithInlineTable(c *C) {
 	tokens := []*token{
 		&token{kind: specKind, value: "Spec Heading"},
-		&token{kind: context, value: "Context with inline table"},
+		&token{kind: stepKind, value: "Context with inline table"},
 		&token{kind: tableHeader, args: []string{"id", "name"}},
 		&token{kind: tableRow, args: []string{"1", "foo"}},
 		&token{kind: tableRow, args: []string{"2", "bar"}},
@@ -226,7 +258,7 @@ func (s *MySuite) TestWarningWhenParsingTableOccursWithoutStep(c *C) {
 func (s *MySuite) TestAddSpecTags(c *C) {
 	tokens := []*token{
 		&token{kind: specKind, value: "Spec Heading", lineNo: 1},
-		&token{kind: specTag, args: []string{"tag1", "tag2"}, lineNo: 2},
+		&token{kind: tagKind, args: []string{"tag1", "tag2"}, lineNo: 2},
 		&token{kind: scenarioKind, value: "Scenario Heading", lineNo: 3},
 	}
 
@@ -242,9 +274,9 @@ func (s *MySuite) TestAddSpecTags(c *C) {
 func (s *MySuite) TestAddSpecTagsAndScenarioTags(c *C) {
 	tokens := []*token{
 		&token{kind: specKind, value: "Spec Heading", lineNo: 1},
-		&token{kind: specTag, args: []string{"tag1", "tag2"}, lineNo: 2},
+		&token{kind: tagKind, args: []string{"tag1", "tag2"}, lineNo: 2},
 		&token{kind: scenarioKind, value: "Scenario Heading", lineNo: 3},
-		&token{kind: scenarioTag, args: []string{"tag3", "tag4"}, lineNo: 2},
+		&token{kind: tagKind, args: []string{"tag3", "tag4"}, lineNo: 2},
 	}
 
 	spec, result := new(specParser).createSpecification(tokens)
@@ -270,7 +302,8 @@ func (s *MySuite) TestErrorOnAddingDynamicParamterWithoutADataTable(c *C) {
 	_, result := new(specParser).createSpecification(tokens)
 
 	c.Assert(result.ok, Equals, false)
-	c.Assert(result.error.message, Equals, "No data table found for dynamic paramter <foo> : *Step with a <foo> lineNo: 3")
+	c.Assert(result.error.message, Equals, "No data table found for dynamic paramter <foo> : *Step with a <foo>")
+	c.Assert(result.error.lineNo, Equals, 3)
 
 }
 
@@ -286,6 +319,7 @@ func (s *MySuite) TestErrorOnAddingDynamicParamterWithoutDataTableHeaderValue(c 
 	_, result := new(specParser).createSpecification(tokens)
 
 	c.Assert(result.ok, Equals, false)
-	c.Assert(result.error.message, Equals, "No data table column found for dynamic paramter <foo> : *Step with a <foo> lineNo: 5")
+	c.Assert(result.error.message, Equals, "No data table column found for dynamic paramter <foo> : *Step with a <foo>")
+	c.Assert(result.error.lineNo, Equals, 5)
 
 }

@@ -44,7 +44,6 @@ const (
 	specScope      = 1 << iota
 	scenarioScope  = 1 << iota
 	commentScope   = 1 << iota
-	tagScope       = 1 << iota
 	tableScope     = 1 << iota
 	tableDataScope = 1 << iota
 	stepScope      = 1 << iota
@@ -53,12 +52,10 @@ const (
 
 const (
 	specKind tokenKind = iota
-	specTag
+	tagKind
 	scenarioKind
-	scenarioTag
 	commentKind
 	stepKind
-	context
 	tableHeader
 	tableRow
 )
@@ -69,9 +66,7 @@ func (parser *specParser) initialize() {
 	parser.processors[scenarioKind] = processScenario
 	parser.processors[commentKind] = processComment
 	parser.processors[stepKind] = processStep
-	parser.processors[context] = processStep
-	parser.processors[specTag] = processTag
-	parser.processors[scenarioTag] = processTag
+	parser.processors[tagKind] = processTag
 	parser.processors[tableHeader] = processTable
 	parser.processors[tableRow] = processTable
 }
@@ -101,17 +96,15 @@ func (parser *specParser) generateTokens(specText string) ([]*token, error) {
 		} else if parser.isSpecUnderline(trimmedLine) && (isInState(parser.currentState, commentScope)) {
 			newToken = parser.tokens[len(parser.tokens)-1]
 			newToken.kind = specKind
-			parser.tokens = append(parser.tokens[:len(parser.tokens)-1])
+			parser.tokens = append(parser.tokens[:len(parser.tokens) - 1])
 		} else if parser.isScenarioUnderline(trimmedLine) && (isInState(parser.currentState, commentScope)) {
 			newToken = parser.tokens[len(parser.tokens)-1]
 			newToken.kind = scenarioKind
-			parser.tokens = append(parser.tokens[:len(parser.tokens)-1])
+			parser.tokens = append(parser.tokens[:len(parser.tokens) - 1])
 		} else if parser.isStep(trimmedLine) {
-			kind := parser.tokenKindBasedOnCurrentState(scenarioScope, stepKind, context)
-			newToken = &token{kind: kind, lineNo: parser.lineNo, lineText: line, value: strings.TrimSpace(trimmedLine[1:])}
+			newToken = &token{kind: stepKind, lineNo: parser.lineNo, lineText: line, value: strings.TrimSpace(trimmedLine[1:])}
 		} else if found, startIndex := parser.checkTag(trimmedLine); found {
-			kind := parser.tokenKindBasedOnCurrentState(scenarioScope, scenarioTag, specTag)
-			newToken = &token{kind: kind, lineNo: parser.lineNo, lineText: line, value: strings.TrimSpace(trimmedLine[startIndex:])}
+			newToken = &token{kind: tagKind, lineNo: parser.lineNo, lineText: line, value: strings.TrimSpace(trimmedLine[startIndex:])}
 		} else if parser.isTableRow(trimmedLine) {
 			kind := parser.tokenKindBasedOnCurrentState(tableScope, tableRow, tableHeader)
 			newToken = &token{kind: kind, lineNo: parser.lineNo, lineText: line, value: strings.TrimSpace(trimmedLine)}
@@ -199,37 +192,28 @@ func (parser *specParser) accept(token *token) error {
 }
 
 func processSpec(parser *specParser, token *token) (error, bool) {
-	if isInState(parser.currentState, specScope, scenarioScope) {
-		return &syntaxError{lineNo: parser.lineNo, lineText: token.value, message: "Multiple spec headings found in same file"}, true
-	}
 	if len(token.value) < 1 {
 		return &syntaxError{lineNo: parser.lineNo, lineText: token.value, message: "Spec heading should have at least one character"}, true
 	}
-	addStates(&parser.currentState, specScope)
 	return nil, false
 }
 
 func processScenario(parser *specParser, token *token) (error, bool) {
-	if !isInState(parser.currentState, specScope) {
-		return &syntaxError{lineNo: parser.lineNo, lineText: token.value, message: "Scenario should be defined after the spec heading"}, true
-	}
 	if len(token.value) < 1 {
 		return &syntaxError{lineNo: parser.lineNo, lineText: token.value, message: "Scenario heading should have at least one character"}, true
 	}
-	retainStates(&parser.currentState, specScope)
-	addStates(&parser.currentState, scenarioScope)
+	parser.clearState()
 	return nil, false
 }
 
 func processComment(parser *specParser, token *token) (error, bool) {
-	retainStates(&parser.currentState, specScope, scenarioScope)
+	parser.clearState()
 	addStates(&parser.currentState, commentScope)
 	return nil, false
 }
 
 func processTag(parser *specParser, token *token) (error, bool) {
-	retainStates(&parser.currentState, specScope, scenarioScope)
-	addStates(&parser.currentState, tagScope)
+	parser.clearState()
 
 	for _, tagValue := range strings.Split(token.value, ",") {
 		trimmedTag := strings.TrimSpace(tagValue)
@@ -303,4 +287,8 @@ func (parser *specParser) nextLine() (string, bool) {
 	}
 
 	return "", false
+}
+
+func (parser *specParser) clearState() {
+	parser.currentState = 0
 }

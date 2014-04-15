@@ -143,7 +143,7 @@ func (s *MySuite) TestParsingContext(c *C) {
 
 	c.Assert(err, Equals, nil)
 	contextToken := tokens[1]
-	c.Assert(contextToken.kind, Equals, context)
+	c.Assert(contextToken.kind, Equals, stepKind)
 	c.Assert(contextToken.value, Equals, "Context with {static}")
 	c.Assert(contextToken.args[0], Equals, "param")
 }
@@ -152,10 +152,12 @@ func (s *MySuite) TestParsingThrowsErrorWhenStepIsPresentWithoutStep(c *C) {
 	parser := new(specParser)
 	specText := SpecBuilder().step("step without spec heading").String()
 
-	_, err := parser.generateTokens(specText)
+	tokens, err := parser.generateTokens(specText)
 
-	c.Assert(err, NotNil)
-	c.Assert(err.Error(), Equals, "Parse error: syntax error, Spec heading is not present on line: 1")
+	c.Assert(err, Equals, nil)
+	c.Assert(tokens[0].kind, Equals, stepKind)
+	c.Assert(tokens[0].value, Equals, "step without spec heading")
+
 }
 
 func (s *MySuite) TestParsingStepWithSimpleSpecialParameter(c *C) {
@@ -182,13 +184,13 @@ func (s *MySuite) TestParsingStepWithSpecialParametersWithWhiteSpaces(c *C) {
 	c.Assert(err, Equals, nil)
 	c.Assert(len(tokens), Equals, 3)
 
-	c.Assert(tokens[1].kind, Equals, context)
+	c.Assert(tokens[1].kind, Equals, stepKind)
 	c.Assert(tokens[1].value, Equals, "Step with {static} and special parameter {special}")
 	c.Assert(len(tokens[1].args), Equals, 2)
 	c.Assert(tokens[1].args[0], Equals, "first")
 	c.Assert(tokens[1].args[1], Equals, "table : user.csv")
 
-	c.Assert(tokens[2].kind, Equals, context)
+	c.Assert(tokens[2].kind, Equals, stepKind)
 	c.Assert(tokens[2].value, Equals, "Another with {dynamic} and {special}")
 	c.Assert(len(tokens[2].args), Equals, 2)
 	c.Assert(tokens[2].args[0], Equals, "name")

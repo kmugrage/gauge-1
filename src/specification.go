@@ -54,6 +54,7 @@ type line struct {
 
 type specerror struct {
 	message string
+	lineNo  int
 }
 
 func (specerror *specerror) Error() string {
@@ -111,6 +112,9 @@ func initalizeConverters() []func(*token, *int, *specification) parseResult {
 	specConverter := converterFn(func(token *token, state *int) bool {
 			return token.kind == specKind
 		}, func(token *token, spec *specification, state *int) parseResult {
+			if spec.heading.value != "" {
+				return parseResult{ok:false, error:&specerror{"Parse error: syntax error, Multiple spec headings found in same file", token.lineNo}}
+			}
 			spec.heading = line{token.value, token.lineNo}
 			addStates(state, specScope)
 			return parseResult{ok: true}
@@ -119,6 +123,9 @@ func initalizeConverters() []func(*token, *int, *specification) parseResult {
 	scenarioConverter := converterFn(func(token *token, state *int) bool {
 			return token.kind == scenarioKind
 		}, func(token *token, spec *specification, state *int) parseResult {
+			if spec.heading.value == "" {
+				return parseResult{ok:false, error:&specerror{"Parse error: syntax error, Scenario should be defined after the spec heading", token.lineNo}}
+			}
 			scenarioHeading := line{token.value, token.lineNo}
 			scenario := &scenario{heading: scenarioHeading}
 			spec.scenarios = append(spec.scenarios, scenario)
@@ -128,7 +135,7 @@ func initalizeConverters() []func(*token, *int, *specification) parseResult {
 		})
 
 	stepConverter := converterFn(func(token *token, state *int) bool {
-			return token.kind == stepKind
+			return token.kind == stepKind && isInState(*state, scenarioScope)
 		}, func(token *token, spec *specification, state *int) parseResult {
 			latestScenario := spec.scenarios[len(spec.scenarios) - 1]
 			err := spec.addStep(token, &latestScenario.steps)
@@ -141,7 +148,7 @@ func initalizeConverters() []func(*token, *int, *specification) parseResult {
 		})
 
 	contextConverter := converterFn(func(token *token, state *int) bool {
-			return token.kind == context
+			return token.kind == stepKind && !isInState(*state, scenarioScope) && isInState(*state, specScope)
 		}, func(token *token, spec *specification, state *int) parseResult {
 			err := spec.addStep(token, &spec.contexts)
 			if err != nil {
@@ -204,13 +211,13 @@ func initalizeConverters() []func(*token, *int, *specification) parseResult {
 		})
 
 	tagConverter := converterFn(func(token *token, state *int) bool {
-			return (token.kind == specTag) || (token.kind == scenarioTag)
+			return (token.kind == tagKind)
 		}, func(token *token, spec *specification, state *int) parseResult {
-			if token.kind == specTag {
-				spec.tags = token.args
-			} else if token.kind == scenarioTag {
+			if isInState(*state, scenarioScope) {
 				latestScenario := spec.scenarios[len(spec.scenarios) - 1]
 				latestScenario.tags = token.args
+			} else {
+				spec.tags = token.args
 			}
 			return parseResult{ok: true}
 		})
@@ -233,7 +240,7 @@ func (spec *specification) addStep(stepToken *token, addTo *[]*step) *specerror 
 		return nil
 	}
 	if len(args) != len(stepToken.args) {
-		return &specerror{fmt.Sprintf("Step text should not have '{static}' or '{dynamic}' or '{special}' on line: %d", stepToken.lineNo)}
+		return &specerror{"Step text should not have '{static}' or '{dynamic}' or '{special}'", stepToken.lineNo}
 	}
 	step.value = r.ReplaceAllString(step.value, "{}")
 	for i, arg := range args {
@@ -256,9 +263,9 @@ func (spec *specification) createStepArg(argValue string, typeOfArg string, toke
 		return &stepArg{argType: static, value: argValue}, nil
 	} else {
 		if !spec.dataTable.isInitialized() {
-			return nil, &specerror{fmt.Sprintf("No data table found for dynamic paramter <%s> : %s lineNo: %d", argValue, token.lineText, token.lineNo)}
+			return nil, &specerror{fmt.Sprintf("No data table found for dynamic paramter <%s> : %s", argValue, token.lineText), token.lineNo}
 		} else if !spec.dataTable.headerExists(argValue) {
-			return nil, &specerror{fmt.Sprintf("No data table column found for dynamic paramter <%s> : %s lineNo: %d", argValue, token.lineText, token.lineNo)}
+			return nil, &specerror{fmt.Sprintf("No data table column found for dynamic paramter <%s> : %s", argValue, token.lineText), token.lineNo}
 		}
 		stepArgument = &stepArg{argType: dynamic, value: argValue}
 		return stepArgument, nil

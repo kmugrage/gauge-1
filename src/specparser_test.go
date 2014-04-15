@@ -28,9 +28,14 @@ func (s *MySuite) TestParsingMultipleSpecHeading(c *C) {
 	parser := new(specParser)
 	specText := SpecBuilder().specHeading("Spec Heading").specHeading("Another Spec Heading").String()
 
-	_, err := parser.generateTokens(specText)
+	tokens, err := parser.generateTokens(specText)
 
-	c.Assert(err.Error(), Equals, "Parse error: syntax error, Multiple spec headings found in same file on line: 2")
+	c.Assert(err, Equals, nil)
+	c.Assert(len(tokens), Equals, 2)
+	c.Assert(tokens[0].kind, Equals, specKind)
+	c.Assert(tokens[0].value, Equals, "Spec Heading")
+	c.Assert(tokens[1].kind, Equals, specKind)
+	c.Assert(tokens[1].value, Equals, "Another Spec Heading")
 }
 
 func (s *MySuite) TestParsingThrowErrorForEmptySpecHeading(c *C) {
@@ -69,9 +74,11 @@ func (s *MySuite) TestParsingScenarioWithoutSpecHeading(c *C) {
 	parser := new(specParser)
 	specText := SpecBuilder().scenarioHeading("Scenario Heading").String()
 
-	_, err := parser.generateTokens(specText)
+	tokens, err := parser.generateTokens(specText)
 
-	c.Assert(err.Error(), Equals, "Parse error: syntax error, Scenario should be defined after the spec heading on line: 1")
+	c.Assert(err, Equals, nil)
+	c.Assert(len(tokens), Equals, 1)
+	c.Assert(tokens[0].kind, Equals, scenarioKind)
 }
 
 func (s *MySuite) TestParsingComments(c *C) {
@@ -200,7 +207,7 @@ func (s *MySuite) TestParseSpecTags(c *C) {
 	c.Assert(err, Equals, nil)
 	c.Assert(len(tokens), Equals, 3)
 
-	c.Assert(tokens[1].kind, Equals, specTag)
+	c.Assert(tokens[1].kind, Equals, tagKind)
 	c.Assert(len(tokens[1].args), Equals, 2)
 	c.Assert(tokens[1].args[0], Equals, "tag1")
 	c.Assert(tokens[1].args[1], Equals, "tag2")
@@ -217,7 +224,7 @@ func (s *MySuite) TestParseSpecTagsWithSpace(c *C) {
 	c.Assert(err, Equals, nil)
 	c.Assert(len(tokens), Equals, 3)
 
-	c.Assert(tokens[1].kind, Equals, specTag)
+	c.Assert(tokens[1].kind, Equals, tagKind)
 	c.Assert(len(tokens[1].args), Equals, 2)
 	c.Assert(tokens[1].args[0], Equals, "tag1")
 	c.Assert(tokens[1].args[1], Equals, "tag2")
@@ -233,7 +240,7 @@ func (s *MySuite) TestParseEmptyTags(c *C) {
 	c.Assert(err, Equals, nil)
 	c.Assert(len(tokens), Equals, 3)
 
-	c.Assert(tokens[1].kind, Equals, specTag)
+	c.Assert(tokens[1].kind, Equals, tagKind)
 	c.Assert(len(tokens[1].args), Equals, 2)
 	c.Assert(tokens[1].args[0], Equals, "tag1")
 	c.Assert(tokens[1].args[1], Equals, "tag2")
@@ -250,7 +257,7 @@ func (s *MySuite) TestParseScenarioTags(c *C) {
 	c.Assert(err, Equals, nil)
 	c.Assert(len(tokens), Equals, 3)
 
-	c.Assert(tokens[2].kind, Equals, scenarioTag)
+	c.Assert(tokens[2].kind, Equals, tagKind)
 	c.Assert(len(tokens[2].args), Equals, 2)
 	c.Assert(tokens[2].args[0], Equals, "tag1")
 	c.Assert(tokens[2].args[1], Equals, "tag2")
@@ -267,7 +274,7 @@ func (s *MySuite) TestParseSpecTagsBeforeSpecHeading(c *C) {
 	c.Assert(err, Equals, nil)
 	c.Assert(len(tokens), Equals, 2)
 
-	c.Assert(tokens[0].kind, Equals, specTag)
+	c.Assert(tokens[0].kind, Equals, tagKind)
 	c.Assert(len(tokens[0].args), Equals, 1)
 	c.Assert(tokens[0].args[0], Equals, "tag1")
 	c.Assert(tokens[0].lineText, Equals, "tags: tag1 ")
@@ -385,20 +392,20 @@ func (s *MySuite) TestParsingDataTableWithSeparatorAsHeader(c *C) {
 func (s *MySuite) TestParsingSpecWithMultipleLines(c *C) {
 	parser := new(specParser)
 	specText := SpecBuilder().specHeading("A spec heading").
-		text("Hello, i am a comment").
-		text(" ").
-		step("Context step with \"param\" and <file:foo>").
-		text("|a|b|c|").
-		text("|--||").
-		text("|a1|a2|a3|").
-		tags("one", "two").
-		scenarioHeading("First flow").
-		tags("tag1", "tag2").
-		step("first with \"fpp\" and <bar>").
-		text("Comment in scenario").
-		step("<table:file.csv> and <another> with \"foo\"").
-		scenarioHeading("First flow").
-		step("another").String()
+	text("Hello, i am a comment").
+	text(" ").
+	step("Context step with \"param\" and <file:foo>").
+	text("|a|b|c|").
+	text("|--||").
+	text("|a1|a2|a3|").
+	tags("one", "two").
+	scenarioHeading("First flow").
+	tags("tag1", "tag2").
+	step("first with \"fpp\" and <bar>").
+	text("Comment in scenario").
+	step("<table:file.csv> and <another> with \"foo\"").
+	scenarioHeading("First flow").
+	step("another").String()
 
 	tokens, err := parser.generateTokens(specText)
 	c.Assert(err, Equals, nil)
@@ -407,14 +414,14 @@ func (s *MySuite) TestParsingSpecWithMultipleLines(c *C) {
 	c.Assert(tokens[0].kind, Equals, specKind)
 	c.Assert(tokens[1].kind, Equals, commentKind)
 
-	c.Assert(tokens[2].kind, Equals, context)
+	c.Assert(tokens[2].kind, Equals, stepKind)
 	c.Assert(tokens[2].value, Equals, "Context step with {static} and {special}")
 
 	c.Assert(tokens[3].kind, Equals, tableHeader)
 	c.Assert(tokens[4].kind, Equals, tableRow)
-	c.Assert(tokens[5].kind, Equals, specTag)
+	c.Assert(tokens[5].kind, Equals, tagKind)
 	c.Assert(tokens[6].kind, Equals, scenarioKind)
-	c.Assert(tokens[7].kind, Equals, scenarioTag)
+	c.Assert(tokens[7].kind, Equals, tagKind)
 
 	c.Assert(tokens[8].kind, Equals, stepKind)
 	c.Assert(tokens[8].value, Equals, "first with {static} and {dynamic}")
