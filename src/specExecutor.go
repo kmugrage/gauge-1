@@ -143,7 +143,7 @@ func (executor *specExecutor) validateStep(step *step) error {
 	if response.GetMessageType() == Message_StepValidateResponse {
 		validateResponse := response.GetStepValidateResponse()
 		if !validateResponse.GetIsValid() {
-			fmt.Println("Not implemented")
+			fmt.Printf("step (%s) is not implemented", step.lineText)
 			return errors.New("Step is not implemented")
 		}
 		return nil
