@@ -11,7 +11,9 @@ type conceptParser struct {
 	currentConcept *step
 }
 
-func (parser *conceptParser) parse(text string) ([]*step, error) {
+func (parser *conceptParser) parse(text string) ([]*step, *parseError) {
+	defer parser.resetState()
+
 	specParser := new(specParser)
 	tokens, err := specParser.generateTokens(text)
 	if err != nil {
@@ -20,22 +22,27 @@ func (parser *conceptParser) parse(text string) ([]*step, error) {
 	return parser.createConcepts(tokens)
 }
 
-func (parser *conceptParser) createConcepts(tokens []*token) ([]*step, error) {
+func (parser *conceptParser) resetState() {
+	parser.currentState = 0
+	parser.currentConcept = nil
+}
+
+func (parser *conceptParser) createConcepts(tokens []*token) ([]*step, *parseError) {
 	concepts := make([]*step, 0)
-	var err error
+	var error *parseError
 	for _, token := range tokens {
 		if parser.isConceptHeading(token) {
 			if isInState(parser.currentState, conceptScope, stepScope) {
 				concepts = append(concepts, parser.currentConcept)
 			}
 			addStates(&parser.currentState, conceptScope)
-			parser.currentConcept, err = parser.processConceptHeading(token)
-			if err != nil {
-				return nil, err
+			parser.currentConcept, error = parser.processConceptHeading(token)
+			if error != nil {
+				return nil, error
 			}
 		} else if parser.isStep(token) {
 			if !isInState(parser.currentState, conceptScope) {
-				return nil, &syntaxError{lineNo: token.lineNo, message: "Step is not defined inside a concept heading"}
+				return nil, &parseError{lineNo: token.lineNo, message: "Step is not defined inside a concept heading", lineText: token.lineText}
 			}
 			if err := parser.processConceptStep(token); err != nil {
 				return nil, err
@@ -44,7 +51,7 @@ func (parser *conceptParser) createConcepts(tokens []*token) ([]*step, error) {
 		}
 	}
 	if !isInState(parser.currentState, stepScope) {
-		return nil, &syntaxError{lineNo: parser.currentConcept.lineNo, message: "Concept should have atleast one step"}
+		return nil, &parseError{lineNo: parser.currentConcept.lineNo, message: "Concept should have atleast one step", lineText: parser.currentConcept.lineText}
 	}
 	return append(concepts, parser.currentConcept), nil
 }
@@ -57,7 +64,7 @@ func (parser *conceptParser) isStep(token *token) bool {
 	return token.kind == stepKind
 }
 
-func (parser *conceptParser) processConceptHeading(token *token) (*step, error) {
+func (parser *conceptParser) processConceptHeading(token *token) (*step, *parseError) {
 	processStep(new(specParser), token)
 	concept, err := new(specification).createConceptStep(token)
 	if err != nil {
@@ -65,14 +72,14 @@ func (parser *conceptParser) processConceptHeading(token *token) (*step, error) 
 	}
 	concept.isConcept = true
 	if !parser.hasOnlyDynamicParams(concept) {
-		return nil, &syntaxError{lineNo: concept.lineNo, message: "Concept heading can have only Dynamic Parameters"}
+		return nil, &parseError{lineNo: concept.lineNo, message: "Concept heading can have only Dynamic Parameters"}
 	}
 	parser.createConceptLookup(concept)
 	return concept, nil
 
 }
 
-func (parser *conceptParser) processConceptStep(token *token) error {
+func (parser *conceptParser) processConceptStep(token *token) *parseError {
 	processStep(new(specParser), token)
 	conceptStep, err := new(specification).createConceptStep(token)
 	if err != nil {
@@ -94,10 +101,10 @@ func (parser *conceptParser) hasOnlyDynamicParams(concept *step) bool {
 	return true
 }
 
-func (parser *conceptParser) validateConceptStep(conceptStep *step) error {
+func (parser *conceptParser) validateConceptStep(conceptStep *step) *parseError {
 	for _, arg := range conceptStep.args {
 		if arg.argType == dynamic && !parser.currentConcept.lookup.containsParam(arg.value) {
-			return &syntaxError{lineNo: conceptStep.lineNo, message: fmt.Sprintf("dynamic parameter %s is not defined in concept heading", arg.value)}
+			return &parseError{lineNo: conceptStep.lineNo, message: fmt.Sprintf("dynamic parameter %s is not defined in concept heading", arg.value)}
 		}
 	}
 	return nil

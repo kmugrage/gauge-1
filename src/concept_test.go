@@ -8,7 +8,7 @@ func (s *MySuite) TestParsingSimpleConcept(c *C) {
 	parser := new(conceptParser)
 	concepts, err := parser.parse("# my concept \n * first step \n * second step ")
 
-	c.Assert(err, Equals, nil)
+	c.Assert(err, IsNil)
 	c.Assert(len(concepts), Equals, 1)
 
 	concept := concepts[0]
@@ -20,11 +20,23 @@ func (s *MySuite) TestParsingSimpleConcept(c *C) {
 
 }
 
+func (s *MySuite) TestErrorParsingConceptHeadingWithStaticOrSpecialParamter(c *C) {
+	parser := new(conceptParser)
+	_, err := parser.parse("# my concept with \"paratemer\" \n * first step \n * second step ")
+	c.Assert(err, NotNil)
+	c.Assert(err.message, Equals, "Concept heading can have only Dynamic Parameters")
+
+	_, err = parser.parse("# my concept with <table: foo> \n * first step \n * second step ")
+	c.Assert(err, NotNil)
+	c.Assert(err.message, Equals, "Concept heading can have only Dynamic Parameters")
+
+}
+
 func (s *MySuite) TestParsingSimpleConceptWithParamters(c *C) {
 	parser := new(conceptParser)
 	concepts, err := parser.parse("# my concept with <param0> and <param1> \n * first step using <param0> \n * second step using \"value\" and <param1> ")
 
-	c.Assert(err, Equals, nil)
+	c.Assert(err, IsNil)
 	c.Assert(len(concepts), Equals, 1)
 
 	concept := concepts[0]

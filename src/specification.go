@@ -63,17 +63,8 @@ type line struct {
 	lineNo int
 }
 
-type specerror struct {
-	message string
-	lineNo  int
-}
-
-func (specerror *specerror) Error() string {
-	return specerror.message
-}
-
 type parseResult struct {
-	error    *specerror
+	error    *parseError
 	warnings []string
 	ok       bool
 	specFile string
@@ -124,7 +115,7 @@ func initalizeConverters() []func(*token, *int, *specification) parseResult {
 		return token.kind == specKind
 	}, func(token *token, spec *specification, state *int) parseResult {
 		if spec.heading.value != "" {
-			return parseResult{ok: false, error: &specerror{"Parse error: syntax error, Multiple spec headings found in same file", token.lineNo}}
+			return parseResult{ok: false, error: &parseError{token.lineNo, "Parse error: Multiple spec headings found in same file", token.lineText}}
 		}
 		spec.heading = line{token.value, token.lineNo}
 		addStates(state, specScope)
@@ -135,7 +126,7 @@ func initalizeConverters() []func(*token, *int, *specification) parseResult {
 		return token.kind == scenarioKind
 	}, func(token *token, spec *specification, state *int) parseResult {
 		if spec.heading.value == "" {
-			return parseResult{ok: false, error: &specerror{"Parse error: syntax error, Scenario should be defined after the spec heading", token.lineNo}}
+			return parseResult{ok: false, error: &parseError{token.lineNo, "Parse error: Scenario should be defined after the spec heading", token.lineText}}
 		}
 		scenarioHeading := line{token.value, token.lineNo}
 		scenario := &scenario{heading: scenarioHeading}
@@ -240,7 +231,7 @@ func initalizeConverters() []func(*token, *int, *specification) parseResult {
 	return converter
 }
 
-func (spec *specification) addStep(stepToken *token, addTo *[]*step) *specerror {
+func (spec *specification) addStep(stepToken *token, addTo *[]*step) *parseError {
 	step, err := spec.createStep(stepToken, false)
 	if err != nil {
 		return err
@@ -249,11 +240,11 @@ func (spec *specification) addStep(stepToken *token, addTo *[]*step) *specerror 
 	return nil
 }
 
-func (spec *specification) createConceptStep(token *token) (*step, *specerror) {
+func (spec *specification) createConceptStep(token *token) (*step, *parseError) {
 	return spec.createStep(token, true)
 }
 
-func (spec *specification) createStep(stepToken *token, isConcept bool) (*step, *specerror) {
+func (spec *specification) createStep(stepToken *token, isConcept bool) (*step, *parseError) {
 	step := &step{lineNo: stepToken.lineNo, value: stepToken.value, lineText: strings.TrimSpace(stepToken.lineText)}
 	r := regexp.MustCompile("{(dynamic|static|special)}")
 
@@ -263,11 +254,11 @@ func (spec *specification) createStep(stepToken *token, isConcept bool) (*step, 
 		return step, nil
 	}
 	if len(args) != len(stepToken.args) {
-		return nil, &specerror{"Step text should not have '{static}' or '{dynamic}' or '{special}'", stepToken.lineNo}
+		return nil, &parseError{stepToken.lineNo, "Step text should not have '{static}' or '{dynamic}' or '{special}'", stepToken.lineText}
 	}
 	step.value = r.ReplaceAllString(step.value, "{}")
 	var argument *stepArg
-	var err *specerror
+	var err *parseError
 	for i, arg := range args {
 		if isConcept {
 			argument, err = spec.createConceptStepArg(stepToken.args[i], arg[1], stepToken)
@@ -282,7 +273,7 @@ func (spec *specification) createStep(stepToken *token, isConcept bool) (*step, 
 	return step, nil
 }
 
-func (spec *specification) createStepArg(argValue string, typeOfArg string, token *token) (*stepArg, *specerror) {
+func (spec *specification) createStepArg(argValue string, typeOfArg string, token *token) (*stepArg, *parseError) {
 	var stepArgument *stepArg
 	if typeOfArg == "special" {
 		return new(specialTypeResolver).resolve(argValue), nil
@@ -290,9 +281,9 @@ func (spec *specification) createStepArg(argValue string, typeOfArg string, toke
 		return &stepArg{argType: static, value: argValue}, nil
 	} else {
 		if !spec.dataTable.isInitialized() {
-			return nil, &specerror{fmt.Sprintf("No data table found for dynamic paramter <%s> : %s", argValue, token.lineText), token.lineNo}
+			return nil, &parseError{token.lineNo, fmt.Sprintf("No data table found for dynamic paramter <%s> : %s", argValue, token.lineText), token.lineText}
 		} else if !spec.dataTable.headerExists(argValue) {
-			return nil, &specerror{fmt.Sprintf("No data table column found for dynamic paramter <%s> : %s", argValue, token.lineText), token.lineNo}
+			return nil, &parseError{token.lineNo, fmt.Sprintf("No data table column found for dynamic paramter <%s> : %s", argValue, token.lineText), token.lineText}
 		}
 		stepArgument = &stepArg{argType: dynamic, value: argValue}
 		return stepArgument, nil
@@ -300,7 +291,7 @@ func (spec *specification) createStepArg(argValue string, typeOfArg string, toke
 }
 
 //Does not check if data table is initialized for concepts, they will be resolved in the concept lookup
-func (spec *specification) createConceptStepArg(argValue string, typeOfArg string, token *token) (*stepArg, *specerror) {
+func (spec *specification) createConceptStepArg(argValue string, typeOfArg string, token *token) (*stepArg, *parseError) {
 	var stepArgument *stepArg
 	if typeOfArg == "special" {
 		return new(specialTypeResolver).resolve(argValue), nil

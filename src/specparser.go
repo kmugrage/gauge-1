@@ -12,7 +12,7 @@ type specParser struct {
 	lineNo       int
 	tokens       []*token
 	currentState int
-	processors   map[tokenKind]func(*specParser, *token) (error, bool)
+	processors   map[tokenKind]func(*specParser, *token) (*parseError, bool)
 }
 
 type tokenKind int
@@ -25,14 +25,14 @@ type token struct {
 	value    string
 }
 
-type syntaxError struct {
+type parseError struct {
 	lineNo   int
-	lineText string
 	message  string
+	lineText string
 }
 
-func (se *syntaxError) Error() string {
-	return fmt.Sprintf("Parse error: syntax error, %s on line: %d", se.message, se.lineNo)
+func (se *parseError) Error() string {
+	return fmt.Sprintf("Parse error: %s on line: %d", se.message, se.lineNo)
 }
 
 func (token *token) String() string {
@@ -62,7 +62,7 @@ const (
 )
 
 func (parser *specParser) initialize() {
-	parser.processors = make(map[tokenKind]func(*specParser, *token) (error, bool))
+	parser.processors = make(map[tokenKind]func(*specParser, *token) (*parseError, bool))
 	parser.processors[specKind] = processSpec
 	parser.processors[scenarioKind] = processScenario
 	parser.processors[commentKind] = processComment
@@ -73,14 +73,14 @@ func (parser *specParser) initialize() {
 }
 
 func (parser *specParser) parse(specText string) (*specification, *parseResult) {
-	tokens, err := parser.generateTokens(specText)
-	if err != nil {
-		return nil, &parseResult{error: &specerror{message: err.Error()}, ok: false}
+	tokens, parseError := parser.generateTokens(specText)
+	if parseError != nil {
+		return nil, &parseResult{error: parseError, ok: false}
 	}
 	return parser.createSpecification(tokens)
 }
 
-func (parser *specParser) generateTokens(specText string) ([]*token, error) {
+func (parser *specParser) generateTokens(specText string) ([]*token, *parseError) {
 	parser.initialize()
 	parser.scanner = bufio.NewScanner(strings.NewReader(specText))
 	parser.currentState = initial
@@ -180,7 +180,7 @@ func (parser *specParser) isSpecUnderline(text string) bool {
 
 }
 
-func (parser *specParser) accept(token *token) error {
+func (parser *specParser) accept(token *token) *parseError {
 	error, shouldSkip := parser.processors[token.kind](parser, token)
 	if error != nil {
 		return error
@@ -192,28 +192,28 @@ func (parser *specParser) accept(token *token) error {
 	return nil
 }
 
-func processSpec(parser *specParser, token *token) (error, bool) {
+func processSpec(parser *specParser, token *token) (*parseError, bool) {
 	if len(token.value) < 1 {
-		return &syntaxError{lineNo: parser.lineNo, lineText: token.value, message: "Spec heading should have at least one character"}, true
+		return &parseError{lineNo: parser.lineNo, lineText: token.value, message: "Spec heading should have at least one character"}, true
 	}
 	return nil, false
 }
 
-func processScenario(parser *specParser, token *token) (error, bool) {
+func processScenario(parser *specParser, token *token) (*parseError, bool) {
 	if len(token.value) < 1 {
-		return &syntaxError{lineNo: parser.lineNo, lineText: token.value, message: "Scenario heading should have at least one character"}, true
+		return &parseError{lineNo: parser.lineNo, lineText: token.value, message: "Scenario heading should have at least one character"}, true
 	}
 	parser.clearState()
 	return nil, false
 }
 
-func processComment(parser *specParser, token *token) (error, bool) {
+func processComment(parser *specParser, token *token) (*parseError, bool) {
 	parser.clearState()
 	addStates(&parser.currentState, commentScope)
 	return nil, false
 }
 
-func processTag(parser *specParser, token *token) (error, bool) {
+func processTag(parser *specParser, token *token) (*parseError, bool) {
 	parser.clearState()
 
 	for _, tagValue := range strings.Split(token.value, ",") {
@@ -225,7 +225,7 @@ func processTag(parser *specParser, token *token) (error, bool) {
 	return nil, false
 }
 
-func processTable(parser *specParser, token *token) (error, bool) {
+func processTable(parser *specParser, token *token) (*parseError, bool) {
 
 	var buffer bytes.Buffer
 	shouldEscape := false
@@ -246,11 +246,11 @@ func processTable(parser *specParser, token *token) (error, bool) {
 
 			if token.kind == tableHeader {
 				if len(trimmedValue) == 0 {
-					return &syntaxError{lineNo: parser.lineNo, lineText: token.value, message: "Table header should not be blank"}, true
+					return &parseError{lineNo: parser.lineNo, lineText: token.value, message: "Table header should not be blank"}, true
 				}
 
 				if arrayContains(token.args, trimmedValue) {
-					return &syntaxError{lineNo: parser.lineNo, lineText: token.value, message: "Table header cannot have repeated column values"}, true
+					return &parseError{lineNo: parser.lineNo, lineText: token.value, message: "Table header cannot have repeated column values"}, true
 				}
 			}
 			token.args = append(token.args, trimmedValue)

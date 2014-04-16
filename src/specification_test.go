@@ -16,7 +16,7 @@ func (s *MySuite) TestThrowsErrorForMultipleSpecHeading(c *C) {
 
 	c.Assert(result.ok, Equals, false)
 
-	c.Assert(result.error.message, Equals, "Parse error: syntax error, Multiple spec headings found in same file")
+	c.Assert(result.error.message, Equals, "Parse error: Multiple spec headings found in same file")
 	c.Assert(result.error.lineNo, Equals, 4)
 }
 
@@ -30,7 +30,7 @@ func (s *MySuite) TestThrowsErrorForScenarioWithoutSpecHeading(c *C) {
 
 	c.Assert(result.ok, Equals, false)
 
-	c.Assert(result.error.message, Equals, "Parse error: syntax error, Scenario should be defined after the spec heading")
+	c.Assert(result.error.message, Equals, "Parse error: Scenario should be defined after the spec heading")
 	c.Assert(result.error.lineNo, Equals, 1)
 }
 
