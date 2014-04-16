@@ -33,8 +33,8 @@ type paramNameValue struct {
 }
 
 type conceptLookup struct {
-	paramIndex map[string]int
-	paramValue []*paramNameValue
+	paramIndexMap map[string]int
+	paramValue    []*paramNameValue
 }
 
 type step struct {
@@ -241,7 +241,7 @@ func initalizeConverters() []func(*token, *int, *specification) parseResult {
 }
 
 func (spec *specification) addStep(stepToken *token, addTo *[]*step) *specerror {
-	step, err := spec.createStep(stepToken)
+	step, err := spec.createStep(stepToken, false)
 	if err != nil {
 		return err
 	}
@@ -249,7 +249,11 @@ func (spec *specification) addStep(stepToken *token, addTo *[]*step) *specerror 
 	return nil
 }
 
-func (spec *specification) createStep(stepToken *token) (*step, *specerror) {
+func (spec *specification) createConceptStep(token *token) (*step, *specerror) {
+	return spec.createStep(token, true)
+}
+
+func (spec *specification) createStep(stepToken *token, isConcept bool) (*step, *specerror) {
 	step := &step{lineNo: stepToken.lineNo, value: stepToken.value, lineText: strings.TrimSpace(stepToken.lineText)}
 	r := regexp.MustCompile("{(dynamic|static|special)}")
 
@@ -262,12 +266,18 @@ func (spec *specification) createStep(stepToken *token) (*step, *specerror) {
 		return nil, &specerror{"Step text should not have '{static}' or '{dynamic}' or '{special}'", stepToken.lineNo}
 	}
 	step.value = r.ReplaceAllString(step.value, "{}")
+	var argument *stepArg
+	var err *specerror
 	for i, arg := range args {
-		arg, err := spec.createStepArg(stepToken.args[i], arg[1], stepToken)
+		if isConcept {
+			argument, err = spec.createConceptStepArg(stepToken.args[i], arg[1], stepToken)
+		} else {
+			argument, err = spec.createStepArg(stepToken.args[i], arg[1], stepToken)
+		}
 		if err != nil {
 			return nil, err
 		}
-		step.args = append(step.args, arg)
+		step.args = append(step.args, argument)
 	}
 	return step, nil
 }
@@ -287,6 +297,19 @@ func (spec *specification) createStepArg(argValue string, typeOfArg string, toke
 		stepArgument = &stepArg{argType: dynamic, value: argValue}
 		return stepArgument, nil
 	}
+}
+
+//Does not check if data table is initialized for concepts, they will be resolved in the concept lookup
+func (spec *specification) createConceptStepArg(argValue string, typeOfArg string, token *token) (*stepArg, *specerror) {
+	var stepArgument *stepArg
+	if typeOfArg == "special" {
+		return new(specialTypeResolver).resolve(argValue), nil
+	} else if typeOfArg == "static" {
+		return &stepArg{argType: static, value: argValue}, nil
+	} else {
+		stepArgument = &stepArg{argType: dynamic, value: argValue}
+		return stepArgument, nil
+	}
 
 }
 
@@ -298,11 +321,15 @@ func (resolver *specialTypeResolver) resolve(value string) *stepArg {
 }
 
 func (lookup *conceptLookup) addParam(param string) {
-	lookup.paramIndex[param] = len(lookup.paramValue)
+	if lookup.paramIndexMap == nil {
+		lookup.paramIndexMap = make(map[string]int)
+		lookup.paramValue = make([]*paramNameValue, 0)
+	}
+	lookup.paramIndexMap[param] = len(lookup.paramValue)
 	lookup.paramValue = append(lookup.paramValue, &paramNameValue{name: param})
 }
 
 func (lookup *conceptLookup) containsParam(param string) bool {
-	index := lookup.paramIndex[param]
+	index := lookup.paramIndexMap[param]
 	return lookup.paramValue[index].name == param
 }

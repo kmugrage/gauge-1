@@ -59,7 +59,7 @@ func (parser *conceptParser) isStep(token *token) bool {
 
 func (parser *conceptParser) processConceptHeading(token *token) (*step, error) {
 	processStep(new(specParser), token)
-	concept, err := new(specification).createStep(token)
+	concept, err := new(specification).createConceptStep(token)
 	if err != nil {
 		return nil, err
 	}
@@ -74,7 +74,7 @@ func (parser *conceptParser) processConceptHeading(token *token) (*step, error) 
 
 func (parser *conceptParser) processConceptStep(token *token) error {
 	processStep(new(specParser), token)
-	conceptStep, err := new(specification).createStep(token)
+	conceptStep, err := new(specification).createConceptStep(token)
 	if err != nil {
 		return err
 	}
