@@ -20,7 +20,7 @@ func (s *MySuite) TestParsingSimpleConcept(c *C) {
 
 }
 
-func (s *MySuite) TestErrorParsingConceptHeadingWithStaticOrSpecialParamter(c *C) {
+func (s *MySuite) TestErrorParsingConceptHeadingWithStaticOrSpecialParameter(c *C) {
 	parser := new(conceptParser)
 	_, err := parser.parse("# my concept with \"paratemer\" \n * first step \n * second step ")
 	c.Assert(err, NotNil)
@@ -30,6 +30,24 @@ func (s *MySuite) TestErrorParsingConceptHeadingWithStaticOrSpecialParamter(c *C
 	c.Assert(err, NotNil)
 	c.Assert(err.message, Equals, "Concept heading can have only Dynamic Parameters")
 
+}
+
+func (s *MySuite) TestErrorParsingConceptWithoutHeading(c *C) {
+	parser := new(conceptParser)
+
+	_, err := parser.parse("* first step \n * second step ")
+
+	c.Assert(err, NotNil)
+	c.Assert(err.message, Equals, "Step is not defined inside a concept heading")
+}
+
+func (s *MySuite) TestErrorParsingConceptWithoutSteps(c *C) {
+	parser := new(conceptParser)
+
+	_, err := parser.parse("# my concept with \n")
+
+	c.Assert(err, NotNil)
+	c.Assert(err.message, Equals, "Concept should have atleast one step")
 }
 
 func (s *MySuite) TestParsingSimpleConceptWithParamters(c *C) {
@@ -46,18 +64,58 @@ func (s *MySuite) TestParsingSimpleConceptWithParamters(c *C) {
 	c.Assert(concept.lookup.containsParam("param0"), Equals, true)
 	c.Assert(concept.lookup.containsParam("param1"), Equals, true)
 
-	firstStep := concept.conceptSteps[0]
-	c.Assert(firstStep.value, Equals, "first step using {}")
-	c.Assert(len(firstStep.args), Equals, 1)
-	c.Assert(firstStep.args[0].argType, Equals, dynamic)
-	c.Assert(firstStep.args[0].value, Equals, "param0")
+	firstConcept := concept.conceptSteps[0]
+	c.Assert(firstConcept.value, Equals, "first step using {}")
+	c.Assert(len(firstConcept.args), Equals, 1)
+	c.Assert(firstConcept.args[0].argType, Equals, dynamic)
+	c.Assert(firstConcept.args[0].value, Equals, "param0")
 
-	secondStep := concept.conceptSteps[1]
-	c.Assert(secondStep.value, Equals, "second step using {} and {}")
-	c.Assert(len(secondStep.args), Equals, 2)
-	c.Assert(secondStep.args[0].argType, Equals, static)
-	c.Assert(secondStep.args[0].value, Equals, "value")
-	c.Assert(secondStep.args[1].argType, Equals, dynamic)
-	c.Assert(secondStep.args[1].value, Equals, "param1")
+	secondConcept := concept.conceptSteps[1]
+	c.Assert(secondConcept.value, Equals, "second step using {} and {}")
+	c.Assert(len(secondConcept.args), Equals, 2)
+	c.Assert(secondConcept.args[0].argType, Equals, static)
+	c.Assert(secondConcept.args[0].value, Equals, "value")
+	c.Assert(secondConcept.args[1].argType, Equals, dynamic)
+	c.Assert(secondConcept.args[1].value, Equals, "param1")
+
+}
+
+func (s *MySuite) TestErrorParsingConceptStepWithInvalidParamters(c *C) {
+	parser := new(conceptParser)
+	_, err := parser.parse("# my concept with <param0> and <param1> \n * first step using <param3> \n * second step using \"value\" and <param1> ")
+
+	c.Assert(err, NotNil)
+	c.Assert(err.message, Equals, "Dynamic parameter <param3> is not defined in concept heading")
+}
+
+func (s *MySuite) TestParsingMultipleConcept(c *C) {
+	parser := new(conceptParser)
+	concepts, err := parser.parse("# my concept \n * first step \n * second step \n# my second concept \n* next step\n # my third concept <param0>\n * next step <param0> and \"value\"\n  ")
+
+	c.Assert(err, IsNil)
+	c.Assert(len(concepts), Equals, 3)
+
+	firstConcept := concepts[0]
+	secondConcept := concepts[1]
+	thirdConcept := concepts[2]
+
+	c.Assert(firstConcept.isConcept, Equals, true)
+	c.Assert(len(firstConcept.conceptSteps), Equals, 2)
+	c.Assert(firstConcept.conceptSteps[0].value, Equals, "first step")
+	c.Assert(firstConcept.conceptSteps[1].value, Equals, "second step")
+
+	c.Assert(secondConcept.isConcept, Equals, true)
+	c.Assert(len(secondConcept.conceptSteps), Equals, 1)
+	c.Assert(secondConcept.conceptSteps[0].value, Equals, "next step")
+
+	c.Assert(thirdConcept.isConcept, Equals, true)
+	c.Assert(len(thirdConcept.conceptSteps), Equals, 1)
+	c.Assert(thirdConcept.conceptSteps[0].value, Equals, "next step {} and {}")
+	c.Assert(len(thirdConcept.conceptSteps[0].args), Equals, 2)
+	c.Assert(thirdConcept.conceptSteps[0].args[0].argType, Equals, dynamic)
+	c.Assert(thirdConcept.conceptSteps[0].args[1].argType, Equals, static)
+
+	c.Assert(len(thirdConcept.lookup.paramValue), Equals, 1)
+	c.Assert(thirdConcept.lookup.containsParam("param0"), Equals, true)
 
 }
