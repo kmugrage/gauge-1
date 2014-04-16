@@ -43,7 +43,7 @@ type environmentVariables struct {
 
 func getProjectManifest() *manifest {
 	projectRoot, err := common.GetProjectRoot()
-	if (err != nil) {
+	if err != nil {
 		fmt.Printf("Failed to read manifest: %s \n", err.Error())
 		os.Exit(1)
 	}
@@ -64,7 +64,7 @@ func getProjectManifest() *manifest {
 	return &m
 }
 
-func findScenarioFiles(fileChan chan <- string) {
+func findScenarioFiles(fileChan chan<- string) {
 	pwd, err := os.Getwd()
 	if err != nil {
 		panic(err)
@@ -112,14 +112,14 @@ func makeListOfAvailableSteps() {
 
 func startAPIService() {
 	http.HandleFunc("/steps", func(w http.ResponseWriter, r *http.Request) {
-			js, err := json.Marshal(availableSteps)
-			if err != nil {
-				io.WriteString(w, err.Error())
-			} else {
-				w.Header()["Content-Type"] = []string{"application/json"}
-				w.Write(js)
-			}
-		})
+		js, err := json.Marshal(availableSteps)
+		if err != nil {
+			io.WriteString(w, err.Error())
+		} else {
+			w.Header()["Content-Type"] = []string{"application/json"}
+			w.Write(js)
+		}
+	})
 	log.Fatal(http.ListenAndServe(":8889", nil))
 }
 
@@ -204,7 +204,7 @@ func createProjectTemplate(language string) error {
 // Loads all the json files available in the specified env directory
 func loadEnvironment(env string) error {
 	envDir, err := common.GetDirInProject(common.EnvDirectoryName)
-	if (err != nil) {
+	if err != nil {
 		fmt.Printf("Failed to Load environment: %s\n", err.Error())
 		os.Exit(1)
 	}
@@ -219,23 +219,23 @@ func loadEnvironment(env string) error {
 	}
 
 	err = filepath.Walk(dirToRead, func(path string, info os.FileInfo, err error) error {
-			if isJson(path) {
-				var e environmentVariables
-				contents := common.ReadFileContents(path)
-				err := json.Unmarshal([]byte(contents), &e)
-				if err != nil {
-					return errors.New(fmt.Sprintf("Failed to parse: %s. %s", path, err.Error()))
-				}
+		if isJson(path) {
+			var e environmentVariables
+			contents := common.ReadFileContents(path)
+			err := json.Unmarshal([]byte(contents), &e)
+			if err != nil {
+				return errors.New(fmt.Sprintf("Failed to parse: %s. %s", path, err.Error()))
+			}
 
-				for k, v := range e.Variables {
-					err := common.SetEnvVariable(k, string(v))
-					if err != nil {
-						return errors.New(fmt.Sprintf("%s: %s", path, err.Error()))
-					}
+			for k, v := range e.Variables {
+				err := common.SetEnvVariable(k, string(v))
+				if err != nil {
+					return errors.New(fmt.Sprintf("%s: %s", path, err.Error()))
 				}
 			}
-			return nil
-		})
+		}
+		return nil
+	})
 
 	return err
 }
@@ -315,16 +315,16 @@ func main() {
 	}
 }
 
-func findConceptFiles() ([]string) {
+func findConceptFiles() []string {
 	conceptsDir, err := common.GetDirInProject(common.ConceptsDirectoryName)
 	if err != nil {
 		fmt.Printf("Failed to find concepts directory. %s\n", err.Error())
 		os.Exit(1)
 	}
 
-	return common.FindFilesInDir(conceptsDir, func(path string) (bool) {
-			return filepath.Ext(path) == common.ConceptFileExtension
-		})
+	return common.FindFilesInDir(conceptsDir, func(path string) bool {
+		return filepath.Ext(path) == common.ConceptFileExtension
+	})
 
 }
 
@@ -339,11 +339,11 @@ func createConceptsDictionary() (*conceptDictionary, error) {
 	return conceptsDictionary, nil
 }
 
-func addConcepts(conceptFile string, conceptDictionary *conceptDictionary) (error) {
+func addConcepts(conceptFile string, conceptDictionary *conceptDictionary) error {
 	fileText := common.ReadFileContents(conceptFile)
 	concepts, err := new(conceptParser).parse(fileText)
 	conceptDictionary.add(concepts)
-	return err;
+	return err
 }
 
 func findSpecs(specSource string) ([]*specification, error) {

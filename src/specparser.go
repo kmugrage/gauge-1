@@ -48,6 +48,7 @@ const (
 	tableDataScope = 1 << iota
 	stepScope      = 1 << iota
 	contextScope   = 1 << iota
+	conceptScope   = 1 << iota
 )
 
 const (
@@ -96,11 +97,11 @@ func (parser *specParser) generateTokens(specText string) ([]*token, error) {
 		} else if parser.isSpecUnderline(trimmedLine) && (isInState(parser.currentState, commentScope)) {
 			newToken = parser.tokens[len(parser.tokens)-1]
 			newToken.kind = specKind
-			parser.tokens = append(parser.tokens[:len(parser.tokens) - 1])
+			parser.tokens = append(parser.tokens[:len(parser.tokens)-1])
 		} else if parser.isScenarioUnderline(trimmedLine) && (isInState(parser.currentState, commentScope)) {
 			newToken = parser.tokens[len(parser.tokens)-1]
 			newToken.kind = scenarioKind
-			parser.tokens = append(parser.tokens[:len(parser.tokens) - 1])
+			parser.tokens = append(parser.tokens[:len(parser.tokens)-1])
 		} else if parser.isStep(trimmedLine) {
 			newToken = &token{kind: stepKind, lineNo: parser.lineNo, lineText: line, value: strings.TrimSpace(trimmedLine[1:])}
 		} else if found, startIndex := parser.checkTag(trimmedLine); found {

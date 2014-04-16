@@ -63,12 +63,12 @@ func isInState(currentState int, statesToCheck ...int) bool {
 	for _, value := range statesToCheck {
 		mask |= value
 	}
-	return (mask&currentState) != 0
+	return (mask & currentState) != 0
 }
 
 func isInAnyState(currentState int, statesToCheck ...int) bool {
 	for _, value := range statesToCheck {
-		if (currentState&value) != 0 {
+		if (currentState & value) != 0 {
 			return true
 		}
 	}
@@ -80,7 +80,7 @@ func retainStates(currentState *int, statesToKeep ...int) {
 	for _, value := range statesToKeep {
 		mask |= value
 	}
-	*currentState = mask&*currentState
+	*currentState = mask & *currentState
 }
 
 func addStates(currentState *int, states ...int) {
@@ -88,7 +88,7 @@ func addStates(currentState *int, states ...int) {
 	for _, value := range states {
 		mask |= value
 	}
-	*currentState = mask|*currentState
+	*currentState = mask | *currentState
 }
 
 func isUnderline(text string, underlineChar rune) bool {

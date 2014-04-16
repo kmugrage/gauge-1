@@ -392,20 +392,20 @@ func (s *MySuite) TestParsingDataTableWithSeparatorAsHeader(c *C) {
 func (s *MySuite) TestParsingSpecWithMultipleLines(c *C) {
 	parser := new(specParser)
 	specText := SpecBuilder().specHeading("A spec heading").
-	text("Hello, i am a comment").
-	text(" ").
-	step("Context step with \"param\" and <file:foo>").
-	text("|a|b|c|").
-	text("|--||").
-	text("|a1|a2|a3|").
-	tags("one", "two").
-	scenarioHeading("First flow").
-	tags("tag1", "tag2").
-	step("first with \"fpp\" and <bar>").
-	text("Comment in scenario").
-	step("<table:file.csv> and <another> with \"foo\"").
-	scenarioHeading("First flow").
-	step("another").String()
+		text("Hello, i am a comment").
+		text(" ").
+		step("Context step with \"param\" and <file:foo>").
+		text("|a|b|c|").
+		text("|--||").
+		text("|a1|a2|a3|").
+		tags("one", "two").
+		scenarioHeading("First flow").
+		tags("tag1", "tag2").
+		step("first with \"fpp\" and <bar>").
+		text("Comment in scenario").
+		step("<table:file.csv> and <another> with \"foo\"").
+		scenarioHeading("First flow").
+		step("another").String()
 
 	tokens, err := parser.generateTokens(specText)
 	c.Assert(err, Equals, nil)

@@ -27,6 +27,16 @@ type stepArg struct {
 	table   table
 }
 
+type paramNameValue struct {
+	name  string
+	value string
+}
+
+type conceptLookup struct {
+	paramIndex map[string]int
+	paramValue []*paramNameValue
+}
+
 type step struct {
 	lineNo       int
 	value        string
@@ -34,6 +44,7 @@ type step struct {
 	args         []*stepArg
 	inlineTable  table
 	isConcept    bool
+	lookup       conceptLookup
 	conceptSteps []*step
 }
 
@@ -110,117 +121,117 @@ func (specParser *specParser) createSpecification(tokens []*token) (*specificati
 
 func initalizeConverters() []func(*token, *int, *specification) parseResult {
 	specConverter := converterFn(func(token *token, state *int) bool {
-			return token.kind == specKind
-		}, func(token *token, spec *specification, state *int) parseResult {
-			if spec.heading.value != "" {
-				return parseResult{ok:false, error:&specerror{"Parse error: syntax error, Multiple spec headings found in same file", token.lineNo}}
-			}
-			spec.heading = line{token.value, token.lineNo}
-			addStates(state, specScope)
-			return parseResult{ok: true}
-		})
+		return token.kind == specKind
+	}, func(token *token, spec *specification, state *int) parseResult {
+		if spec.heading.value != "" {
+			return parseResult{ok: false, error: &specerror{"Parse error: syntax error, Multiple spec headings found in same file", token.lineNo}}
+		}
+		spec.heading = line{token.value, token.lineNo}
+		addStates(state, specScope)
+		return parseResult{ok: true}
+	})
 
 	scenarioConverter := converterFn(func(token *token, state *int) bool {
-			return token.kind == scenarioKind
-		}, func(token *token, spec *specification, state *int) parseResult {
-			if spec.heading.value == "" {
-				return parseResult{ok:false, error:&specerror{"Parse error: syntax error, Scenario should be defined after the spec heading", token.lineNo}}
-			}
-			scenarioHeading := line{token.value, token.lineNo}
-			scenario := &scenario{heading: scenarioHeading}
-			spec.scenarios = append(spec.scenarios, scenario)
-			retainStates(state, specScope)
-			addStates(state, scenarioScope)
-			return parseResult{ok: true}
-		})
+		return token.kind == scenarioKind
+	}, func(token *token, spec *specification, state *int) parseResult {
+		if spec.heading.value == "" {
+			return parseResult{ok: false, error: &specerror{"Parse error: syntax error, Scenario should be defined after the spec heading", token.lineNo}}
+		}
+		scenarioHeading := line{token.value, token.lineNo}
+		scenario := &scenario{heading: scenarioHeading}
+		spec.scenarios = append(spec.scenarios, scenario)
+		retainStates(state, specScope)
+		addStates(state, scenarioScope)
+		return parseResult{ok: true}
+	})
 
 	stepConverter := converterFn(func(token *token, state *int) bool {
-			return token.kind == stepKind && isInState(*state, scenarioScope)
-		}, func(token *token, spec *specification, state *int) parseResult {
-			latestScenario := spec.scenarios[len(spec.scenarios) - 1]
-			err := spec.addStep(token, &latestScenario.steps)
-			if err != nil {
-				return parseResult{error: err, ok: false}
-			}
-			retainStates(state, specScope, scenarioScope)
-			addStates(state, stepScope)
-			return parseResult{ok: true}
-		})
+		return token.kind == stepKind && isInState(*state, scenarioScope)
+	}, func(token *token, spec *specification, state *int) parseResult {
+		latestScenario := spec.scenarios[len(spec.scenarios)-1]
+		err := spec.addStep(token, &latestScenario.steps)
+		if err != nil {
+			return parseResult{error: err, ok: false}
+		}
+		retainStates(state, specScope, scenarioScope)
+		addStates(state, stepScope)
+		return parseResult{ok: true}
+	})
 
 	contextConverter := converterFn(func(token *token, state *int) bool {
-			return token.kind == stepKind && !isInState(*state, scenarioScope) && isInState(*state, specScope)
-		}, func(token *token, spec *specification, state *int) parseResult {
-			err := spec.addStep(token, &spec.contexts)
-			if err != nil {
-				return parseResult{error: err, ok: false}
-			}
-			retainStates(state, specScope)
-			addStates(state, contextScope)
-			return parseResult{ok: true}
-		})
+		return token.kind == stepKind && !isInState(*state, scenarioScope) && isInState(*state, specScope)
+	}, func(token *token, spec *specification, state *int) parseResult {
+		err := spec.addStep(token, &spec.contexts)
+		if err != nil {
+			return parseResult{error: err, ok: false}
+		}
+		retainStates(state, specScope)
+		addStates(state, contextScope)
+		return parseResult{ok: true}
+	})
 
 	commentConverter := converterFn(func(token *token, state *int) bool {
-			return token.kind == commentKind
-		}, func(token *token, spec *specification, state *int) parseResult {
-			commentLine := &line{token.value, token.lineNo}
-			spec.comments = append(spec.comments, commentLine)
-			retainStates(state, specScope, scenarioScope)
-			addStates(state, commentScope)
-			return parseResult{ok: true}
-		})
+		return token.kind == commentKind
+	}, func(token *token, spec *specification, state *int) parseResult {
+		commentLine := &line{token.value, token.lineNo}
+		spec.comments = append(spec.comments, commentLine)
+		retainStates(state, specScope, scenarioScope)
+		addStates(state, commentScope)
+		return parseResult{ok: true}
+	})
 
 	tableHeaderConverter := converterFn(func(token *token, state *int) bool {
-			return token.kind == tableHeader && isInState(*state, specScope)
-		}, func(token *token, spec *specification, state *int) parseResult {
-			if isInState(*state, stepScope) {
-				latestScenario := spec.scenarios[len(spec.scenarios) - 1]
-				latestStep := latestScenario.steps[len(latestScenario.steps) - 1]
-				latestStep.inlineTable.addHeaders(token.args)
-			} else if isInState(*state, contextScope) {
-				spec.contexts[len(spec.contexts) - 1].inlineTable.addHeaders(token.args)
-			} else if !isInState(*state, scenarioScope) {
-				if !spec.dataTable.isInitialized() {
-					spec.dataTable.addHeaders(token.args)
-				} else {
-					value := fmt.Sprintf("multiple data table present, ignoring table at line no: %d", token.lineNo)
-					return parseResult{ok: false, warnings: []string{value}}
-				}
+		return token.kind == tableHeader && isInState(*state, specScope)
+	}, func(token *token, spec *specification, state *int) parseResult {
+		if isInState(*state, stepScope) {
+			latestScenario := spec.scenarios[len(spec.scenarios)-1]
+			latestStep := latestScenario.steps[len(latestScenario.steps)-1]
+			latestStep.inlineTable.addHeaders(token.args)
+		} else if isInState(*state, contextScope) {
+			spec.contexts[len(spec.contexts)-1].inlineTable.addHeaders(token.args)
+		} else if !isInState(*state, scenarioScope) {
+			if !spec.dataTable.isInitialized() {
+				spec.dataTable.addHeaders(token.args)
 			} else {
-				value := fmt.Sprintf("table not associated with a step, ignoring table at line no: %d", token.lineNo)
+				value := fmt.Sprintf("multiple data table present, ignoring table at line no: %d", token.lineNo)
 				return parseResult{ok: false, warnings: []string{value}}
 			}
-			retainStates(state, specScope, scenarioScope, stepScope, contextScope)
-			addStates(state, tableScope)
-			return parseResult{ok: true}
-		})
+		} else {
+			value := fmt.Sprintf("table not associated with a step, ignoring table at line no: %d", token.lineNo)
+			return parseResult{ok: false, warnings: []string{value}}
+		}
+		retainStates(state, specScope, scenarioScope, stepScope, contextScope)
+		addStates(state, tableScope)
+		return parseResult{ok: true}
+	})
 
 	tableRowConverter := converterFn(func(token *token, state *int) bool {
-			return token.kind == tableRow && isInState(*state, tableScope)
-		}, func(token *token, spec *specification, state *int) parseResult {
-			if isInState(*state, stepScope) {
-				latestScenario := spec.scenarios[len(spec.scenarios) - 1]
-				latestStep := latestScenario.steps[len(latestScenario.steps) - 1]
-				latestStep.inlineTable.addRowValues(token.args)
-			} else if isInState(*state, contextScope) {
-				spec.contexts[len(spec.contexts) - 1].inlineTable.addRowValues(token.args)
-			} else {
-				spec.dataTable.addRowValues(token.args)
-			}
-			retainStates(state, specScope, scenarioScope, stepScope, contextScope, tableScope)
-			return parseResult{ok: true}
-		})
+		return token.kind == tableRow && isInState(*state, tableScope)
+	}, func(token *token, spec *specification, state *int) parseResult {
+		if isInState(*state, stepScope) {
+			latestScenario := spec.scenarios[len(spec.scenarios)-1]
+			latestStep := latestScenario.steps[len(latestScenario.steps)-1]
+			latestStep.inlineTable.addRowValues(token.args)
+		} else if isInState(*state, contextScope) {
+			spec.contexts[len(spec.contexts)-1].inlineTable.addRowValues(token.args)
+		} else {
+			spec.dataTable.addRowValues(token.args)
+		}
+		retainStates(state, specScope, scenarioScope, stepScope, contextScope, tableScope)
+		return parseResult{ok: true}
+	})
 
 	tagConverter := converterFn(func(token *token, state *int) bool {
-			return (token.kind == tagKind)
-		}, func(token *token, spec *specification, state *int) parseResult {
-			if isInState(*state, scenarioScope) {
-				latestScenario := spec.scenarios[len(spec.scenarios) - 1]
-				latestScenario.tags = token.args
-			} else {
-				spec.tags = token.args
-			}
-			return parseResult{ok: true}
-		})
+		return (token.kind == tagKind)
+	}, func(token *token, spec *specification, state *int) parseResult {
+		if isInState(*state, scenarioScope) {
+			latestScenario := spec.scenarios[len(spec.scenarios)-1]
+			latestScenario.tags = token.args
+		} else {
+			spec.tags = token.args
+		}
+		return parseResult{ok: true}
+	})
 
 	converter := []func(*token, *int, *specification) parseResult{
 		specConverter, scenarioConverter, stepConverter, contextConverter, commentConverter, tableHeaderConverter, tableRowConverter, tagConverter,
@@ -230,29 +241,35 @@ func initalizeConverters() []func(*token, *int, *specification) parseResult {
 }
 
 func (spec *specification) addStep(stepToken *token, addTo *[]*step) *specerror {
+	step, err := spec.createStep(stepToken)
+	if err != nil {
+		return err
+	}
+	*addTo = append(*addTo, step)
+	return nil
+}
+
+func (spec *specification) createStep(stepToken *token) (*step, *specerror) {
 	step := &step{lineNo: stepToken.lineNo, value: stepToken.value, lineText: strings.TrimSpace(stepToken.lineText)}
 	r := regexp.MustCompile("{(dynamic|static|special)}")
 
 	args := r.FindAllStringSubmatch(stepToken.value, -1)
 
 	if args == nil {
-		*addTo = append(*addTo, step)
-		return nil
+		return step, nil
 	}
 	if len(args) != len(stepToken.args) {
-		return &specerror{"Step text should not have '{static}' or '{dynamic}' or '{special}'", stepToken.lineNo}
+		return nil, &specerror{"Step text should not have '{static}' or '{dynamic}' or '{special}'", stepToken.lineNo}
 	}
 	step.value = r.ReplaceAllString(step.value, "{}")
 	for i, arg := range args {
 		arg, err := spec.createStepArg(stepToken.args[i], arg[1], stepToken)
 		if err != nil {
-			return err
+			return nil, err
 		}
 		step.args = append(step.args, arg)
 	}
-
-	*addTo = append(*addTo, step)
-	return nil
+	return step, nil
 }
 
 func (spec *specification) createStepArg(argValue string, typeOfArg string, token *token) (*stepArg, *specerror) {
@@ -278,4 +295,14 @@ type specialTypeResolver struct {
 
 func (resolver *specialTypeResolver) resolve(value string) *stepArg {
 	return &stepArg{argType: specialString, value: ""}
+}
+
+func (lookup *conceptLookup) addParam(param string) {
+	lookup.paramIndex[param] = len(lookup.paramValue)
+	lookup.paramValue = append(lookup.paramValue, &paramNameValue{name: param})
+}
+
+func (lookup *conceptLookup) containsParam(param string) bool {
+	index := lookup.paramIndex[param]
+	return lookup.paramValue[index].name == param
 }
