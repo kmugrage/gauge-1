@@ -321,6 +321,6 @@ func (lookup *conceptLookup) addParam(param string) {
 }
 
 func (lookup *conceptLookup) containsParam(param string) bool {
-	index := lookup.paramIndexMap[param]
-	return lookup.paramValue[index].name == param
+	_, ok := lookup.paramIndexMap[param]
+	return ok
 }

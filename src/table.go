@@ -22,12 +22,8 @@ func (table *table) get(header string) []string {
 }
 
 func (table *table) headerExists(header string) bool {
-	valueIndex := table.headerIndexMap[header]
-	if valueIndex == 0 && table.headers[0] != header {
-		return false
-	} else {
-		return true
-	}
+	_, ok := table.headerIndexMap[header]
+	return ok
 }
 
 func (table *table) addHeaders(columns []string) {

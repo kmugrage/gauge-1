@@ -151,7 +151,17 @@ func (parser *conceptParser) createConceptLookup(concept *step) {
 }
 
 func (conceptDictionary *conceptDictionary) add(concepts []*step) {
+	if conceptDictionary.conceptsMap == nil {
+		conceptDictionary.conceptsMap = make(map[string]*step)
+	}
 	for _, step := range concepts {
 		conceptDictionary.conceptsMap[step.value] = step
 	}
+}
+
+func (conceptDictionary *conceptDictionary) search(stepValue string) *step {
+	if step, ok := conceptDictionary.conceptsMap[stepValue]; ok {
+		return step
+	}
+	return nil
 }

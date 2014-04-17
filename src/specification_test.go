@@ -323,3 +323,26 @@ func (s *MySuite) TestErrorOnAddingDynamicParamterWithoutDataTableHeaderValue(c 
 	c.Assert(result.error.lineNo, Equals, 5)
 
 }
+
+func (s *MySuite) TestLookupAddParam(c *C) {
+	lookup := new(conceptLookup)
+	lookup.addParam("param1")
+	lookup.addParam("param2")
+
+	c.Assert(lookup.paramIndexMap["param1"], Equals, 0)
+	c.Assert(lookup.paramIndexMap["param2"], Equals, 1)
+	c.Assert(len(lookup.paramValue), Equals, 2)
+	c.Assert(lookup.paramValue[0].name, Equals, "param1")
+	c.Assert(lookup.paramValue[1].name, Equals, "param2")
+
+}
+
+func (s *MySuite) TestLookupContainsParam(c *C) {
+	lookup := new(conceptLookup)
+	lookup.addParam("param1")
+	lookup.addParam("param2")
+
+	c.Assert(lookup.containsParam("param1"), Equals, true)
+	c.Assert(lookup.containsParam("param2"), Equals, true)
+	c.Assert(lookup.containsParam("param3"), Equals, false)
+}

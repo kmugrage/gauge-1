@@ -4,6 +4,28 @@ import (
 	. "launchpad.net/gocheck"
 )
 
+func (s *MySuite) TestConceptDictionaryAdd(c *C) {
+	dictionary := new(conceptDictionary)
+	step1 := &step{value: "test step 1"}
+	step2 := &step{value: "test step 2"}
+
+	dictionary.add([]*step{step1, step2})
+
+	c.Assert(dictionary.conceptsMap["test step 1"], Equals, step1)
+	c.Assert(dictionary.conceptsMap["test step 2"], Equals, step2)
+}
+
+func (s *MySuite) TestConceptDictionarySearch(c *C) {
+	dictionary := new(conceptDictionary)
+	step1 := &step{value: "test step 1"}
+	step2 := &step{value: "test step 2"}
+
+	dictionary.add([]*step{step1, step2})
+
+	c.Assert(dictionary.search(step1.value), Equals, step1)
+	c.Assert(dictionary.search(step2.value), Equals, step2)
+}
+
 func (s *MySuite) TestParsingSimpleConcept(c *C) {
 	parser := new(conceptParser)
 	concepts, err := parser.parse("# my concept \n * first step \n * second step ")
