@@ -35,11 +35,11 @@ func (parser *conceptParser) createConcepts(tokens []*token) ([]*step, *parseErr
 			if isInState(parser.currentState, conceptScope, stepScope) {
 				concepts = append(concepts, parser.currentConcept)
 			}
-			addStates(&parser.currentState, conceptScope)
 			parser.currentConcept, error = parser.processConceptHeading(token)
 			if error != nil {
 				return nil, error
 			}
+			addStates(&parser.currentState, conceptScope)
 		} else if parser.isStep(token) {
 			if !isInState(parser.currentState, conceptScope) {
 				return nil, &parseError{lineNo: token.lineNo, message: "Step is not defined inside a concept heading", lineText: token.lineText}
@@ -48,6 +48,18 @@ func (parser *conceptParser) createConcepts(tokens []*token) ([]*step, *parseErr
 				return nil, err
 			}
 			addStates(&parser.currentState, stepScope)
+		} else if parser.isTableHeader(token) {
+			if !isInState(parser.currentState, stepScope) {
+				return nil, &parseError{lineNo: token.lineNo, message: "Table doesn't belong to any step", lineText: token.lineText}
+			}
+			if err := parser.processTableHeader(token); err != nil {
+				return nil, err
+			}
+			addStates(&parser.currentState, tableScope)
+		} else if parser.isTableDataRow(token) {
+			if err := parser.processTableDataRow(token); err != nil {
+				return nil, err
+			}
 		}
 	}
 	if !isInState(parser.currentState, stepScope) {
@@ -62,6 +74,14 @@ func (parser *conceptParser) isConceptHeading(token *token) bool {
 
 func (parser *conceptParser) isStep(token *token) bool {
 	return token.kind == stepKind
+}
+
+func (parser *conceptParser) isTableHeader(token *token) bool {
+	return token.kind == tableHeader
+}
+
+func (parser *conceptParser) isTableDataRow(token *token) bool {
+	return token.kind == tableRow
 }
 
 func (parser *conceptParser) processConceptHeading(token *token) (*step, *parseError) {
@@ -89,6 +109,20 @@ func (parser *conceptParser) processConceptStep(token *token) *parseError {
 		return err
 	}
 	parser.currentConcept.conceptSteps = append(parser.currentConcept.conceptSteps, conceptStep)
+	return nil
+}
+
+func (parser *conceptParser) processTableHeader(token *token) *parseError {
+	steps := parser.currentConcept.conceptSteps
+	currentStep := steps[len(steps)-1]
+	currentStep.inlineTable.addHeaders(token.args)
+	return nil
+}
+
+func (parser *conceptParser) processTableDataRow(token *token) *parseError {
+	steps := parser.currentConcept.conceptSteps
+	currentStep := steps[len(steps)-1]
+	currentStep.inlineTable.addRowValues(token.args)
 	return nil
 }
 

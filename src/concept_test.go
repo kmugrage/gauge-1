@@ -50,7 +50,7 @@ func (s *MySuite) TestErrorParsingConceptWithoutSteps(c *C) {
 	c.Assert(err.message, Equals, "Concept should have atleast one step")
 }
 
-func (s *MySuite) TestParsingSimpleConceptWithParamters(c *C) {
+func (s *MySuite) TestParsingSimpleConceptWithParameters(c *C) {
 	parser := new(conceptParser)
 	concepts, err := parser.parse("# my concept with <param0> and <param1> \n * first step using <param0> \n * second step using \"value\" and <param1> ")
 
@@ -80,7 +80,7 @@ func (s *MySuite) TestParsingSimpleConceptWithParamters(c *C) {
 
 }
 
-func (s *MySuite) TestErrorParsingConceptStepWithInvalidParamters(c *C) {
+func (s *MySuite) TestErrorParsingConceptStepWithInvalidParameters(c *C) {
 	parser := new(conceptParser)
 	_, err := parser.parse("# my concept with <param0> and <param1> \n * first step using <param3> \n * second step using \"value\" and <param1> ")
 
@@ -118,4 +118,34 @@ func (s *MySuite) TestParsingMultipleConcept(c *C) {
 	c.Assert(len(thirdConcept.lookup.paramValue), Equals, 1)
 	c.Assert(thirdConcept.lookup.containsParam("param0"), Equals, true)
 
+}
+
+func (s *MySuite) TestParsingConceptStepWithInlineTable(c *C) {
+	parser := new(conceptParser)
+	concepts, err := parser.parse("# my concept \n * first step with inline table\n |id|name|\n|1|vishnu|\n|2|prateek|\n")
+
+	c.Assert(err, IsNil)
+	c.Assert(len(concepts), Equals, 1)
+
+	concept := concepts[0]
+
+	c.Assert(concept.isConcept, Equals, true)
+	c.Assert(len(concept.conceptSteps), Equals, 1)
+	c.Assert(concept.conceptSteps[0].value, Equals, "first step with inline table")
+	inlineTable := concept.conceptSteps[0].inlineTable
+	c.Assert(inlineTable.isInitialized(), Equals, true)
+	c.Assert(len(inlineTable.get("id")), Equals, 2)
+	c.Assert(len(inlineTable.get("name")), Equals, 2)
+	c.Assert(inlineTable.get("id")[0], Equals, "1")
+	c.Assert(inlineTable.get("id")[1], Equals, "2")
+	c.Assert(inlineTable.get("name")[0], Equals, "vishnu")
+	c.Assert(inlineTable.get("name")[1], Equals, "prateek")
+}
+
+func (s *MySuite) TestErrorParsingConceptWithInvalidInlineTable(c *C) {
+	parser := new(conceptParser)
+	_, err := parser.parse("# my concept \n |id|name|\n|1|vishnu|\n|2|prateek|\n")
+
+	c.Assert(err, NotNil)
+	c.Assert(err.message, Equals, "Table doesn't belong to any step")
 }
