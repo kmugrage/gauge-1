@@ -296,9 +296,9 @@ func main() {
 		}
 
 		execution := newExecution(manifest, specs, conn)
-		err = execution.start()
-		if err != nil {
-			fmt.Printf("Execution failed. %s\n", err.Error())
+		status := execution.start()
+		if status.isFailed() {
+			fmt.Println("Execution failed. %s\n")
 			os.Exit(1)
 		}
 	}
