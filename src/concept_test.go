@@ -107,7 +107,7 @@ func (s *MySuite) TestErrorParsingConceptStepWithInvalidParameters(c *C) {
 	_, err := parser.parse("# my concept with <param0> and <param1> \n * first step using <param3> \n * second step using \"value\" and <param1> ")
 
 	c.Assert(err, NotNil)
-	c.Assert(err.message, Equals, "Dynamic parameter <param3> is not defined in concept heading")
+	c.Assert(err.message, Equals, "Dynamic parameter <param3> could not be resolved")
 }
 
 func (s *MySuite) TestParsingMultipleConcept(c *C) {

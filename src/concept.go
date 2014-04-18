@@ -86,7 +86,7 @@ func (parser *conceptParser) isTableDataRow(token *token) bool {
 
 func (parser *conceptParser) processConceptHeading(token *token) (*step, *parseError) {
 	processStep(new(specParser), token)
-	concept, err := new(specification).createConceptStep(token)
+	concept, err := new(specification).createStep(token, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -101,11 +101,8 @@ func (parser *conceptParser) processConceptHeading(token *token) (*step, *parseE
 
 func (parser *conceptParser) processConceptStep(token *token) *parseError {
 	processStep(new(specParser), token)
-	conceptStep, err := new(specification).createConceptStep(token)
+	conceptStep, err := new(specification).createStep(token, &parser.currentConcept.lookup)
 	if err != nil {
-		return err
-	}
-	if err := parser.validateConceptStep(conceptStep); err != nil {
 		return err
 	}
 	parser.currentConcept.conceptSteps = append(parser.currentConcept.conceptSteps, conceptStep)

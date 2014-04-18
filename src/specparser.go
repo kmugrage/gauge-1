@@ -8,11 +8,12 @@ import (
 )
 
 type specParser struct {
-	scanner      *bufio.Scanner
-	lineNo       int
-	tokens       []*token
-	currentState int
-	processors   map[tokenKind]func(*specParser, *token) (*parseError, bool)
+	scanner           *bufio.Scanner
+	lineNo            int
+	tokens            []*token
+	currentState      int
+	processors        map[tokenKind]func(*specParser, *token) (*parseError, bool)
+	conceptDictionary *conceptDictionary
 }
 
 type tokenKind int
@@ -72,12 +73,12 @@ func (parser *specParser) initialize() {
 	parser.processors[tableRow] = processTable
 }
 
-func (parser *specParser) parse(specText string) (*specification, *parseResult) {
+func (parser *specParser) parse(specText string, conceptDictionary *conceptDictionary) (*specification, *parseResult) {
 	tokens, parseError := parser.generateTokens(specText)
 	if parseError != nil {
 		return nil, &parseResult{error: parseError, ok: false}
 	}
-	return parser.createSpecification(tokens)
+	return parser.createSpecification(tokens, conceptDictionary)
 }
 
 func (parser *specParser) generateTokens(specText string) ([]*token, *parseError) {

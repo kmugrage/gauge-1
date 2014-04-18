@@ -81,9 +81,9 @@ func converterFn(predicate func(token *token, state *int) bool, apply func(token
 
 }
 
-func (specParser *specParser) createSpecification(tokens []*token) (*specification, *parseResult) {
-
-	converters := initalizeConverters()
+func (specParser *specParser) createSpecification(tokens []*token, conceptDictionary *conceptDictionary) (*specification, *parseResult) {
+	specParser.conceptDictionary = conceptDictionary
+	converters := specParser.initalizeConverters()
 	specification := &specification{}
 	finalResult := &parseResult{}
 	state := initial
@@ -110,7 +110,7 @@ func (specParser *specParser) createSpecification(tokens []*token) (*specificati
 	return specification, finalResult
 }
 
-func initalizeConverters() []func(*token, *int, *specification) parseResult {
+func (specParser *specParser) initalizeConverters() []func(*token, *int, *specification) parseResult {
 	specConverter := converterFn(func(token *token, state *int) bool {
 		return token.kind == specKind
 	}, func(token *token, spec *specification, state *int) parseResult {
@@ -140,7 +140,7 @@ func initalizeConverters() []func(*token, *int, *specification) parseResult {
 		return token.kind == stepKind && isInState(*state, scenarioScope)
 	}, func(token *token, spec *specification, state *int) parseResult {
 		latestScenario := spec.scenarios[len(spec.scenarios)-1]
-		err := spec.addStep(token, &latestScenario.steps)
+		err := spec.addStep(token, &latestScenario.steps, specParser.conceptDictionary)
 		if err != nil {
 			return parseResult{error: err, ok: false}
 		}
@@ -152,7 +152,7 @@ func initalizeConverters() []func(*token, *int, *specification) parseResult {
 	contextConverter := converterFn(func(token *token, state *int) bool {
 		return token.kind == stepKind && !isInState(*state, scenarioScope) && isInState(*state, specScope)
 	}, func(token *token, spec *specification, state *int) parseResult {
-		err := spec.addStep(token, &spec.contexts)
+		err := spec.addStep(token, &spec.contexts, specParser.conceptDictionary)
 		if err != nil {
 			return parseResult{error: err, ok: false}
 		}
@@ -231,8 +231,18 @@ func initalizeConverters() []func(*token, *int, *specification) parseResult {
 	return converter
 }
 
-func (spec *specification) addStep(stepToken *token, addTo *[]*step) *parseError {
-	step, err := spec.createStep(stepToken, false)
+func (spec *specification) addStep(stepToken *token, addTo *[]*step, conceptDictionary *conceptDictionary) *parseError {
+	var lookup conceptLookup
+	conceptStep := conceptDictionary.search(stepToken.value)
+	if conceptStep != nil {
+		lookup = conceptStep.lookup
+	} else {
+		lookup = *new(conceptLookup)
+		for _, value := range spec.dataTable.headers {
+			lookup.addParam(value)
+		}
+	}
+	step, err := spec.createStep(stepToken, &lookup)
 	if err != nil {
 		return err
 	}
@@ -240,11 +250,7 @@ func (spec *specification) addStep(stepToken *token, addTo *[]*step) *parseError
 	return nil
 }
 
-func (spec *specification) createConceptStep(token *token) (*step, *parseError) {
-	return spec.createStep(token, true)
-}
-
-func (spec *specification) createStep(stepToken *token, isConcept bool) (*step, *parseError) {
+func (spec *specification) createStep(stepToken *token, lookup *conceptLookup) (*step, *parseError) {
 	step := &step{lineNo: stepToken.lineNo, value: stepToken.value, lineText: strings.TrimSpace(stepToken.lineText)}
 	r := regexp.MustCompile("{(dynamic|static|special)}")
 
@@ -260,11 +266,7 @@ func (spec *specification) createStep(stepToken *token, isConcept bool) (*step, 
 	var argument *stepArg
 	var err *parseError
 	for i, arg := range args {
-		if isConcept {
-			argument, err = spec.createConceptStepArg(stepToken.args[i], arg[1], stepToken)
-		} else {
-			argument, err = spec.createStepArg(stepToken.args[i], arg[1], stepToken)
-		}
+		argument, err = spec.createStepArg(stepToken.args[i], arg[1], stepToken, lookup)
 		if err != nil {
 			return nil, err
 		}
@@ -273,35 +275,24 @@ func (spec *specification) createStep(stepToken *token, isConcept bool) (*step, 
 	return step, nil
 }
 
-func (spec *specification) createStepArg(argValue string, typeOfArg string, token *token) (*stepArg, *parseError) {
+func (spec *specification) createStepArg(argValue string, typeOfArg string, token *token, lookup *conceptLookup) (*stepArg, *parseError) {
 	var stepArgument *stepArg
 	if typeOfArg == "special" {
 		return new(specialTypeResolver).resolve(argValue), nil
 	} else if typeOfArg == "static" {
 		return &stepArg{argType: static, value: argValue}, nil
 	} else {
-		if !spec.dataTable.isInitialized() {
-			return nil, &parseError{token.lineNo, fmt.Sprintf("No data table found for dynamic paramter <%s> : %s", argValue, token.lineText), token.lineText}
-		} else if !spec.dataTable.headerExists(argValue) {
-			return nil, &parseError{token.lineNo, fmt.Sprintf("No data table column found for dynamic paramter <%s> : %s", argValue, token.lineText), token.lineText}
+		if !isConceptHeader(lookup) && !lookup.containsParam(argValue) {
+			return nil, &parseError{lineNo: token.lineNo, message: fmt.Sprintf("Dynamic parameter <%s> could not be resolved", argValue), lineText: token.lineText}
 		}
 		stepArgument = &stepArg{argType: dynamic, value: argValue}
 		return stepArgument, nil
 	}
 }
 
-//Does not check if data table is initialized for concepts, they will be resolved in the concept lookup
-func (spec *specification) createConceptStepArg(argValue string, typeOfArg string, token *token) (*stepArg, *parseError) {
-	var stepArgument *stepArg
-	if typeOfArg == "special" {
-		return new(specialTypeResolver).resolve(argValue), nil
-	} else if typeOfArg == "static" {
-		return &stepArg{argType: static, value: argValue}, nil
-	} else {
-		stepArgument = &stepArg{argType: dynamic, value: argValue}
-		return stepArgument, nil
-	}
-
+//concept header will have dynamic param and should not be resolved through lookup, so passing nil lookup
+func isConceptHeader(lookup *conceptLookup) bool {
+	return lookup == nil
 }
 
 type specialTypeResolver struct {

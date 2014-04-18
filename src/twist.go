@@ -90,7 +90,8 @@ func parseScenarioFiles(fileChan <-chan string) {
 		}
 
 		parser := new(specParser)
-		specification, result := parser.parse(common.ReadFileContents(scenarioFilePath))
+		//todo: parse concepts
+		specification, result := parser.parse(common.ReadFileContents(scenarioFilePath), new(conceptDictionary))
 
 		if result.ok {
 			availableSteps = append(availableSteps, specification.contexts...)
@@ -286,8 +287,8 @@ func main() {
 		specSource := flag.Arg(0)
 
 		//todo pass concept dictionary to the spec parsing
-		_, err = createConceptsDictionary()
-		specs, err := findSpecs(specSource)
+		concepts, err := createConceptsDictionary()
+		specs, err := findSpecs(specSource, concepts)
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(1)
@@ -346,7 +347,7 @@ func addConcepts(conceptFile string, conceptDictionary *conceptDictionary) error
 	return err
 }
 
-func findSpecs(specSource string) ([]*specification, error) {
+func findSpecs(specSource string, conceptDictionary *conceptDictionary) ([]*specification, error) {
 	specFiles := make([]string, 0)
 	if common.DirExists(specSource) {
 		specFiles = append(specFiles, findSpecsFilesIn(specSource)...)
@@ -359,7 +360,8 @@ func findSpecs(specSource string) ([]*specification, error) {
 
 	specs := make([]*specification, 0)
 	for _, specFile := range specFiles {
-		spec, parseResult := new(specParser).parse(common.ReadFileContents(specFile))
+		specFileContent := common.ReadFileContents(specFile)
+		spec, parseResult := new(specParser).parse(specFileContent, conceptDictionary)
 		if !parseResult.ok {
 			return nil, errors.New(fmt.Sprintf("%s : %s", specFile, parseResult.error.Error()))
 		}

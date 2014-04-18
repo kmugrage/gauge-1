@@ -1,8 +1,6 @@
 package main
 
-import (
-	. "launchpad.net/gocheck"
-)
+import . "launchpad.net/gocheck"
 
 func (s *MySuite) TestThrowsErrorForMultipleSpecHeading(c *C) {
 	tokens := []*token{
@@ -12,7 +10,7 @@ func (s *MySuite) TestThrowsErrorForMultipleSpecHeading(c *C) {
 		&token{kind: specKind, value: "Another Heading", lineNo: 4},
 	}
 
-	_, result := new(specParser).createSpecification(tokens)
+	_, result := new(specParser).createSpecification(tokens, new(conceptDictionary))
 
 	c.Assert(result.ok, Equals, false)
 
@@ -26,7 +24,7 @@ func (s *MySuite) TestThrowsErrorForScenarioWithoutSpecHeading(c *C) {
 		&token{kind: stepKind, value: "Example step", lineNo: 2},
 	}
 
-	_, result := new(specParser).createSpecification(tokens)
+	_, result := new(specParser).createSpecification(tokens, new(conceptDictionary))
 
 	c.Assert(result.ok, Equals, false)
 
@@ -41,7 +39,7 @@ func (s *MySuite) TestSpecWithHeadingAndSimpleSteps(c *C) {
 		&token{kind: stepKind, value: "Example step", lineNo: 3},
 	}
 
-	spec, result := new(specParser).createSpecification(tokens)
+	spec, result := new(specParser).createSpecification(tokens, new(conceptDictionary))
 
 	c.Assert(result.ok, Equals, true)
 	c.Assert(spec.heading.lineNo, Equals, 1)
@@ -64,7 +62,7 @@ func (s *MySuite) TestStepsAndComments(c *C) {
 		&token{kind: commentKind, value: "Third comment", lineNo: 6},
 	}
 
-	spec, result := new(specParser).createSpecification(tokens)
+	spec, result := new(specParser).createSpecification(tokens, new(conceptDictionary))
 
 	c.Assert(result.ok, Equals, true)
 	c.Assert(spec.heading.value, Equals, "Spec Heading")
@@ -95,7 +93,7 @@ func (s *MySuite) TestStepsWithParam(c *C) {
 		&token{kind: stepKind, value: "sample \\{static\\}", lineNo: 5, args: []string{"user"}},
 	}
 
-	spec, result := new(specParser).createSpecification(tokens)
+	spec, result := new(specParser).createSpecification(tokens, new(conceptDictionary))
 
 	c.Assert(result.ok, Equals, true)
 	step := spec.scenarios[0].steps[0]
@@ -119,7 +117,7 @@ func (s *MySuite) TestStepsWithKeywords(c *C) {
 		&token{kind: stepKind, value: "sample {static} and {dynamic}", lineNo: 3, args: []string{"name"}},
 	}
 
-	_, result := new(specParser).createSpecification(tokens)
+	_, result := new(specParser).createSpecification(tokens, new(conceptDictionary))
 
 	c.Assert(result, NotNil)
 	c.Assert(result.ok, Equals, false)
@@ -134,7 +132,7 @@ func (s *MySuite) TestContextWithKeywords(c *C) {
 		&token{kind: scenarioKind, value: "Scenario Heading", lineNo: 2},
 	}
 
-	_, result := new(specParser).createSpecification(tokens)
+	_, result := new(specParser).createSpecification(tokens, new(conceptDictionary))
 
 	c.Assert(result, NotNil)
 	c.Assert(result.ok, Equals, false)
@@ -152,7 +150,7 @@ func (s *MySuite) TestSpecWithDataTable(c *C) {
 		&token{kind: commentKind, value: "Comment before data table"},
 	}
 
-	spec, result := new(specParser).createSpecification(tokens)
+	spec, result := new(specParser).createSpecification(tokens, new(conceptDictionary))
 
 	c.Assert(result.ok, Equals, true)
 	c.Assert(spec.dataTable, NotNil)
@@ -174,7 +172,7 @@ func (s *MySuite) TestStepWithInlineTable(c *C) {
 		&token{kind: tableRow, args: []string{"2", "bar"}},
 	}
 
-	spec, result := new(specParser).createSpecification(tokens)
+	spec, result := new(specParser).createSpecification(tokens, new(conceptDictionary))
 
 	c.Assert(result.ok, Equals, true)
 	inlineTable := spec.scenarios[0].steps[0].inlineTable
@@ -197,7 +195,7 @@ func (s *MySuite) TestContextWithInlineTable(c *C) {
 		&token{kind: scenarioKind, value: "Scenario Heading"},
 	}
 
-	spec, result := new(specParser).createSpecification(tokens)
+	spec, result := new(specParser).createSpecification(tokens, new(conceptDictionary))
 
 	c.Assert(result.ok, Equals, true)
 	inlineTable := spec.contexts[0].inlineTable
@@ -224,7 +222,7 @@ func (s *MySuite) TestWarningWhenParsingMultipleDataTable(c *C) {
 		&token{kind: tableRow, args: []string{"2"}},
 	}
 
-	_, result := new(specParser).createSpecification(tokens)
+	_, result := new(specParser).createSpecification(tokens, new(conceptDictionary))
 
 	c.Assert(result.ok, Equals, true)
 	c.Assert(len(result.warnings), Equals, 1)
@@ -246,7 +244,7 @@ func (s *MySuite) TestWarningWhenParsingTableOccursWithoutStep(c *C) {
 		&token{kind: tableRow, args: []string{"2"}},
 	}
 
-	_, result := new(specParser).createSpecification(tokens)
+	_, result := new(specParser).createSpecification(tokens, new(conceptDictionary))
 
 	c.Assert(result.ok, Equals, true)
 	c.Assert(len(result.warnings), Equals, 2)
@@ -262,7 +260,7 @@ func (s *MySuite) TestAddSpecTags(c *C) {
 		&token{kind: scenarioKind, value: "Scenario Heading", lineNo: 3},
 	}
 
-	spec, result := new(specParser).createSpecification(tokens)
+	spec, result := new(specParser).createSpecification(tokens, new(conceptDictionary))
 
 	c.Assert(result.ok, Equals, true)
 
@@ -279,7 +277,7 @@ func (s *MySuite) TestAddSpecTagsAndScenarioTags(c *C) {
 		&token{kind: tagKind, args: []string{"tag3", "tag4"}, lineNo: 2},
 	}
 
-	spec, result := new(specParser).createSpecification(tokens)
+	spec, result := new(specParser).createSpecification(tokens, new(conceptDictionary))
 
 	c.Assert(result.ok, Equals, true)
 
@@ -299,10 +297,10 @@ func (s *MySuite) TestErrorOnAddingDynamicParamterWithoutADataTable(c *C) {
 		&token{kind: stepKind, value: "Step with a {dynamic}", args: []string{"foo"}, lineNo: 3, lineText: "*Step with a <foo>"},
 	}
 
-	_, result := new(specParser).createSpecification(tokens)
+	_, result := new(specParser).createSpecification(tokens, new(conceptDictionary))
 
 	c.Assert(result.ok, Equals, false)
-	c.Assert(result.error.message, Equals, "No data table found for dynamic paramter <foo> : *Step with a <foo>")
+	c.Assert(result.error.message, Equals, "Dynamic parameter <foo> could not be resolved")
 	c.Assert(result.error.lineNo, Equals, 3)
 
 }
@@ -316,10 +314,10 @@ func (s *MySuite) TestErrorOnAddingDynamicParamterWithoutDataTableHeaderValue(c 
 		&token{kind: stepKind, value: "Step with a {dynamic}", args: []string{"foo"}, lineNo: 5, lineText: "*Step with a <foo>"},
 	}
 
-	_, result := new(specParser).createSpecification(tokens)
+	_, result := new(specParser).createSpecification(tokens, new(conceptDictionary))
 
 	c.Assert(result.ok, Equals, false)
-	c.Assert(result.error.message, Equals, "No data table column found for dynamic paramter <foo> : *Step with a <foo>")
+	c.Assert(result.error.message, Equals, "Dynamic parameter <foo> could not be resolved")
 	c.Assert(result.error.lineNo, Equals, 5)
 
 }
@@ -346,3 +344,25 @@ func (s *MySuite) TestLookupContainsParam(c *C) {
 	c.Assert(lookup.containsParam("param2"), Equals, true)
 	c.Assert(lookup.containsParam("param3"), Equals, false)
 }
+
+//func (s *MySuite) TestCreateStepFromSimpleConcept(c *C) {
+//	tokens := []*token{
+//		&token{kind: specKind, value: "Spec Heading", lineNo: 1},
+//		&token{kind: scenarioKind, value: "Scenario Heading", lineNo: 2},
+//		&token{kind: scenarioKind, value: "concept step", lineNo: 3},
+//	}
+//
+//	conceptDictionary := new(conceptDictionary)
+//	firstStep := &step{value: "step 1"}
+//	secondStep := &step{value: "step 2"}
+//	conceptStep := &step{value: "concept step", isConcept: true, conceptSteps: []*step{firstStep, secondStep}}
+//	conceptDictionary.add([]*step{conceptStep})
+//	spec, result := new(specParser).createSpecification(tokens, conceptDictionary)
+//	c.Assert(result.ok, Equals, true)
+//
+//	c.Assert(len(spec.scenarios[0].steps), Equals, 1)
+//	specConceptStep := spec.scenarios[0].steps[0]
+//	c.Assert(specConceptStep.isConcept, Equals, true)
+//	c.Assert(specConceptStep.conceptSteps[0], Equals, firstStep)
+//	c.Assert(specConceptStep.conceptSteps[1], Equals, secondStep)
+//}
