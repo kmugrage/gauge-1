@@ -56,6 +56,7 @@ func (exe *execution) start() *testExecutionStatus {
 	for _, specificationToExecute := range exe.specifications {
 		executor := &specExecutor{specification: specificationToExecute, connection: exe.connection}
 		specExecutionStatus := executor.execute()
+		testExecutionStatus.specifications = append(testExecutionStatus.specifications, specificationToExecute)
 		testExecutionStatus.specExecutionStatuses = append(testExecutionStatus.specExecutionStatuses, specExecutionStatus)
 	}
 	//TODO: error check when hooks are in place

@@ -58,7 +58,7 @@ func (e *specExecutor) executeAfterSpecHook() *ExecutionStatus {
 }
 
 func (executor *specExecutor) execute() *specExecutionStatus {
-	specExecutionStatus := &specExecutionStatus{specification: executor.specification}
+	specExecutionStatus := &specExecutionStatus{specification: executor.specification, scenariosExecutionStatuses: make(map[int][]*scenarioExecutionStatus)}
 
 	beforeSpecHookStatus := executor.executeBeforeSpecHook()
 	if beforeSpecHookStatus.GetPassed() {
@@ -215,7 +215,7 @@ func (executor *specExecutor) executeStep(step *step) *stepExecutionStatus {
 		stepExecStatus.executionStatus = append(stepExecStatus.executionStatus, status)
 	}
 
-	if !stepExecStatus.passed {
+	if stepExecStatus.passed {
 		fmt.Printf("=> \x1b[32;1m%s\n\x1b[0m", step.lineText)
 	} else {
 		fmt.Printf("\x1b[31;1m%s\n\x1b[0m", step.lineText)
