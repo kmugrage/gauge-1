@@ -373,6 +373,29 @@ func (s *MySuite) TestGetLookupCopy(c *C) {
 	c.Assert(originalLookup.getArg("param1"), IsNil)
 }
 
+func (s *MySuite) TestGetLookupFromTableRow(c *C) {
+	dataTable := new(table)
+	dataTable.addHeaders([]string{"id", "name"})
+	dataTable.addRowValues([]string{"1", "admin"})
+	dataTable.addRowValues([]string{"2", "root"})
+
+	emptyLookup := new(argLookup).fromDataTableRow(new(table), 0)
+	lookup1 := new(argLookup).fromDataTableRow(dataTable, 0)
+	lookup2 := new(argLookup).fromDataTableRow(dataTable, 1)
+
+	c.Assert(emptyLookup.paramIndexMap, IsNil)
+
+	c.Assert(lookup1.getArg("id").value, Equals, "1")
+	c.Assert(lookup1.getArg("id").argType, Equals, static)
+	c.Assert(lookup1.getArg("name").value, Equals, "admin")
+	c.Assert(lookup1.getArg("name").argType, Equals, static)
+
+	c.Assert(lookup2.getArg("id").value, Equals, "2")
+	c.Assert(lookup2.getArg("id").argType, Equals, static)
+	c.Assert(lookup2.getArg("name").value, Equals, "root")
+	c.Assert(lookup2.getArg("name").argType, Equals, static)
+}
+
 func (s *MySuite) TestCreateStepFromSimpleConcept(c *C) {
 	tokens := []*token{
 		&token{kind: specKind, value: "Spec Heading", lineNo: 1},

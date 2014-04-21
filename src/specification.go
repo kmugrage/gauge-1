@@ -379,3 +379,15 @@ func (lookup *argLookup) getCopy() argLookup {
 	}
 	return *lookupCopy
 }
+
+func (lookup *argLookup) fromDataTableRow(datatable *table, index int) *argLookup {
+	dataTableLookup := new(argLookup)
+	if !datatable.isInitialized() {
+		return dataTableLookup
+	}
+	for _, header := range datatable.headers {
+		dataTableLookup.addArgName(header)
+		dataTableLookup.addArgValue(header, &stepArg{value: datatable.get(header)[index], argType: static})
+	}
+	return dataTableLookup
+}
