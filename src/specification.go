@@ -34,7 +34,7 @@ type paramNameValue struct {
 
 type conceptLookup struct {
 	paramIndexMap map[string]int
-	paramValue    []*paramNameValue
+	paramValue    []paramNameValue
 }
 
 type step struct {
@@ -232,47 +232,83 @@ func (specParser *specParser) initalizeConverters() []func(*token, *int, *specif
 }
 
 func (spec *specification) addStep(stepToken *token, addTo *[]*step, conceptDictionary *conceptDictionary) *parseError {
-	var lookup conceptLookup
-	conceptStep := conceptDictionary.search(stepToken.value)
-	if conceptStep != nil {
-		lookup = conceptStep.lookup
+	var stepToAdd *step
+	var err *parseError
+	stepValue, _ := spec.extractStepValueAndParameterTypes(stepToken.value)
+	if conceptFromDictionary := conceptDictionary.search(stepValue); conceptFromDictionary != nil {
+		stepToAdd, err = spec.createConceptStep(conceptFromDictionary, stepToken)
 	} else {
-		lookup = *new(conceptLookup)
+		lookup := *new(conceptLookup)
 		for _, value := range spec.dataTable.headers {
 			lookup.addParam(value)
 		}
+		stepToAdd, err = spec.createStep(stepToken, &lookup)
 	}
-	step, err := spec.createStep(stepToken, &lookup)
 	if err != nil {
 		return err
 	}
-	*addTo = append(*addTo, step)
+	*addTo = append(*addTo, stepToAdd)
 	return nil
 }
 
-func (spec *specification) createStep(stepToken *token, lookup *conceptLookup) (*step, *parseError) {
-	step := &step{lineNo: stepToken.lineNo, value: stepToken.value, lineText: strings.TrimSpace(stepToken.lineText)}
-	r := regexp.MustCompile("{(dynamic|static|special)}")
-
-	args := r.FindAllStringSubmatch(stepToken.value, -1)
-
-	if args == nil {
-		return step, nil
+func (spec *specification) createConceptStep(conceptFromDictionary *step, stepToken *token) (*step, *parseError) {
+	lookup := conceptFromDictionary.lookup.getCopy()
+	conceptStep, err := spec.createStep(stepToken, nil)
+	conceptStep.isConcept = true
+	if err != nil {
+		return nil, err
 	}
-	if len(args) != len(stepToken.args) {
+	conceptStep.conceptSteps = conceptFromDictionary.conceptSteps
+	spec.populateConceptLookup(&lookup, conceptFromDictionary.args, conceptStep.args)
+	conceptStep.lookup = lookup
+	return conceptStep, nil
+}
+
+func (spec *specification) createStep(stepToken *token, lookup *conceptLookup) (*step, *parseError) {
+	stepValue, argsType := spec.extractStepValueAndParameterTypes(stepToken.value)
+	if argsType != nil && len(argsType) != len(stepToken.args) {
 		return nil, &parseError{stepToken.lineNo, "Step text should not have '{static}' or '{dynamic}' or '{special}'", stepToken.lineText}
 	}
-	step.value = r.ReplaceAllString(step.value, "{}")
+	step := &step{lineNo: stepToken.lineNo, value: stepValue, lineText: strings.TrimSpace(stepToken.lineText)}
 	var argument *stepArg
 	var err *parseError
-	for i, arg := range args {
-		argument, err = spec.createStepArg(stepToken.args[i], arg[1], stepToken, lookup)
+	for i, argType := range argsType {
+		argument, err = spec.createStepArg(stepToken.args[i], argType, stepToken, lookup)
 		if err != nil {
 			return nil, err
 		}
 		step.args = append(step.args, argument)
 	}
 	return step, nil
+}
+
+func (spec *specification) extractStepValueAndParameterTypes(stepTokenValue string) (string, []string) {
+	argsType := make([]string, 0)
+	r := regexp.MustCompile("{(dynamic|static|special)}")
+	/*
+		enter {dynamic} and {static}
+		returns
+		[
+		["{dynamic}","dynamic"]
+		["{static}","static"]
+		]
+	*/
+	args := r.FindAllStringSubmatch(stepTokenValue, -1)
+
+	if args == nil {
+		return stepTokenValue, nil
+	}
+	for _, arg := range args {
+		//arg[1] extracts the first group
+		argsType = append(argsType, arg[1])
+	}
+	return r.ReplaceAllString(stepTokenValue, "{}"), argsType
+}
+
+func (spec *specification) populateConceptLookup(lookup *conceptLookup, conceptArgs []*stepArg, stepArgs []*stepArg) {
+	for i, arg := range stepArgs {
+		lookup.addParamValue(conceptArgs[i].value, arg.value)
+	}
 }
 
 func (spec *specification) createStepArg(argValue string, typeOfArg string, token *token, lookup *conceptLookup) (*stepArg, *parseError) {
@@ -305,13 +341,38 @@ func (resolver *specialTypeResolver) resolve(value string) *stepArg {
 func (lookup *conceptLookup) addParam(param string) {
 	if lookup.paramIndexMap == nil {
 		lookup.paramIndexMap = make(map[string]int)
-		lookup.paramValue = make([]*paramNameValue, 0)
+		lookup.paramValue = make([]paramNameValue, 0)
 	}
 	lookup.paramIndexMap[param] = len(lookup.paramValue)
-	lookup.paramValue = append(lookup.paramValue, &paramNameValue{name: param})
+	lookup.paramValue = append(lookup.paramValue, paramNameValue{name: param})
+}
+
+func (lookup *conceptLookup) addParamValue(param string, value string) {
+	paramIndex, ok := lookup.paramIndexMap[param]
+	if !ok {
+		panic(fmt.Sprintf("Accessing an invalid parameter (%s)", param))
+	}
+	lookup.paramValue[paramIndex].value = value
 }
 
 func (lookup *conceptLookup) containsParam(param string) bool {
 	_, ok := lookup.paramIndexMap[param]
 	return ok
+}
+
+func (lookup *conceptLookup) getParamValue(param string) string {
+	paramIndex, ok := lookup.paramIndexMap[param]
+	if !ok {
+		panic(fmt.Sprintf("Accessing an invalid parameter (%s)", param))
+	}
+	return lookup.paramValue[paramIndex].value
+}
+
+func (lookup *conceptLookup) getCopy() conceptLookup {
+	lookupCopy := new(conceptLookup)
+	for key, _ := range lookup.paramIndexMap {
+		lookupCopy.addParam(key)
+		lookupCopy.addParamValue(key, lookup.getParamValue(key))
+	}
+	return *lookupCopy
 }

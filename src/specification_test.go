@@ -90,11 +90,10 @@ func (s *MySuite) TestStepsWithParam(c *C) {
 		&token{kind: tableHeader, args: []string{"id"}, lineNo: 2},
 		&token{kind: scenarioKind, value: "Scenario Heading", lineNo: 3},
 		&token{kind: stepKind, value: "enter {static} with {dynamic}", lineNo: 4, args: []string{"user", "id"}},
-		&token{kind: stepKind, value: "sample \\{static\\}", lineNo: 5, args: []string{"user"}},
+		&token{kind: stepKind, value: "sample \\{static\\}", lineNo: 5},
 	}
 
 	spec, result := new(specParser).createSpecification(tokens, new(conceptDictionary))
-
 	c.Assert(result.ok, Equals, true)
 	step := spec.scenarios[0].steps[0]
 	c.Assert(step.value, Equals, "enter {} with {}")
@@ -345,24 +344,92 @@ func (s *MySuite) TestLookupContainsParam(c *C) {
 	c.Assert(lookup.containsParam("param3"), Equals, false)
 }
 
-//func (s *MySuite) TestCreateStepFromSimpleConcept(c *C) {
-//	tokens := []*token{
-//		&token{kind: specKind, value: "Spec Heading", lineNo: 1},
-//		&token{kind: scenarioKind, value: "Scenario Heading", lineNo: 2},
-//		&token{kind: scenarioKind, value: "concept step", lineNo: 3},
-//	}
-//
-//	conceptDictionary := new(conceptDictionary)
-//	firstStep := &step{value: "step 1"}
-//	secondStep := &step{value: "step 2"}
-//	conceptStep := &step{value: "concept step", isConcept: true, conceptSteps: []*step{firstStep, secondStep}}
-//	conceptDictionary.add([]*step{conceptStep})
-//	spec, result := new(specParser).createSpecification(tokens, conceptDictionary)
-//	c.Assert(result.ok, Equals, true)
-//
-//	c.Assert(len(spec.scenarios[0].steps), Equals, 1)
-//	specConceptStep := spec.scenarios[0].steps[0]
-//	c.Assert(specConceptStep.isConcept, Equals, true)
-//	c.Assert(specConceptStep.conceptSteps[0], Equals, firstStep)
-//	c.Assert(specConceptStep.conceptSteps[1], Equals, secondStep)
-//}
+func (s *MySuite) TestAddParamValue(c *C) {
+	lookup := new(conceptLookup)
+	lookup.addParam("param1")
+	lookup.addParamValue("param1", "value1")
+	lookup.addParam("param2")
+	lookup.addParamValue("param2", "value2")
+
+	c.Assert(lookup.getParamValue("param1"), Equals, "value1")
+	c.Assert(lookup.getParamValue("param2"), Equals, "value2")
+}
+
+func (s *MySuite) TestPanicForInvalidParam(c *C) {
+	lookup := new(conceptLookup)
+
+	c.Assert(func() { lookup.addParamValue("param1", "value1") }, Panics, "Accessing an invalid parameter (param1)")
+	c.Assert(func() { lookup.getParamValue("param1") }, Panics, "Accessing an invalid parameter (param1)")
+}
+
+func (s *MySuite) TestGetLookupCopy(c *C) {
+	originalLookup := new(conceptLookup)
+	originalLookup.addParam("param1")
+
+	copiedLookup := originalLookup.getCopy()
+	copiedLookup.addParamValue("param1", "value1")
+
+	c.Assert(copiedLookup.getParamValue("param1"), Equals, "value1")
+	c.Assert(originalLookup.getParamValue("param1"), Equals, "")
+}
+
+func (s *MySuite) TestCreateStepFromSimpleConcept(c *C) {
+	tokens := []*token{
+		&token{kind: specKind, value: "Spec Heading", lineNo: 1},
+		&token{kind: scenarioKind, value: "Scenario Heading", lineNo: 2},
+		&token{kind: stepKind, value: "concept step", lineNo: 3},
+	}
+
+	conceptDictionary := new(conceptDictionary)
+	firstStep := &step{value: "step 1"}
+	secondStep := &step{value: "step 2"}
+	conceptStep := &step{value: "concept step", isConcept: true, conceptSteps: []*step{firstStep, secondStep}}
+	conceptDictionary.add([]*step{conceptStep})
+	spec, result := new(specParser).createSpecification(tokens, conceptDictionary)
+	c.Assert(result.ok, Equals, true)
+
+	c.Assert(len(spec.scenarios[0].steps), Equals, 1)
+	specConceptStep := spec.scenarios[0].steps[0]
+	c.Assert(specConceptStep.isConcept, Equals, true)
+	c.Assert(specConceptStep.conceptSteps[0], Equals, firstStep)
+	c.Assert(specConceptStep.conceptSteps[1], Equals, secondStep)
+}
+
+func (s *MySuite) TestCreateStepFromConceptWithParameters(c *C) {
+	tokens := []*token{
+		&token{kind: specKind, value: "Spec Heading", lineNo: 1},
+		&token{kind: scenarioKind, value: "Scenario Heading", lineNo: 2},
+		&token{kind: stepKind, value: "create user {static}", args: []string{"foo"}, lineNo: 3},
+		&token{kind: stepKind, value: "create user {static}", args: []string{"bar"}, lineNo: 4},
+	}
+
+	concepts, _ := new(conceptParser).parse("#create user <username> \n * enter user <username> \n *select \"finish\"")
+	conceptsDictionary := new(conceptDictionary)
+	conceptsDictionary.add(concepts)
+
+	spec, result := new(specParser).createSpecification(tokens, conceptsDictionary)
+	c.Assert(result.ok, Equals, true)
+
+	c.Assert(len(spec.scenarios[0].steps), Equals, 2)
+
+	firstConceptStep := spec.scenarios[0].steps[0]
+	c.Assert(firstConceptStep.isConcept, Equals, true)
+	c.Assert(firstConceptStep.conceptSteps[0].value, Equals, "enter user {}")
+	c.Assert(firstConceptStep.conceptSteps[0].args[0].value, Equals, "username")
+	c.Assert(firstConceptStep.conceptSteps[1].value, Equals, "select {}")
+	c.Assert(firstConceptStep.conceptSteps[1].args[0].value, Equals, "finish")
+	c.Assert(len(firstConceptStep.lookup.paramValue), Equals, 1)
+	c.Assert(firstConceptStep.lookup.paramValue[0].name, Equals, "username")
+	c.Assert(firstConceptStep.lookup.paramValue[0].value, Equals, "foo")
+
+	secondConceptStep := spec.scenarios[0].steps[1]
+	c.Assert(secondConceptStep.isConcept, Equals, true)
+	c.Assert(secondConceptStep.conceptSteps[0].value, Equals, "enter user {}")
+	c.Assert(secondConceptStep.conceptSteps[0].args[0].value, Equals, "username")
+	c.Assert(secondConceptStep.conceptSteps[1].value, Equals, "select {}")
+	c.Assert(secondConceptStep.conceptSteps[1].args[0].value, Equals, "finish")
+	c.Assert(len(secondConceptStep.lookup.paramValue), Equals, 1)
+	c.Assert(secondConceptStep.lookup.paramValue[0].name, Equals, "username")
+	c.Assert(secondConceptStep.lookup.paramValue[0].value, Equals, "bar")
+
+}
