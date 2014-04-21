@@ -24,7 +24,6 @@ func handleConnection(conn net.Conn) {
 		n, err := conn.Read(data)
 		if err != nil {
 			if err == io.EOF {
-				log.Println("Client exited")
 				return
 			}
 			log.Println(err.Error())
@@ -78,7 +77,8 @@ func getResponse(conn net.Conn, message *Message) (*Message, error) {
 		delete(pendingRequests, *message.MessageId)
 		return nil, err
 	}
-	data = append(proto.EncodeVarint(uint64(len(data))), data...)
+	dataLength := proto.EncodeVarint(uint64(len(data)))
+	data = append(dataLength, data...)
 
 	_, err = conn.Write(data)
 	if err != nil {
