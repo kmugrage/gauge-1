@@ -321,10 +321,10 @@ func (s *MySuite) TestErrorOnAddingDynamicParamterWithoutDataTableHeaderValue(c 
 
 }
 
-func (s *MySuite) TestLookupAddParam(c *C) {
-	lookup := new(conceptLookup)
-	lookup.addParam("param1")
-	lookup.addParam("param2")
+func (s *MySuite) TestLookupaddArg(c *C) {
+	lookup := new(argLookup)
+	lookup.addArgName("param1")
+	lookup.addArgName("param2")
 
 	c.Assert(lookup.paramIndexMap["param1"], Equals, 0)
 	c.Assert(lookup.paramIndexMap["param2"], Equals, 1)
@@ -334,43 +334,43 @@ func (s *MySuite) TestLookupAddParam(c *C) {
 
 }
 
-func (s *MySuite) TestLookupContainsParam(c *C) {
-	lookup := new(conceptLookup)
-	lookup.addParam("param1")
-	lookup.addParam("param2")
+func (s *MySuite) TestLookupContainsArg(c *C) {
+	lookup := new(argLookup)
+	lookup.addArgName("param1")
+	lookup.addArgName("param2")
 
-	c.Assert(lookup.containsParam("param1"), Equals, true)
-	c.Assert(lookup.containsParam("param2"), Equals, true)
-	c.Assert(lookup.containsParam("param3"), Equals, false)
+	c.Assert(lookup.containsArg("param1"), Equals, true)
+	c.Assert(lookup.containsArg("param2"), Equals, true)
+	c.Assert(lookup.containsArg("param3"), Equals, false)
 }
 
-func (s *MySuite) TestAddParamValue(c *C) {
-	lookup := new(conceptLookup)
-	lookup.addParam("param1")
-	lookup.addParamValue("param1", "value1", static)
-	lookup.addParam("param2")
-	lookup.addParamValue("param2", "value2", dynamic)
+func (s *MySuite) TestaddArgValue(c *C) {
+	lookup := new(argLookup)
+	lookup.addArgName("param1")
+	lookup.addArgValue("param1", &stepArg{value: "value1", argType: static})
+	lookup.addArgName("param2")
+	lookup.addArgValue("param2", &stepArg{value: "value2", argType: dynamic})
 
-	c.Assert(lookup.getParamValue("param1"), Equals, "value1")
-	c.Assert(lookup.getParamValue("param2"), Equals, "value2")
+	c.Assert(lookup.getArg("param1").value, Equals, "value1")
+	c.Assert(lookup.getArg("param2").value, Equals, "value2")
 }
 
-func (s *MySuite) TestPanicForInvalidParam(c *C) {
-	lookup := new(conceptLookup)
+func (s *MySuite) TestPanicForInvalidArg(c *C) {
+	lookup := new(argLookup)
 
-	c.Assert(func() { lookup.addParamValue("param1", "value1", static) }, Panics, "Accessing an invalid parameter (param1)")
-	c.Assert(func() { lookup.getParamValue("param1") }, Panics, "Accessing an invalid parameter (param1)")
+	c.Assert(func() { lookup.addArgValue("param1", &stepArg{value: "value1", argType: static}) }, Panics, "Accessing an invalid parameter (param1)")
+	c.Assert(func() { lookup.getArg("param1") }, Panics, "Accessing an invalid parameter (param1)")
 }
 
 func (s *MySuite) TestGetLookupCopy(c *C) {
-	originalLookup := new(conceptLookup)
-	originalLookup.addParam("param1")
+	originalLookup := new(argLookup)
+	originalLookup.addArgName("param1")
 
 	copiedLookup := originalLookup.getCopy()
-	copiedLookup.addParamValue("param1", "value1", static)
+	copiedLookup.addArgValue("param1", &stepArg{value: "value1", argType: static})
 
-	c.Assert(copiedLookup.getParamValue("param1"), Equals, "value1")
-	c.Assert(originalLookup.getParamValue("param1"), Equals, "")
+	c.Assert(copiedLookup.getArg("param1").value, Equals, "value1")
+	c.Assert(originalLookup.getArg("param1"), IsNil)
 }
 
 func (s *MySuite) TestCreateStepFromSimpleConcept(c *C) {
@@ -420,7 +420,7 @@ func (s *MySuite) TestCreateStepFromConceptWithParameters(c *C) {
 	c.Assert(firstConceptStep.conceptSteps[1].args[0].value, Equals, "finish")
 	c.Assert(len(firstConceptStep.lookup.paramValue), Equals, 1)
 	c.Assert(firstConceptStep.lookup.paramValue[0].name, Equals, "username")
-	c.Assert(firstConceptStep.lookup.paramValue[0].value, Equals, "foo")
+	c.Assert(firstConceptStep.lookup.paramValue[0].stepArg.value, Equals, "foo")
 
 	secondConceptStep := spec.scenarios[0].steps[1]
 	c.Assert(secondConceptStep.isConcept, Equals, true)
@@ -430,7 +430,7 @@ func (s *MySuite) TestCreateStepFromConceptWithParameters(c *C) {
 	c.Assert(secondConceptStep.conceptSteps[1].args[0].value, Equals, "finish")
 	c.Assert(len(secondConceptStep.lookup.paramValue), Equals, 1)
 	c.Assert(secondConceptStep.lookup.paramValue[0].name, Equals, "username")
-	c.Assert(secondConceptStep.lookup.paramValue[0].value, Equals, "bar")
+	c.Assert(secondConceptStep.lookup.paramValue[0].stepArg.value, Equals, "bar")
 
 }
 
@@ -447,7 +447,6 @@ func (s *MySuite) TestCreateStepFromConceptWithDynamicParameters(c *C) {
 	concepts, _ := new(conceptParser).parse("#create user <user-id> and <user-description> \n * enter user <user-id> and <user-description> \n *select \"finish\"")
 	conceptsDictionary := new(conceptDictionary)
 	conceptsDictionary.add(concepts)
-
 	spec, result := new(specParser).createSpecification(tokens, conceptsDictionary)
 	c.Assert(result.ok, Equals, true)
 
@@ -466,11 +465,11 @@ func (s *MySuite) TestCreateStepFromConceptWithDynamicParameters(c *C) {
 
 	c.Assert(len(firstConcept.lookup.paramValue), Equals, 2)
 	c.Assert(firstConcept.lookup.paramValue[0].name, Equals, "user-id")
-	c.Assert(firstConcept.lookup.paramValue[0].value, Equals, "id")
-	c.Assert(firstConcept.lookup.paramValue[0].paramType, Equals, dynamic)
+	c.Assert(firstConcept.lookup.paramValue[0].stepArg.value, Equals, "id")
+	c.Assert(firstConcept.lookup.paramValue[0].stepArg.argType, Equals, dynamic)
 	c.Assert(firstConcept.lookup.paramValue[1].name, Equals, "user-description")
-	c.Assert(firstConcept.lookup.paramValue[1].value, Equals, "description")
-	c.Assert(firstConcept.lookup.paramValue[1].paramType, Equals, dynamic)
+	c.Assert(firstConcept.lookup.paramValue[1].stepArg.value, Equals, "description")
+	c.Assert(firstConcept.lookup.paramValue[1].stepArg.argType, Equals, dynamic)
 
 	secondConcept := spec.scenarios[0].steps[1]
 	c.Assert(secondConcept.isConcept, Equals, true)
@@ -485,10 +484,10 @@ func (s *MySuite) TestCreateStepFromConceptWithDynamicParameters(c *C) {
 
 	c.Assert(len(secondConcept.lookup.paramValue), Equals, 2)
 	c.Assert(secondConcept.lookup.paramValue[0].name, Equals, "user-id")
-	c.Assert(secondConcept.lookup.paramValue[0].value, Equals, "456")
-	c.Assert(secondConcept.lookup.paramValue[0].paramType, Equals, static)
+	c.Assert(secondConcept.lookup.paramValue[0].stepArg.value, Equals, "456")
+	c.Assert(secondConcept.lookup.paramValue[0].stepArg.argType, Equals, static)
 	c.Assert(secondConcept.lookup.paramValue[1].name, Equals, "user-description")
-	c.Assert(secondConcept.lookup.paramValue[1].value, Equals, "Regular fellow")
-	c.Assert(secondConcept.lookup.paramValue[1].paramType, Equals, static)
+	c.Assert(secondConcept.lookup.paramValue[1].stepArg.value, Equals, "Regular fellow")
+	c.Assert(secondConcept.lookup.paramValue[1].stepArg.argType, Equals, static)
 
 }

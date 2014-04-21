@@ -28,12 +28,11 @@ type stepArg struct {
 }
 
 type paramNameValue struct {
-	name      string
-	value     string
-	paramType argType
+	name    string
+	stepArg *stepArg
 }
 
-type conceptLookup struct {
+type argLookup struct {
 	paramIndexMap map[string]int
 	paramValue    []paramNameValue
 }
@@ -45,7 +44,7 @@ type step struct {
 	args         []*stepArg
 	inlineTable  table
 	isConcept    bool
-	lookup       conceptLookup
+	lookup       argLookup
 	conceptSteps []*step
 }
 
@@ -239,9 +238,9 @@ func (spec *specification) addStep(stepToken *token, addTo *[]*step, conceptDict
 	if conceptFromDictionary := conceptDictionary.search(stepValue); conceptFromDictionary != nil {
 		stepToAdd, err = spec.createConceptStep(conceptFromDictionary, stepToken)
 	} else {
-		lookup := *new(conceptLookup)
+		lookup := *new(argLookup)
 		for _, value := range spec.dataTable.headers {
-			lookup.addParam(value)
+			lookup.addArgName(value)
 		}
 		stepToAdd, err = spec.createStep(stepToken, &lookup)
 	}
@@ -265,7 +264,7 @@ func (spec *specification) createConceptStep(conceptFromDictionary *step, stepTo
 	return conceptStep, nil
 }
 
-func (spec *specification) createStep(stepToken *token, lookup *conceptLookup) (*step, *parseError) {
+func (spec *specification) createStep(stepToken *token, lookup *argLookup) (*step, *parseError) {
 	stepValue, argsType := spec.extractStepValueAndParameterTypes(stepToken.value)
 	if argsType != nil && len(argsType) != len(stepToken.args) {
 		return nil, &parseError{stepToken.lineNo, "Step text should not have '{static}' or '{dynamic}' or '{special}'", stepToken.lineText}
@@ -306,20 +305,20 @@ func (spec *specification) extractStepValueAndParameterTypes(stepTokenValue stri
 	return r.ReplaceAllString(stepTokenValue, "{}"), argsType
 }
 
-func (spec *specification) populateConceptLookup(lookup *conceptLookup, conceptArgs []*stepArg, stepArgs []*stepArg) {
+func (spec *specification) populateConceptLookup(lookup *argLookup, conceptArgs []*stepArg, stepArgs []*stepArg) {
 	for i, arg := range stepArgs {
-		lookup.addParamValue(conceptArgs[i].value, arg.value, arg.argType)
+		lookup.addArgValue(conceptArgs[i].value, &stepArg{value: arg.value, argType: arg.argType, table: arg.table})
 	}
 }
 
-func (spec *specification) createStepArg(argValue string, typeOfArg string, token *token, lookup *conceptLookup) (*stepArg, *parseError) {
+func (spec *specification) createStepArg(argValue string, typeOfArg string, token *token, lookup *argLookup) (*stepArg, *parseError) {
 	var stepArgument *stepArg
 	if typeOfArg == "special" {
 		return new(specialTypeResolver).resolve(argValue), nil
 	} else if typeOfArg == "static" {
 		return &stepArg{argType: static, value: argValue}, nil
 	} else {
-		if !isConceptHeader(lookup) && !lookup.containsParam(argValue) {
+		if !isConceptHeader(lookup) && !lookup.containsArg(argValue) {
 			return nil, &parseError{lineNo: token.lineNo, message: fmt.Sprintf("Dynamic parameter <%s> could not be resolved", argValue), lineText: token.lineText}
 		}
 		stepArgument = &stepArg{argType: dynamic, value: argValue}
@@ -328,7 +327,7 @@ func (spec *specification) createStepArg(argValue string, typeOfArg string, toke
 }
 
 //concept header will have dynamic param and should not be resolved through lookup, so passing nil lookup
-func isConceptHeader(lookup *conceptLookup) bool {
+func isConceptHeader(lookup *argLookup) bool {
 	return lookup == nil
 }
 
@@ -339,43 +338,44 @@ func (resolver *specialTypeResolver) resolve(value string) *stepArg {
 	return &stepArg{argType: specialString, value: ""}
 }
 
-func (lookup *conceptLookup) addParam(param string) {
+func (lookup *argLookup) addArgName(argName string) {
 	if lookup.paramIndexMap == nil {
 		lookup.paramIndexMap = make(map[string]int)
 		lookup.paramValue = make([]paramNameValue, 0)
 	}
-	lookup.paramIndexMap[param] = len(lookup.paramValue)
-	lookup.paramValue = append(lookup.paramValue, paramNameValue{name: param})
+	lookup.paramIndexMap[argName] = len(lookup.paramValue)
+	lookup.paramValue = append(lookup.paramValue, paramNameValue{name: argName})
 }
 
-func (lookup *conceptLookup) addParamValue(param string, value string, paramType argType) {
+func (lookup *argLookup) addArgValue(param string, stepArg *stepArg) {
 	paramIndex, ok := lookup.paramIndexMap[param]
 	if !ok {
 		panic(fmt.Sprintf("Accessing an invalid parameter (%s)", param))
 	}
-	lookup.paramValue[paramIndex].value = value
-	lookup.paramValue[paramIndex].paramType = paramType
+	lookup.paramValue[paramIndex].stepArg = stepArg
 }
 
-func (lookup *conceptLookup) containsParam(param string) bool {
+func (lookup *argLookup) containsArg(param string) bool {
 	_, ok := lookup.paramIndexMap[param]
 	return ok
 }
 
-func (lookup *conceptLookup) getParamValue(param string) string {
+func (lookup *argLookup) getArg(param string) *stepArg {
 	paramIndex, ok := lookup.paramIndexMap[param]
 	if !ok {
 		panic(fmt.Sprintf("Accessing an invalid parameter (%s)", param))
 	}
-	return lookup.paramValue[paramIndex].value
+	return lookup.paramValue[paramIndex].stepArg
 }
 
-func (lookup *conceptLookup) getCopy() conceptLookup {
-	lookupCopy := new(conceptLookup)
-	for key, value := range lookup.paramIndexMap {
-		lookupCopy.addParam(key)
-		paramValue := lookup.paramValue[value]
-		lookupCopy.addParamValue(key, paramValue.value, paramValue.paramType)
+func (lookup *argLookup) getCopy() argLookup {
+	lookupCopy := new(argLookup)
+	for key, _ := range lookup.paramIndexMap {
+		lookupCopy.addArgName(key)
+		arg := lookup.getArg(key)
+		if arg != nil {
+			lookupCopy.addArgValue(key, &stepArg{value: arg.value, argType: arg.argType, table: arg.table})
+		}
 	}
 	return *lookupCopy
 }

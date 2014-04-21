@@ -83,8 +83,8 @@ func (s *MySuite) TestParsingSimpleConceptWithParameters(c *C) {
 	c.Assert(concept.isConcept, Equals, true)
 	c.Assert(len(concept.conceptSteps), Equals, 2)
 	c.Assert(len(concept.lookup.paramValue), Equals, 2)
-	c.Assert(concept.lookup.containsParam("param0"), Equals, true)
-	c.Assert(concept.lookup.containsParam("param1"), Equals, true)
+	c.Assert(concept.lookup.containsArg("param0"), Equals, true)
+	c.Assert(concept.lookup.containsArg("param1"), Equals, true)
 
 	firstConcept := concept.conceptSteps[0]
 	c.Assert(firstConcept.value, Equals, "first step using {}")
@@ -138,7 +138,7 @@ func (s *MySuite) TestParsingMultipleConcept(c *C) {
 	c.Assert(thirdConcept.conceptSteps[0].args[1].argType, Equals, static)
 
 	c.Assert(len(thirdConcept.lookup.paramValue), Equals, 1)
-	c.Assert(thirdConcept.lookup.containsParam("param0"), Equals, true)
+	c.Assert(thirdConcept.lookup.containsArg("param0"), Equals, true)
 
 }
 

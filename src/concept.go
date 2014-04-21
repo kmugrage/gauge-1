@@ -134,7 +134,7 @@ func (parser *conceptParser) hasOnlyDynamicParams(concept *step) bool {
 
 func (parser *conceptParser) validateConceptStep(conceptStep *step) *parseError {
 	for _, arg := range conceptStep.args {
-		if arg.argType == dynamic && !parser.currentConcept.lookup.containsParam(arg.value) {
+		if arg.argType == dynamic && !parser.currentConcept.lookup.containsArg(arg.value) {
 			return &parseError{lineNo: conceptStep.lineNo, message: fmt.Sprintf("Dynamic parameter <%s> is not defined in concept heading", arg.value)}
 		}
 	}
@@ -143,7 +143,7 @@ func (parser *conceptParser) validateConceptStep(conceptStep *step) *parseError 
 
 func (parser *conceptParser) createConceptLookup(concept *step) {
 	for _, arg := range concept.args {
-		concept.lookup.addParam(arg.value)
+		concept.lookup.addArgName(arg.value)
 	}
 }
 
