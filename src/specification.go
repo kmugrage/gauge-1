@@ -28,8 +28,9 @@ type stepArg struct {
 }
 
 type paramNameValue struct {
-	name  string
-	value string
+	name      string
+	value     string
+	paramType argType
 }
 
 type conceptLookup struct {
@@ -307,7 +308,7 @@ func (spec *specification) extractStepValueAndParameterTypes(stepTokenValue stri
 
 func (spec *specification) populateConceptLookup(lookup *conceptLookup, conceptArgs []*stepArg, stepArgs []*stepArg) {
 	for i, arg := range stepArgs {
-		lookup.addParamValue(conceptArgs[i].value, arg.value)
+		lookup.addParamValue(conceptArgs[i].value, arg.value, arg.argType)
 	}
 }
 
@@ -347,12 +348,13 @@ func (lookup *conceptLookup) addParam(param string) {
 	lookup.paramValue = append(lookup.paramValue, paramNameValue{name: param})
 }
 
-func (lookup *conceptLookup) addParamValue(param string, value string) {
+func (lookup *conceptLookup) addParamValue(param string, value string, paramType argType) {
 	paramIndex, ok := lookup.paramIndexMap[param]
 	if !ok {
 		panic(fmt.Sprintf("Accessing an invalid parameter (%s)", param))
 	}
 	lookup.paramValue[paramIndex].value = value
+	lookup.paramValue[paramIndex].paramType = paramType
 }
 
 func (lookup *conceptLookup) containsParam(param string) bool {
@@ -370,9 +372,10 @@ func (lookup *conceptLookup) getParamValue(param string) string {
 
 func (lookup *conceptLookup) getCopy() conceptLookup {
 	lookupCopy := new(conceptLookup)
-	for key, _ := range lookup.paramIndexMap {
+	for key, value := range lookup.paramIndexMap {
 		lookupCopy.addParam(key)
-		lookupCopy.addParamValue(key, lookup.getParamValue(key))
+		paramValue := lookup.paramValue[value]
+		lookupCopy.addParamValue(key, paramValue.value, paramValue.paramType)
 	}
 	return *lookupCopy
 }

@@ -347,9 +347,9 @@ func (s *MySuite) TestLookupContainsParam(c *C) {
 func (s *MySuite) TestAddParamValue(c *C) {
 	lookup := new(conceptLookup)
 	lookup.addParam("param1")
-	lookup.addParamValue("param1", "value1")
+	lookup.addParamValue("param1", "value1", static)
 	lookup.addParam("param2")
-	lookup.addParamValue("param2", "value2")
+	lookup.addParamValue("param2", "value2", dynamic)
 
 	c.Assert(lookup.getParamValue("param1"), Equals, "value1")
 	c.Assert(lookup.getParamValue("param2"), Equals, "value2")
@@ -358,7 +358,7 @@ func (s *MySuite) TestAddParamValue(c *C) {
 func (s *MySuite) TestPanicForInvalidParam(c *C) {
 	lookup := new(conceptLookup)
 
-	c.Assert(func() { lookup.addParamValue("param1", "value1") }, Panics, "Accessing an invalid parameter (param1)")
+	c.Assert(func() { lookup.addParamValue("param1", "value1", static) }, Panics, "Accessing an invalid parameter (param1)")
 	c.Assert(func() { lookup.getParamValue("param1") }, Panics, "Accessing an invalid parameter (param1)")
 }
 
@@ -367,7 +367,7 @@ func (s *MySuite) TestGetLookupCopy(c *C) {
 	originalLookup.addParam("param1")
 
 	copiedLookup := originalLookup.getCopy()
-	copiedLookup.addParamValue("param1", "value1")
+	copiedLookup.addParamValue("param1", "value1", static)
 
 	c.Assert(copiedLookup.getParamValue("param1"), Equals, "value1")
 	c.Assert(originalLookup.getParamValue("param1"), Equals, "")
@@ -431,5 +431,64 @@ func (s *MySuite) TestCreateStepFromConceptWithParameters(c *C) {
 	c.Assert(len(secondConceptStep.lookup.paramValue), Equals, 1)
 	c.Assert(secondConceptStep.lookup.paramValue[0].name, Equals, "username")
 	c.Assert(secondConceptStep.lookup.paramValue[0].value, Equals, "bar")
+
+}
+
+func (s *MySuite) TestCreateStepFromConceptWithDynamicParameters(c *C) {
+	tokens := []*token{
+		&token{kind: specKind, value: "Spec Heading", lineNo: 1},
+		&token{kind: tableHeader, args: []string{"id, description"}, lineNo: 2},
+		&token{kind: tableRow, args: []string{"123, Admin fellow"}, lineNo: 3},
+		&token{kind: scenarioKind, value: "Scenario Heading", lineNo: 4},
+		&token{kind: stepKind, value: "create user {dynamic} and {dynamic}", args: []string{"id", "description"}, lineNo: 5},
+		&token{kind: stepKind, value: "create user {static} and {static}", args: []string{"456", "Regular fellow"}, lineNo: 6},
+	}
+
+	concepts, _ := new(conceptParser).parse("#create user <user-id> and <user-description> \n * enter user <user-id> and <user-description> \n *select \"finish\"")
+	conceptsDictionary := new(conceptDictionary)
+	conceptsDictionary.add(concepts)
+
+	spec, result := new(specParser).createSpecification(tokens, conceptsDictionary)
+	c.Assert(result.ok, Equals, true)
+
+	c.Assert(len(spec.scenarios[0].steps), Equals, 2)
+
+	firstConcept := spec.scenarios[0].steps[0]
+	c.Assert(firstConcept.isConcept, Equals, true)
+	c.Assert(firstConcept.conceptSteps[0].value, Equals, "enter user {} and {}")
+	c.Assert(firstConcept.conceptSteps[0].args[0].argType, Equals, dynamic)
+	c.Assert(firstConcept.conceptSteps[0].args[0].value, Equals, "user-id")
+	c.Assert(firstConcept.conceptSteps[0].args[1].argType, Equals, dynamic)
+	c.Assert(firstConcept.conceptSteps[0].args[1].value, Equals, "user-description")
+	c.Assert(firstConcept.conceptSteps[1].value, Equals, "select {}")
+	c.Assert(firstConcept.conceptSteps[1].args[0].value, Equals, "finish")
+	c.Assert(firstConcept.conceptSteps[1].args[0].argType, Equals, static)
+
+	c.Assert(len(firstConcept.lookup.paramValue), Equals, 2)
+	c.Assert(firstConcept.lookup.paramValue[0].name, Equals, "user-id")
+	c.Assert(firstConcept.lookup.paramValue[0].value, Equals, "id")
+	c.Assert(firstConcept.lookup.paramValue[0].paramType, Equals, dynamic)
+	c.Assert(firstConcept.lookup.paramValue[1].name, Equals, "user-description")
+	c.Assert(firstConcept.lookup.paramValue[1].value, Equals, "description")
+	c.Assert(firstConcept.lookup.paramValue[1].paramType, Equals, dynamic)
+
+	secondConcept := spec.scenarios[0].steps[1]
+	c.Assert(secondConcept.isConcept, Equals, true)
+	c.Assert(secondConcept.conceptSteps[0].value, Equals, "enter user {} and {}")
+	c.Assert(secondConcept.conceptSteps[0].args[0].argType, Equals, dynamic)
+	c.Assert(secondConcept.conceptSteps[0].args[0].value, Equals, "user-id")
+	c.Assert(secondConcept.conceptSteps[0].args[1].argType, Equals, dynamic)
+	c.Assert(secondConcept.conceptSteps[0].args[1].value, Equals, "user-description")
+	c.Assert(secondConcept.conceptSteps[1].value, Equals, "select {}")
+	c.Assert(secondConcept.conceptSteps[1].args[0].value, Equals, "finish")
+	c.Assert(secondConcept.conceptSteps[1].args[0].argType, Equals, static)
+
+	c.Assert(len(secondConcept.lookup.paramValue), Equals, 2)
+	c.Assert(secondConcept.lookup.paramValue[0].name, Equals, "user-id")
+	c.Assert(secondConcept.lookup.paramValue[0].value, Equals, "456")
+	c.Assert(secondConcept.lookup.paramValue[0].paramType, Equals, static)
+	c.Assert(secondConcept.lookup.paramValue[1].name, Equals, "user-description")
+	c.Assert(secondConcept.lookup.paramValue[1].value, Equals, "Regular fellow")
+	c.Assert(secondConcept.lookup.paramValue[1].paramType, Equals, static)
 
 }
