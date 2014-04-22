@@ -297,6 +297,10 @@ func main() {
 
 		//todo pass concept dictionary to the spec parsing
 		concepts, err := createConceptsDictionary()
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
 		specs, err := findSpecs(specSource, concepts)
 		if err != nil {
 			fmt.Println(err)
@@ -412,7 +416,7 @@ func findConceptFiles() []string {
 
 }
 
-func createConceptsDictionary() (*conceptDictionary, error) {
+func createConceptsDictionary() (*conceptDictionary, *parseError) {
 	conceptFiles := findConceptFiles()
 	conceptsDictionary := new(conceptDictionary)
 	for _, conceptFile := range conceptFiles {
@@ -423,7 +427,7 @@ func createConceptsDictionary() (*conceptDictionary, error) {
 	return conceptsDictionary, nil
 }
 
-func addConcepts(conceptFile string, conceptDictionary *conceptDictionary) error {
+func addConcepts(conceptFile string, conceptDictionary *conceptDictionary) *parseError {
 	fileText := common.ReadFileContents(conceptFile)
 	concepts, err := new(conceptParser).parse(fileText)
 	conceptDictionary.add(concepts)

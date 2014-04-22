@@ -171,14 +171,13 @@ func (executor *specExecutor) executeSteps(steps []*step, argLookup *argLookup) 
 	var status *stepExecutionStatus
 	var statuses []*stepExecutionStatus
 	for _, step := range steps {
-		if validationErr := executor.validateStep(step); validationErr != nil {
-			//TODO: this will be moved from here when bug #15 is fixed
-			return nil
-		}
-
 		if step.isConcept {
 			status = executor.executeConcept(step, argLookup)
 		} else {
+			if validationErr := executor.validateStep(step); validationErr != nil {
+				//TODO: this will be moved from here when bug #15 is fixed
+				return nil
+			}
 			status = executor.executeStep(step, argLookup)
 		}
 		statuses = append(statuses, status)
