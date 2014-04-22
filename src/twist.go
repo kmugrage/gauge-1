@@ -303,20 +303,20 @@ func main() {
 		}
 		specs, specParseError := findSpecs(specSource, concepts)
 		if specParseError != nil {
-			fmt.Println(err)
+			fmt.Println(specParseError)
 			os.Exit(1)
 		}
 
 		manifest := getProjectManifest()
 		_, runnerError := startRunner(manifest)
 		if runnerError != nil {
-			fmt.Printf("Failed to start a runner. %s\n", err.Error())
+			fmt.Printf("Failed to start a runner. %s\n", runnerError.Error())
 			os.Exit(1)
 		}
 
 		conn, connectionError := acceptConnection()
 		if connectionError != nil {
-			fmt.Printf("Failed to get a runner. %s\n", err.Error())
+			fmt.Printf("Failed to get a runner. %s\n", connectionError.Error())
 			os.Exit(1)
 		}
 
@@ -434,7 +434,7 @@ func addConcepts(conceptFile string, conceptDictionary *conceptDictionary) *pars
 	return err
 }
 
-func findSpecs(specSource string, conceptDictionary *conceptDictionary) ([]*specification, error) {
+func findSpecs(specSource string, conceptDictionary *conceptDictionary) ([]*specification, *parseError) {
 	specFiles := make([]string, 0)
 	if common.DirExists(specSource) {
 		specFiles = append(specFiles, findSpecsFilesIn(specSource)...)
@@ -442,7 +442,8 @@ func findSpecs(specSource string, conceptDictionary *conceptDictionary) ([]*spec
 		specFile, _ := filepath.Abs(specSource)
 		specFiles = append(specFiles, specFile)
 	} else {
-		return nil, errors.New(fmt.Sprintf("Spec file or directory does not exist: %s", specSource))
+		fmt.Printf("Spec file or directory does not exist: %s", specSource)
+		os.Exit(1)
 	}
 
 	specs := make([]*specification, 0)
@@ -450,7 +451,7 @@ func findSpecs(specSource string, conceptDictionary *conceptDictionary) ([]*spec
 		specFileContent := common.ReadFileContents(specFile)
 		spec, parseResult := new(specParser).parse(specFileContent, conceptDictionary)
 		if !parseResult.ok {
-			return nil, errors.New(fmt.Sprintf("%s : %s", specFile, parseResult.error.Error()))
+			return nil, parseResult.error
 		}
 		parseResult.specFile = specFile
 		spec.fileName = specFile
