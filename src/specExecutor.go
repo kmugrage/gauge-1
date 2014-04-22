@@ -192,10 +192,9 @@ func (executor *specExecutor) executeConcept(concept *step, dataTableLookup *arg
 	conceptExecutionStatus := &stepExecutionStatus{passed: true, isConcept: true}
 	conceptLookup := concept.lookup.getCopy()
 	executor.populateConceptDynamicParams(conceptLookup, dataTableLookup)
-	for _, step := range concept.conceptSteps {
-		currentStepExecutionStatus := executor.executeStep(step, conceptLookup)
-		currentStepExecutionStatus.stepExecutionStatuses = append(conceptExecutionStatus.stepExecutionStatuses, currentStepExecutionStatus)
-		if !currentStepExecutionStatus.passed {
+	conceptExecutionStatus.stepExecutionStatuses = executor.executeSteps(concept.conceptSteps, conceptLookup)
+	for _, status := range conceptExecutionStatus.stepExecutionStatuses {
+		if !status.passed {
 			conceptExecutionStatus.passed = false
 			break
 		}
@@ -256,8 +255,7 @@ func (executor *specExecutor) validateStep(step *step) error {
 	if response.GetMessageType() == Message_StepValidateResponse {
 		validateResponse := response.GetStepValidateResponse()
 		if !validateResponse.GetIsValid() {
-			fmt.Printf("step (%s) is not implemented", step.lineText)
-			return errors.New("Step is not implemented")
+			return errors.New(fmt.Sprintf("step (%s) is not implemented", step.lineText))
 		}
 		return nil
 	} else {

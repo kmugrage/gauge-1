@@ -380,12 +380,13 @@ func (s *MySuite) TestPanicForInvalidArg(c *C) {
 func (s *MySuite) TestGetLookupCopy(c *C) {
 	originalLookup := new(argLookup)
 	originalLookup.addArgName("param1")
+	originalLookup.addArgValue("param1", &stepArg{value: "oldValue", argType: dynamic})
 
 	copiedLookup := originalLookup.getCopy()
-	copiedLookup.addArgValue("param1", &stepArg{value: "value1", argType: static})
+	copiedLookup.addArgValue("param1", &stepArg{value: "new value", argType: static})
 
-	c.Assert(copiedLookup.getArg("param1").value, Equals, "value1")
-	c.Assert(originalLookup.getArg("param1"), IsNil)
+	c.Assert(copiedLookup.getArg("param1").value, Equals, "new value")
+	c.Assert(originalLookup.getArg("param1").value, Equals, "oldValue")
 }
 
 func (s *MySuite) TestGetLookupFromTableRow(c *C) {

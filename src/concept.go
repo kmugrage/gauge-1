@@ -1,7 +1,5 @@
 package main
 
-import "fmt"
-
 type conceptDictionary struct {
 	conceptsMap map[string]*step
 }
@@ -130,15 +128,6 @@ func (parser *conceptParser) hasOnlyDynamicParams(concept *step) bool {
 		}
 	}
 	return true
-}
-
-func (parser *conceptParser) validateConceptStep(conceptStep *step) *parseError {
-	for _, arg := range conceptStep.args {
-		if arg.argType == dynamic && !parser.currentConcept.lookup.containsArg(arg.value) {
-			return &parseError{lineNo: conceptStep.lineNo, message: fmt.Sprintf("Dynamic parameter <%s> is not defined in concept heading", arg.value)}
-		}
-	}
-	return nil
 }
 
 func (parser *conceptParser) createConceptLookup(concept *step) {
