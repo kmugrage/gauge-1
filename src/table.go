@@ -8,6 +8,7 @@ type table struct {
 	headerIndexMap map[string]int
 	columns        [][]string
 	headers        []string
+	lineNo         int
 }
 
 func (table *table) isInitialized() bool {

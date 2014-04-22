@@ -190,9 +190,10 @@ func (executor *specExecutor) executeSteps(steps []*step, argLookup *argLookup) 
 }
 func (executor *specExecutor) executeConcept(concept *step, dataTableLookup *argLookup) *stepExecutionStatus {
 	conceptExecutionStatus := &stepExecutionStatus{passed: true, isConcept: true}
-	executor.addConceptLookup(dataTableLookup, &concept.lookup)
+	conceptLookup := concept.lookup.getCopy()
+	executor.populateConceptDynamicParams(conceptLookup, dataTableLookup)
 	for _, step := range concept.conceptSteps {
-		currentStepExecutionStatus := executor.executeStep(step, dataTableLookup)
+		currentStepExecutionStatus := executor.executeStep(step, conceptLookup)
 		currentStepExecutionStatus.stepExecutionStatuses = append(conceptExecutionStatus.stepExecutionStatuses, currentStepExecutionStatus)
 		if !currentStepExecutionStatus.passed {
 			conceptExecutionStatus.passed = false
@@ -337,13 +338,12 @@ func executeAndGetStatus(connection net.Conn, message *Message) *ExecutionStatus
 	}
 }
 
-func (executor *specExecutor) addConceptLookup(dataTableLookup *argLookup, conceptLookup *argLookup) {
+func (executor *specExecutor) populateConceptDynamicParams(conceptLookup *argLookup, dataTableLookup *argLookup) {
 	for key, _ := range conceptLookup.paramIndexMap {
-		dataTableLookup.addArgName(key)
 		conceptLookupArg := conceptLookup.getArg(key)
 		if conceptLookupArg.argType == dynamic {
-			conceptLookupArg = dataTableLookup.getArg(conceptLookupArg.value)
+			resolvedArg := dataTableLookup.getArg(conceptLookupArg.value)
+			conceptLookup.addArgValue(key, resolvedArg)
 		}
-		dataTableLookup.addArgValue(key, conceptLookupArg)
 	}
 }

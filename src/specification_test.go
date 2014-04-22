@@ -88,16 +88,17 @@ func (s *MySuite) TestStepsWithParam(c *C) {
 	tokens := []*token{
 		&token{kind: specKind, value: "Spec Heading", lineNo: 1},
 		&token{kind: tableHeader, args: []string{"id"}, lineNo: 2},
-		&token{kind: scenarioKind, value: "Scenario Heading", lineNo: 3},
-		&token{kind: stepKind, value: "enter {static} with {dynamic}", lineNo: 4, args: []string{"user", "id"}},
-		&token{kind: stepKind, value: "sample \\{static\\}", lineNo: 5},
+		&token{kind: tableRow, args: []string{"1"}, lineNo: 3},
+		&token{kind: scenarioKind, value: "Scenario Heading", lineNo: 4},
+		&token{kind: stepKind, value: "enter {static} with {dynamic}", lineNo: 5, args: []string{"user", "id"}},
+		&token{kind: stepKind, value: "sample \\{static\\}", lineNo: 6},
 	}
 
 	spec, result := new(specParser).createSpecification(tokens, new(conceptDictionary))
 	c.Assert(result.ok, Equals, true)
 	step := spec.scenarios[0].steps[0]
 	c.Assert(step.value, Equals, "enter {} with {}")
-	c.Assert(step.lineNo, Equals, 4)
+	c.Assert(step.lineNo, Equals, 5)
 	c.Assert(len(step.args), Equals, 2)
 	c.Assert(step.args[0].value, Equals, "user")
 	c.Assert(step.args[0].argType, Equals, static)
@@ -206,6 +207,20 @@ func (s *MySuite) TestContextWithInlineTable(c *C) {
 	c.Assert(inlineTable.get("id")[1], Equals, "2")
 	c.Assert(inlineTable.get("name")[0], Equals, "foo")
 	c.Assert(inlineTable.get("name")[1], Equals, "bar")
+}
+
+func (s *MySuite) TestErrorWhenDataTableHasOnlyHeader(c *C) {
+	tokens := []*token{
+		&token{kind: specKind, value: "Spec Heading"},
+		&token{kind: tableHeader, args: []string{"id", "name"}, lineNo: 3},
+		&token{kind: scenarioKind, value: "Scenario Heading"},
+	}
+
+	_, result := new(specParser).createSpecification(tokens, new(conceptDictionary))
+
+	c.Assert(result.ok, Equals, false)
+	c.Assert(result.error.message, Equals, "Data table should have at least 1 data row")
+	c.Assert(result.error.lineNo, Equals, 3)
 }
 
 func (s *MySuite) TestWarningWhenParsingMultipleDataTable(c *C) {

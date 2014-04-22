@@ -106,6 +106,12 @@ func (specParser *specParser) createSpecification(tokens []*token, conceptDictio
 			}
 		}
 	}
+	validationError := specParser.validateSpec(specification)
+	if validationError != nil {
+		finalResult.ok = false
+		finalResult.error = validationError
+		return nil, finalResult
+	}
 	finalResult.ok = true
 	return specification, finalResult
 }
@@ -177,11 +183,15 @@ func (specParser *specParser) initalizeConverters() []func(*token, *int, *specif
 		if isInState(*state, stepScope) {
 			latestScenario := spec.scenarios[len(spec.scenarios)-1]
 			latestStep := latestScenario.steps[len(latestScenario.steps)-1]
+			latestStep.inlineTable.lineNo = token.lineNo
 			latestStep.inlineTable.addHeaders(token.args)
 		} else if isInState(*state, contextScope) {
-			spec.contexts[len(spec.contexts)-1].inlineTable.addHeaders(token.args)
+			inlineTable := &spec.contexts[len(spec.contexts)-1].inlineTable
+			inlineTable.lineNo = token.lineNo
+			inlineTable.addHeaders(token.args)
 		} else if !isInState(*state, scenarioScope) {
 			if !spec.dataTable.isInitialized() {
+				spec.dataTable.lineNo = token.lineNo
 				spec.dataTable.addHeaders(token.args)
 			} else {
 				value := fmt.Sprintf("multiple data table present, ignoring table at line no: %d", token.lineNo)
@@ -238,11 +248,8 @@ func (spec *specification) addStep(stepToken *token, addTo *[]*step, conceptDict
 	if conceptFromDictionary := conceptDictionary.search(stepValue); conceptFromDictionary != nil {
 		stepToAdd, err = spec.createConceptStep(conceptFromDictionary, stepToken)
 	} else {
-		lookup := *new(argLookup)
-		for _, value := range spec.dataTable.headers {
-			lookup.addArgName(value)
-		}
-		stepToAdd, err = spec.createStep(stepToken, &lookup)
+		dataTableLookup := new(argLookup).fromDataTable(&spec.dataTable)
+		stepToAdd, err = spec.createStep(stepToken, dataTableLookup)
 	}
 	if err != nil {
 		return err
@@ -259,8 +266,8 @@ func (spec *specification) createConceptStep(conceptFromDictionary *step, stepTo
 		return nil, err
 	}
 	conceptStep.conceptSteps = conceptFromDictionary.conceptSteps
-	spec.populateConceptLookup(&lookup, conceptFromDictionary.args, conceptStep.args)
-	conceptStep.lookup = lookup
+	spec.populateConceptLookup(lookup, conceptFromDictionary.args, conceptStep.args)
+	conceptStep.lookup = *lookup
 	return conceptStep, nil
 }
 
@@ -280,6 +287,14 @@ func (spec *specification) createStep(stepToken *token, lookup *argLookup) (*ste
 		step.args = append(step.args, argument)
 	}
 	return step, nil
+}
+
+func (specParser *specParser) validateSpec(specification *specification) *parseError {
+	dataTable := specification.dataTable
+	if dataTable.isInitialized() && dataTable.getRowCount() == 0 {
+		return &parseError{lineNo: dataTable.lineNo, message: "Data table should have at least 1 data row"}
+	}
+	return nil
 }
 
 func (spec *specification) extractStepValueAndParameterTypes(stepTokenValue string) (string, []string) {
@@ -368,7 +383,7 @@ func (lookup *argLookup) getArg(param string) *stepArg {
 	return lookup.paramValue[paramIndex].stepArg
 }
 
-func (lookup *argLookup) getCopy() argLookup {
+func (lookup *argLookup) getCopy() *argLookup {
 	lookupCopy := new(argLookup)
 	for key, _ := range lookup.paramIndexMap {
 		lookupCopy.addArgName(key)
@@ -377,7 +392,7 @@ func (lookup *argLookup) getCopy() argLookup {
 			lookupCopy.addArgValue(key, &stepArg{value: arg.value, argType: arg.argType, table: arg.table})
 		}
 	}
-	return *lookupCopy
+	return lookupCopy
 }
 
 func (lookup *argLookup) fromDataTableRow(datatable *table, index int) *argLookup {
@@ -388,6 +403,18 @@ func (lookup *argLookup) fromDataTableRow(datatable *table, index int) *argLooku
 	for _, header := range datatable.headers {
 		dataTableLookup.addArgName(header)
 		dataTableLookup.addArgValue(header, &stepArg{value: datatable.get(header)[index], argType: static})
+	}
+	return dataTableLookup
+}
+
+//create an empty lookup with only args to resolve dynamic params for steps
+func (lookup *argLookup) fromDataTable(datatable *table) *argLookup {
+	dataTableLookup := new(argLookup)
+	if !datatable.isInitialized() {
+		return dataTableLookup
+	}
+	for _, header := range datatable.headers {
+		dataTableLookup.addArgName(header)
 	}
 	return dataTableLookup
 }
