@@ -2,7 +2,6 @@ package main
 
 import (
 	"code.google.com/p/goprotobuf/proto"
-	"errors"
 	"fmt"
 	"net"
 )
@@ -19,6 +18,15 @@ type specExecutionStatus struct {
 	// if no datatable, 0th key points to the execution status
 	scenariosExecutionStatuses map[int][]*scenarioExecutionStatus
 	hooksExecutionStatuses     []*ExecutionStatus
+}
+
+type stepValidationError struct {
+	step    *step
+	message string
+}
+
+func (e *stepValidationError) Error() string {
+	return e.message
 }
 
 func (status *specExecutionStatus) isFailed() bool {
@@ -104,6 +112,64 @@ func (status *scenarioExecutionStatus) isFailed() bool {
 	return false
 }
 
+func (executor *specExecutor) validateSpecification() []*stepValidationError {
+	validationErrors := make([]*stepValidationError, 0)
+
+	contextSteps := executor.specification.contexts
+	validationErrors = append(validationErrors, executor.validateSteps(contextSteps)...)
+
+	for _, scenario := range executor.specification.scenarios {
+		validationErrors = append(validationErrors, executor.validateSteps(scenario.steps)...)
+	}
+	return validationErrors
+}
+
+func (executor *specExecutor) validateSteps(steps []*step) ([]*stepValidationError) {
+	validationErrors := make([]*stepValidationError, 0)
+	for _, step := range steps {
+		if step.isConcept {
+			errors := executor.validateConcept(step)
+			validationErrors = append(validationErrors, errors...)
+		} else {
+			err := executor.validateStep(step)
+			if err != nil {
+				validationErrors = append(validationErrors, err)
+			}
+		}
+	}
+	return validationErrors
+}
+
+func (executor *specExecutor) validateConcept(concept *step) ([]*stepValidationError) {
+	validationErrors := make([]*stepValidationError, 0)
+	for _, conceptStep := range concept.conceptSteps {
+		if err := executor.validateStep(conceptStep); err != nil {
+			validationErrors = append(validationErrors, err)
+		}
+	}
+	return validationErrors
+}
+
+func (executor *specExecutor) validateStep(step *step) *stepValidationError {
+	message := &Message{MessageType: Message_StepValidateRequest.Enum(),
+		StepValidateRequest: &StepValidateRequest{StepText: proto.String(step.value)}}
+	response, err := getResponse(executor.connection, message)
+	if err != nil {
+		return &stepValidationError{step: step, message: err.Error()}
+	}
+
+	if response.GetMessageType() == Message_StepValidateResponse {
+		validateResponse := response.GetStepValidateResponse()
+		if !validateResponse.GetIsValid() {
+			return &stepValidationError{step: step, message: ""}
+		}
+	} else {
+		panic("Expected a validate step response")
+	}
+
+	return nil
+}
+
 func (executor *specExecutor) executeBeforeScenarioHook() *ExecutionStatus {
 	message := &Message{MessageType: Message_ScenarioExecutionStarting.Enum(),
 		ScenarioExecutionStartingRequest: &ScenarioExecutionStartingRequest{}}
@@ -174,10 +240,6 @@ func (executor *specExecutor) executeSteps(steps []*step, argLookup *argLookup) 
 		if step.isConcept {
 			status = executor.executeConcept(step, argLookup)
 		} else {
-			if validationErr := executor.validateStep(step); validationErr != nil {
-				//TODO: this will be moved from here when bug #15 is fixed
-				return nil
-			}
 			status = executor.executeStep(step, argLookup)
 		}
 		statuses = append(statuses, status)
@@ -242,25 +304,6 @@ func (executor *specExecutor) executeStep(step *step, argLookup *argLookup) *ste
 	}
 
 	return stepExecStatus
-}
-
-func (executor *specExecutor) validateStep(step *step) error {
-	message := &Message{MessageType: Message_StepValidateRequest.Enum(),
-		StepValidateRequest: &StepValidateRequest{StepText: proto.String(step.value)}}
-	response, err := getResponse(executor.connection, message)
-	if err != nil {
-		return err
-	}
-
-	if response.GetMessageType() == Message_StepValidateResponse {
-		validateResponse := response.GetStepValidateResponse()
-		if !validateResponse.GetIsValid() {
-			return errors.New(fmt.Sprintf("step (%s) is not implemented", step.lineText))
-		}
-		return nil
-	} else {
-		panic("Expected a validate step response")
-	}
 }
 
 func (executor *specExecutor) createStepRequest(step *step, argLookup *argLookup) *ExecuteStepRequest {
