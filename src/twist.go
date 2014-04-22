@@ -296,26 +296,26 @@ func main() {
 		specSource := flag.Arg(0)
 
 		//todo pass concept dictionary to the spec parsing
-		concepts, err := createConceptsDictionary()
-		if err != nil {
+		concepts, conceptParseError := createConceptsDictionary()
+		if conceptParseError != nil {
 			fmt.Println(err)
 			os.Exit(1)
 		}
-		specs, err := findSpecs(specSource, concepts)
-		if err != nil {
+		specs, specParseError := findSpecs(specSource, concepts)
+		if specParseError != nil {
 			fmt.Println(err)
 			os.Exit(1)
 		}
 
 		manifest := getProjectManifest()
-		_, err = startRunner(manifest)
-		if err != nil {
+		_, runnerError := startRunner(manifest)
+		if runnerError != nil {
 			fmt.Printf("Failed to start a runner. %s\n", err.Error())
 			os.Exit(1)
 		}
 
-		conn, err := acceptConnection()
-		if err != nil {
+		conn, connectionError := acceptConnection()
+		if connectionError != nil {
 			fmt.Printf("Failed to get a runner. %s\n", err.Error())
 			os.Exit(1)
 		}

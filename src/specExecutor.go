@@ -342,7 +342,7 @@ func (executor *specExecutor) addConceptLookup(dataTableLookup *argLookup, conce
 		dataTableLookup.addArgName(key)
 		conceptLookupArg := conceptLookup.getArg(key)
 		if conceptLookupArg.argType == dynamic {
-			conceptLookupArg = dataTableLookup.getArg(key)
+			conceptLookupArg = dataTableLookup.getArg(conceptLookupArg.value)
 		}
 		dataTableLookup.addArgValue(key, conceptLookupArg)
 	}
