@@ -321,13 +321,13 @@ func main() {
 		}
 
 		execution := newExecution(manifest, specs, conn)
-		validationErrors := execution.validate()
+		validationErrors := execution.validate(concepts)
 		if len(validationErrors) > 0 {
 			fmt.Println("Validation failed. The following steps are not implemented")
-			for spec, stepValidationErrors := range validationErrors {
+			for _, stepValidationErrors := range validationErrors {
 				for _, stepValidationError := range stepValidationErrors {
 					s := stepValidationError.step
-					fmt.Printf("\x1b[31;1m  %s:%d: %s\n\x1b[0m", spec.fileName, s.lineNo, s.lineText)
+					fmt.Printf("\x1b[31;1m  %s:%d: %s\n\x1b[0m", stepValidationError.fileName, s.lineNo, s.lineText)
 				}
 			}
 			err := execution.killProcess()
@@ -466,11 +466,11 @@ func findSpecs(specSource string, conceptDictionary *conceptDictionary) ([]*spec
 	for _, specFile := range specFiles {
 		specFileContent := common.ReadFileContents(specFile)
 		spec, parseResult := new(specParser).parse(specFileContent, conceptDictionary)
+		spec.fileName = specFile
 		if !parseResult.ok {
 			return nil, parseResult.error
 		}
 		parseResult.specFile = specFile
-		spec.fileName = specFile
 
 		handleWarnings(parseResult)
 		specs = append(specs, spec)

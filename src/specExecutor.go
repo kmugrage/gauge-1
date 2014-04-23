@@ -7,9 +7,10 @@ import (
 )
 
 type specExecutor struct {
-	specification  *specification
-	dataTableIndex int
-	connection     net.Conn
+	specification     *specification
+	dataTableIndex    int
+	connection        net.Conn
+	conceptDictionary *conceptDictionary
 }
 
 type specExecutionStatus struct {
@@ -21,8 +22,9 @@ type specExecutionStatus struct {
 }
 
 type stepValidationError struct {
-	step    *step
-	message string
+	step     *step
+	message  string
+	fileName string
 }
 
 func (e *stepValidationError) Error() string {
@@ -116,10 +118,12 @@ func (executor *specExecutor) validateSpecification() []*stepValidationError {
 	validationErrors := make([]*stepValidationError, 0)
 
 	contextSteps := executor.specification.contexts
-	validationErrors = append(validationErrors, executor.validateSteps(contextSteps)...)
+	contextStepsValidationErrors := executor.validateSteps(contextSteps)
+	validationErrors = append(validationErrors, contextStepsValidationErrors...)
 
 	for _, scenario := range executor.specification.scenarios {
-		validationErrors = append(validationErrors, executor.validateSteps(scenario.steps)...)
+		stepValidationErrors := executor.validateSteps(scenario.steps)
+		validationErrors = append(validationErrors, stepValidationErrors...)
 	}
 	return validationErrors
 }
@@ -144,6 +148,7 @@ func (executor *specExecutor) validateConcept(concept *step) []*stepValidationEr
 	validationErrors := make([]*stepValidationError, 0)
 	for _, conceptStep := range concept.conceptSteps {
 		if err := executor.validateStep(conceptStep); err != nil {
+			err.fileName = executor.conceptDictionary.search(concept.value).fileName
 			validationErrors = append(validationErrors, err)
 		}
 	}
@@ -155,13 +160,13 @@ func (executor *specExecutor) validateStep(step *step) *stepValidationError {
 		StepValidateRequest: &StepValidateRequest{StepText: proto.String(step.value)}}
 	response, err := getResponse(executor.connection, message)
 	if err != nil {
-		return &stepValidationError{step: step, message: err.Error()}
+		return &stepValidationError{step: step, message: err.Error(), fileName: executor.specification.fileName}
 	}
 
 	if response.GetMessageType() == Message_StepValidateResponse {
 		validateResponse := response.GetStepValidateResponse()
 		if !validateResponse.GetIsValid() {
-			return &stepValidationError{step: step, message: ""}
+			return &stepValidationError{step: step, message: "", fileName: executor.specification.fileName}
 		}
 	} else {
 		panic("Expected a validate step response")
