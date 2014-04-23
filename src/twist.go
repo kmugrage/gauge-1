@@ -251,10 +251,16 @@ func printUsage() {
 	os.Exit(2)
 }
 
-func handleWarnings(result *parseResult) {
-	if result.warnings != nil {
-		for _, warning := range result.warnings {
-			fmt.Println(fmt.Sprintf("[Warning] %s : %s", result.specFile, warning))
+func handleParseResult(results ...*parseResult) {
+	for _, result := range results {
+		if !result.ok {
+			fmt.Println(fmt.Sprintf("[ParseError] %s : %s", result.fileName, result.error.Error()))
+			os.Exit(1)
+		}
+		if result.warnings != nil {
+			for _, warning := range result.warnings {
+				fmt.Println(fmt.Sprintf("[Warning] %s : %v", result.fileName, warning))
+			}
 		}
 	}
 }
@@ -295,17 +301,11 @@ func main() {
 
 		specSource := flag.Arg(0)
 
-		//todo pass concept dictionary to the spec parsing
-		concepts, conceptParseError := createConceptsDictionary()
-		if conceptParseError != nil {
-			fmt.Println(err)
-			os.Exit(1)
-		}
-		specs, specParseError := findSpecs(specSource, concepts)
-		if specParseError != nil {
-			fmt.Println(specParseError)
-			os.Exit(1)
-		}
+		concepts, conceptParseResult := createConceptsDictionary()
+		handleParseResult(conceptParseResult)
+
+		specs, specParseResults := findSpecs(specSource, concepts)
+		handleParseResult(specParseResults...)
 
 		manifest := getProjectManifest()
 		_, runnerError := startRunner(manifest)
@@ -432,15 +432,15 @@ func findConceptFiles() []string {
 
 }
 
-func createConceptsDictionary() (*conceptDictionary, *parseError) {
+func createConceptsDictionary() (*conceptDictionary, *parseResult) {
 	conceptFiles := findConceptFiles()
 	conceptsDictionary := new(conceptDictionary)
 	for _, conceptFile := range conceptFiles {
 		if err := addConcepts(conceptFile, conceptsDictionary); err != nil {
-			return nil, err
+			return nil, &parseResult{error: err, fileName: conceptFile}
 		}
 	}
-	return conceptsDictionary, nil
+	return conceptsDictionary, &parseResult{ok: true}
 }
 
 func addConcepts(conceptFile string, conceptDictionary *conceptDictionary) *parseError {
@@ -453,8 +453,9 @@ func addConcepts(conceptFile string, conceptDictionary *conceptDictionary) *pars
 	return err
 }
 
-func findSpecs(specSource string, conceptDictionary *conceptDictionary) ([]*specification, *parseError) {
+func findSpecs(specSource string, conceptDictionary *conceptDictionary) ([]*specification, []*parseResult) {
 	specFiles := make([]string, 0)
+	parseResults := make([]*parseResult, 0)
 	if common.DirExists(specSource) {
 		specFiles = append(specFiles, findSpecsFilesIn(specSource)...)
 	} else if common.FileExists(specSource) && isValidSpecExtension(specSource) {
@@ -469,16 +470,15 @@ func findSpecs(specSource string, conceptDictionary *conceptDictionary) ([]*spec
 	for _, specFile := range specFiles {
 		specFileContent := common.ReadFileContents(specFile)
 		spec, parseResult := new(specParser).parse(specFileContent, conceptDictionary)
-		spec.fileName = specFile
+		parseResult.fileName = specFile
 		if !parseResult.ok {
-			return nil, parseResult.error
+			return nil, append(parseResults, parseResult)
+		} else {
+			parseResults = append(parseResults, parseResult)
 		}
-		parseResult.specFile = specFile
-
-		handleWarnings(parseResult)
 		specs = append(specs, spec)
 	}
-	return specs, nil
+	return specs, parseResults
 }
 
 func findSpecsFilesIn(dirRoot string) []string {

@@ -240,7 +240,7 @@ func (s *MySuite) TestWarningWhenParsingMultipleDataTable(c *C) {
 
 	c.Assert(result.ok, Equals, true)
 	c.Assert(len(result.warnings), Equals, 1)
-	c.Assert(result.warnings[0], Equals, "multiple data table present, ignoring table at line no: 7")
+	c.Assert(result.warnings[0].String(), Equals, "line no: 7, Multiple data table present, ignoring table")
 
 }
 
@@ -262,8 +262,8 @@ func (s *MySuite) TestWarningWhenParsingTableOccursWithoutStep(c *C) {
 
 	c.Assert(result.ok, Equals, true)
 	c.Assert(len(result.warnings), Equals, 2)
-	c.Assert(result.warnings[0], Equals, "table not associated with a step, ignoring table at line no: 3")
-	c.Assert(result.warnings[1], Equals, "table not associated with a step, ignoring table at line no: 8")
+	c.Assert(result.warnings[0].String(), Equals, "line no: 3, Table not associated with a step, ignoring table")
+	c.Assert(result.warnings[1].String(), Equals, "line no: 8, Table not associated with a step, ignoring table")
 
 }
 

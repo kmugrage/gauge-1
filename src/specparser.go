@@ -33,7 +33,7 @@ type parseError struct {
 }
 
 func (se *parseError) Error() string {
-	return fmt.Sprintf("Parse error: %s on line: %d", se.message, se.lineNo)
+	return fmt.Sprintf("line no: %d, %s", se.lineNo, se.message)
 }
 
 func (token *token) String() string {

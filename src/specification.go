@@ -63,11 +63,16 @@ type line struct {
 	lineNo int
 }
 
+type warning struct {
+	message string
+	lineNo  int
+}
+
 type parseResult struct {
 	error    *parseError
-	warnings []string
+	warnings []*warning
 	ok       bool
-	specFile string
+	fileName string
 }
 
 func converterFn(predicate func(token *token, state *int) bool, apply func(token *token, spec *specification, state *int) parseResult) func(*token, *int, *specification) parseResult {
@@ -99,7 +104,7 @@ func (specParser *specParser) createSpecification(tokens []*token, conceptDictio
 				}
 				if result.warnings != nil {
 					if finalResult.warnings == nil {
-						finalResult.warnings = make([]string, 0)
+						finalResult.warnings = make([]*warning, 0)
 					}
 					finalResult.warnings = append(finalResult.warnings, result.warnings...)
 				}
@@ -194,12 +199,12 @@ func (specParser *specParser) initalizeConverters() []func(*token, *int, *specif
 				spec.dataTable.lineNo = token.lineNo
 				spec.dataTable.addHeaders(token.args)
 			} else {
-				value := fmt.Sprintf("multiple data table present, ignoring table at line no: %d", token.lineNo)
-				return parseResult{ok: false, warnings: []string{value}}
+				value := "Multiple data table present, ignoring table"
+				return parseResult{ok: false, warnings: []*warning{&warning{value, token.lineNo}}}
 			}
 		} else {
-			value := fmt.Sprintf("table not associated with a step, ignoring table at line no: %d", token.lineNo)
-			return parseResult{ok: false, warnings: []string{value}}
+			value := "Table not associated with a step, ignoring table"
+			return parseResult{ok: false, warnings: []*warning{&warning{value, token.lineNo}}}
 		}
 		retainStates(state, specScope, scenarioScope, stepScope, contextScope)
 		addStates(state, tableScope)
@@ -417,4 +422,8 @@ func (lookup *argLookup) fromDataTable(datatable *table) *argLookup {
 		dataTableLookup.addArgName(header)
 	}
 	return dataTableLookup
+}
+
+func (warning *warning) String() string {
+	return fmt.Sprintf("line no: %d, %s", warning.lineNo, warning.message)
 }
