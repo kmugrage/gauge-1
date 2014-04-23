@@ -446,7 +446,7 @@ func createConceptsDictionary() (*conceptDictionary, *parseError) {
 func addConcepts(conceptFile string, conceptDictionary *conceptDictionary) *parseError {
 	fileText := common.ReadFileContents(conceptFile)
 	concepts, err := new(conceptParser).parse(fileText)
-	conceptDictionary.add(concepts)
+	conceptDictionary.add(concepts, conceptFile)
 	return err
 }
 

@@ -124,7 +124,7 @@ func (executor *specExecutor) validateSpecification() []*stepValidationError {
 	return validationErrors
 }
 
-func (executor *specExecutor) validateSteps(steps []*step) ([]*stepValidationError) {
+func (executor *specExecutor) validateSteps(steps []*step) []*stepValidationError {
 	validationErrors := make([]*stepValidationError, 0)
 	for _, step := range steps {
 		if step.isConcept {
@@ -140,7 +140,7 @@ func (executor *specExecutor) validateSteps(steps []*step) ([]*stepValidationErr
 	return validationErrors
 }
 
-func (executor *specExecutor) validateConcept(concept *step) ([]*stepValidationError) {
+func (executor *specExecutor) validateConcept(concept *step) []*stepValidationError {
 	validationErrors := make([]*stepValidationError, 0)
 	for _, conceptStep := range concept.conceptSteps {
 		if err := executor.validateStep(conceptStep); err != nil {

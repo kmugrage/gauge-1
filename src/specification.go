@@ -246,7 +246,7 @@ func (spec *specification) addStep(stepToken *token, addTo *[]*step, conceptDict
 	var err *parseError
 	stepValue, _ := spec.extractStepValueAndParameterTypes(stepToken.value)
 	if conceptFromDictionary := conceptDictionary.search(stepValue); conceptFromDictionary != nil {
-		stepToAdd, err = spec.createConceptStep(conceptFromDictionary, stepToken)
+		stepToAdd, err = spec.createConceptStep(conceptFromDictionary.conceptStep, stepToken)
 	} else {
 		dataTableLookup := new(argLookup).fromDataTable(&spec.dataTable)
 		stepToAdd, err = spec.createStep(stepToken, dataTableLookup)

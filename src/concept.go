@@ -1,7 +1,12 @@
 package main
 
 type conceptDictionary struct {
-	conceptsMap map[string]*step
+	conceptsMap map[string]*concept
+}
+
+type concept struct {
+	conceptStep *step
+	fileName    string
 }
 
 type conceptParser struct {
@@ -136,18 +141,18 @@ func (parser *conceptParser) createConceptLookup(concept *step) {
 	}
 }
 
-func (conceptDictionary *conceptDictionary) add(concepts []*step) {
+func (conceptDictionary *conceptDictionary) add(concepts []*step, conceptFile string) {
 	if conceptDictionary.conceptsMap == nil {
-		conceptDictionary.conceptsMap = make(map[string]*step)
+		conceptDictionary.conceptsMap = make(map[string]*concept)
 	}
 	for _, step := range concepts {
-		conceptDictionary.conceptsMap[step.value] = step
+		conceptDictionary.conceptsMap[step.value] = &concept{step, conceptFile}
 	}
 }
 
-func (conceptDictionary *conceptDictionary) search(stepValue string) *step {
-	if step, ok := conceptDictionary.conceptsMap[stepValue]; ok {
-		return step
+func (conceptDictionary *conceptDictionary) search(stepValue string) *concept {
+	if concept, ok := conceptDictionary.conceptsMap[stepValue]; ok {
+		return concept
 	}
 	return nil
 }

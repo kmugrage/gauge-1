@@ -9,10 +9,12 @@ func (s *MySuite) TestConceptDictionaryAdd(c *C) {
 	step1 := &step{value: "test step 1"}
 	step2 := &step{value: "test step 2"}
 
-	dictionary.add([]*step{step1, step2})
+	dictionary.add([]*step{step1, step2}, "file.cpt")
 
-	c.Assert(dictionary.conceptsMap["test step 1"], Equals, step1)
-	c.Assert(dictionary.conceptsMap["test step 2"], Equals, step2)
+	c.Assert(dictionary.conceptsMap["test step 1"].conceptStep, Equals, step1)
+	c.Assert(dictionary.conceptsMap["test step 1"].fileName, Equals, "file.cpt")
+	c.Assert(dictionary.conceptsMap["test step 2"].conceptStep, Equals, step2)
+	c.Assert(dictionary.conceptsMap["test step 2"].fileName, Equals, "file.cpt")
 }
 
 func (s *MySuite) TestConceptDictionarySearch(c *C) {
@@ -20,10 +22,12 @@ func (s *MySuite) TestConceptDictionarySearch(c *C) {
 	step1 := &step{value: "test step 1"}
 	step2 := &step{value: "test step 2"}
 
-	dictionary.add([]*step{step1, step2})
+	dictionary.add([]*step{step1, step2}, "file.cpt")
 
-	c.Assert(dictionary.search(step1.value), Equals, step1)
-	c.Assert(dictionary.search(step2.value), Equals, step2)
+	c.Assert(dictionary.search(step1.value).conceptStep, Equals, step1)
+	c.Assert(dictionary.search(step1.value).fileName, Equals, "file.cpt")
+	c.Assert(dictionary.search(step2.value).conceptStep, Equals, step2)
+	c.Assert(dictionary.search(step2.value).fileName, Equals, "file.cpt")
 }
 
 func (s *MySuite) TestParsingSimpleConcept(c *C) {

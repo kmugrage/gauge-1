@@ -423,7 +423,7 @@ func (s *MySuite) TestCreateStepFromSimpleConcept(c *C) {
 	firstStep := &step{value: "step 1"}
 	secondStep := &step{value: "step 2"}
 	conceptStep := &step{value: "concept step", isConcept: true, conceptSteps: []*step{firstStep, secondStep}}
-	conceptDictionary.add([]*step{conceptStep})
+	conceptDictionary.add([]*step{conceptStep}, "file.cpt")
 	spec, result := new(specParser).createSpecification(tokens, conceptDictionary)
 	c.Assert(result.ok, Equals, true)
 
@@ -444,7 +444,7 @@ func (s *MySuite) TestCreateStepFromConceptWithParameters(c *C) {
 
 	concepts, _ := new(conceptParser).parse("#create user <username> \n * enter user <username> \n *select \"finish\"")
 	conceptsDictionary := new(conceptDictionary)
-	conceptsDictionary.add(concepts)
+	conceptsDictionary.add(concepts, "file.cpt")
 
 	spec, result := new(specParser).createSpecification(tokens, conceptsDictionary)
 	c.Assert(result.ok, Equals, true)
@@ -485,7 +485,7 @@ func (s *MySuite) TestCreateStepFromConceptWithDynamicParameters(c *C) {
 
 	concepts, _ := new(conceptParser).parse("#create user <user-id> and <user-description> \n * enter user <user-id> and <user-description> \n *select \"finish\"")
 	conceptsDictionary := new(conceptDictionary)
-	conceptsDictionary.add(concepts)
+	conceptsDictionary.add(concepts, "file.cpt")
 	spec, result := new(specParser).createSpecification(tokens, conceptsDictionary)
 	c.Assert(result.ok, Equals, true)
 
