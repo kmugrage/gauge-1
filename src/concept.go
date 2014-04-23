@@ -141,13 +141,17 @@ func (parser *conceptParser) createConceptLookup(concept *step) {
 	}
 }
 
-func (conceptDictionary *conceptDictionary) add(concepts []*step, conceptFile string) {
+func (conceptDictionary *conceptDictionary) add(concepts []*step, conceptFile string) *parseError {
 	if conceptDictionary.conceptsMap == nil {
 		conceptDictionary.conceptsMap = make(map[string]*concept)
 	}
 	for _, step := range concepts {
+		if _, exists := conceptDictionary.conceptsMap[step.value]; exists {
+			return &parseError{message: "Duplicate concept definition found", lineNo: step.lineNo, lineText: step.lineText}
+		}
 		conceptDictionary.conceptsMap[step.value] = &concept{step, conceptFile}
 	}
+	return nil
 }
 
 func (conceptDictionary *conceptDictionary) search(stepValue string) *concept {

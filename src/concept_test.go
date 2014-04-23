@@ -9,12 +9,24 @@ func (s *MySuite) TestConceptDictionaryAdd(c *C) {
 	step1 := &step{value: "test step 1"}
 	step2 := &step{value: "test step 2"}
 
-	dictionary.add([]*step{step1, step2}, "file.cpt")
+	err := dictionary.add([]*step{step1, step2}, "file.cpt")
 
+	c.Assert(err, IsNil)
 	c.Assert(dictionary.conceptsMap["test step 1"].conceptStep, Equals, step1)
 	c.Assert(dictionary.conceptsMap["test step 1"].fileName, Equals, "file.cpt")
 	c.Assert(dictionary.conceptsMap["test step 2"].conceptStep, Equals, step2)
 	c.Assert(dictionary.conceptsMap["test step 2"].fileName, Equals, "file.cpt")
+}
+
+func (s *MySuite) TestConceptDictionaryAddDuplicateConcept(c *C) {
+	dictionary := new(conceptDictionary)
+	step1 := &step{value: "test step {}", lineText: "test step <first>"}
+	step2 := &step{value: "test step {}", lineText: "test step <second>"}
+
+	err := dictionary.add([]*step{step1, step2}, "file.cpt")
+
+	c.Assert(err, NotNil)
+	c.Assert(err.message, Equals, "Duplicate concept definition found")
 }
 
 func (s *MySuite) TestConceptDictionarySearch(c *C) {
