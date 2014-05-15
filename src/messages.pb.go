@@ -19,6 +19,10 @@ It has these top-level messages:
 	ScenarioExecutionEndingRequest
 	StepExecutionStartingRequest
 	StepExecutionEndingRequest
+	ExecutionInfo
+	SpecInfo
+	ScenarioInfo
+	StepInfo
 	ExecuteStepRequest
 	ProtoTable
 	TableRow
@@ -180,97 +184,258 @@ func (m *ExecutionStatusResponse) GetExecutionStatus() *ExecutionStatus {
 }
 
 type ExecutionStartingRequest struct {
-	XXX_unrecognized []byte `json:"-"`
+	CurrentExecutionInfo *ExecutionInfo `protobuf:"bytes,1,opt,name=currentExecutionInfo" json:"currentExecutionInfo,omitempty"`
+	XXX_unrecognized     []byte         `json:"-"`
 }
 
 func (m *ExecutionStartingRequest) Reset()         { *m = ExecutionStartingRequest{} }
 func (m *ExecutionStartingRequest) String() string { return proto.CompactTextString(m) }
 func (*ExecutionStartingRequest) ProtoMessage()    {}
 
+func (m *ExecutionStartingRequest) GetCurrentExecutionInfo() *ExecutionInfo {
+	if m != nil {
+		return m.CurrentExecutionInfo
+	}
+	return nil
+}
+
 type SpecExecutionStartingRequest struct {
-	SpecName         *string `protobuf:"bytes,1,req,name=specName" json:"specName,omitempty"`
-	SpecFile         *string `protobuf:"bytes,2,req,name=specFile" json:"specFile,omitempty"`
-	XXX_unrecognized []byte  `json:"-"`
+	CurrentExecutionInfo *ExecutionInfo `protobuf:"bytes,1,opt,name=currentExecutionInfo" json:"currentExecutionInfo,omitempty"`
+	XXX_unrecognized     []byte         `json:"-"`
 }
 
 func (m *SpecExecutionStartingRequest) Reset()         { *m = SpecExecutionStartingRequest{} }
 func (m *SpecExecutionStartingRequest) String() string { return proto.CompactTextString(m) }
 func (*SpecExecutionStartingRequest) ProtoMessage()    {}
 
-func (m *SpecExecutionStartingRequest) GetSpecName() string {
-	if m != nil && m.SpecName != nil {
-		return *m.SpecName
+func (m *SpecExecutionStartingRequest) GetCurrentExecutionInfo() *ExecutionInfo {
+	if m != nil {
+		return m.CurrentExecutionInfo
 	}
-	return ""
-}
-
-func (m *SpecExecutionStartingRequest) GetSpecFile() string {
-	if m != nil && m.SpecFile != nil {
-		return *m.SpecFile
-	}
-	return ""
+	return nil
 }
 
 type SpecExecutionEndingRequest struct {
-	SpecName         *string `protobuf:"bytes,1,req,name=specName" json:"specName,omitempty"`
-	SpecFile         *string `protobuf:"bytes,2,req,name=specFile" json:"specFile,omitempty"`
-	XXX_unrecognized []byte  `json:"-"`
+	CurrentExecutionInfo *ExecutionInfo `protobuf:"bytes,1,opt,name=currentExecutionInfo" json:"currentExecutionInfo,omitempty"`
+	XXX_unrecognized     []byte         `json:"-"`
 }
 
 func (m *SpecExecutionEndingRequest) Reset()         { *m = SpecExecutionEndingRequest{} }
 func (m *SpecExecutionEndingRequest) String() string { return proto.CompactTextString(m) }
 func (*SpecExecutionEndingRequest) ProtoMessage()    {}
 
-func (m *SpecExecutionEndingRequest) GetSpecName() string {
-	if m != nil && m.SpecName != nil {
-		return *m.SpecName
+func (m *SpecExecutionEndingRequest) GetCurrentExecutionInfo() *ExecutionInfo {
+	if m != nil {
+		return m.CurrentExecutionInfo
 	}
-	return ""
-}
-
-func (m *SpecExecutionEndingRequest) GetSpecFile() string {
-	if m != nil && m.SpecFile != nil {
-		return *m.SpecFile
-	}
-	return ""
+	return nil
 }
 
 type ScenarioExecutionStartingRequest struct {
-	XXX_unrecognized []byte `json:"-"`
+	CurrentExecutionInfo *ExecutionInfo `protobuf:"bytes,1,opt,name=currentExecutionInfo" json:"currentExecutionInfo,omitempty"`
+	XXX_unrecognized     []byte         `json:"-"`
 }
 
 func (m *ScenarioExecutionStartingRequest) Reset()         { *m = ScenarioExecutionStartingRequest{} }
 func (m *ScenarioExecutionStartingRequest) String() string { return proto.CompactTextString(m) }
 func (*ScenarioExecutionStartingRequest) ProtoMessage()    {}
 
+func (m *ScenarioExecutionStartingRequest) GetCurrentExecutionInfo() *ExecutionInfo {
+	if m != nil {
+		return m.CurrentExecutionInfo
+	}
+	return nil
+}
+
 type ScenarioExecutionEndingRequest struct {
-	XXX_unrecognized []byte `json:"-"`
+	CurrentExecutionInfo *ExecutionInfo `protobuf:"bytes,1,opt,name=currentExecutionInfo" json:"currentExecutionInfo,omitempty"`
+	XXX_unrecognized     []byte         `json:"-"`
 }
 
 func (m *ScenarioExecutionEndingRequest) Reset()         { *m = ScenarioExecutionEndingRequest{} }
 func (m *ScenarioExecutionEndingRequest) String() string { return proto.CompactTextString(m) }
 func (*ScenarioExecutionEndingRequest) ProtoMessage()    {}
 
+func (m *ScenarioExecutionEndingRequest) GetCurrentExecutionInfo() *ExecutionInfo {
+	if m != nil {
+		return m.CurrentExecutionInfo
+	}
+	return nil
+}
+
 type StepExecutionStartingRequest struct {
-	XXX_unrecognized []byte `json:"-"`
+	CurrentExecutionInfo *ExecutionInfo `protobuf:"bytes,1,opt,name=currentExecutionInfo" json:"currentExecutionInfo,omitempty"`
+	XXX_unrecognized     []byte         `json:"-"`
 }
 
 func (m *StepExecutionStartingRequest) Reset()         { *m = StepExecutionStartingRequest{} }
 func (m *StepExecutionStartingRequest) String() string { return proto.CompactTextString(m) }
 func (*StepExecutionStartingRequest) ProtoMessage()    {}
 
+func (m *StepExecutionStartingRequest) GetCurrentExecutionInfo() *ExecutionInfo {
+	if m != nil {
+		return m.CurrentExecutionInfo
+	}
+	return nil
+}
+
 type StepExecutionEndingRequest struct {
-	XXX_unrecognized []byte `json:"-"`
+	CurrentExecutionInfo *ExecutionInfo `protobuf:"bytes,1,opt,name=currentExecutionInfo" json:"currentExecutionInfo,omitempty"`
+	XXX_unrecognized     []byte         `json:"-"`
 }
 
 func (m *StepExecutionEndingRequest) Reset()         { *m = StepExecutionEndingRequest{} }
 func (m *StepExecutionEndingRequest) String() string { return proto.CompactTextString(m) }
 func (*StepExecutionEndingRequest) ProtoMessage()    {}
 
+func (m *StepExecutionEndingRequest) GetCurrentExecutionInfo() *ExecutionInfo {
+	if m != nil {
+		return m.CurrentExecutionInfo
+	}
+	return nil
+}
+
+type ExecutionInfo struct {
+	CurrentSpec      *SpecInfo     `protobuf:"bytes,1,opt,name=currentSpec" json:"currentSpec,omitempty"`
+	CurrentScenario  *ScenarioInfo `protobuf:"bytes,2,opt,name=currentScenario" json:"currentScenario,omitempty"`
+	CurrentStep      *StepInfo     `protobuf:"bytes,3,opt,name=currentStep" json:"currentStep,omitempty"`
+	Stacktrace       *string       `protobuf:"bytes,4,opt,name=stacktrace" json:"stacktrace,omitempty"`
+	XXX_unrecognized []byte        `json:"-"`
+}
+
+func (m *ExecutionInfo) Reset()         { *m = ExecutionInfo{} }
+func (m *ExecutionInfo) String() string { return proto.CompactTextString(m) }
+func (*ExecutionInfo) ProtoMessage()    {}
+
+func (m *ExecutionInfo) GetCurrentSpec() *SpecInfo {
+	if m != nil {
+		return m.CurrentSpec
+	}
+	return nil
+}
+
+func (m *ExecutionInfo) GetCurrentScenario() *ScenarioInfo {
+	if m != nil {
+		return m.CurrentScenario
+	}
+	return nil
+}
+
+func (m *ExecutionInfo) GetCurrentStep() *StepInfo {
+	if m != nil {
+		return m.CurrentStep
+	}
+	return nil
+}
+
+func (m *ExecutionInfo) GetStacktrace() string {
+	if m != nil && m.Stacktrace != nil {
+		return *m.Stacktrace
+	}
+	return ""
+}
+
+type SpecInfo struct {
+	Name             *string  `protobuf:"bytes,1,req,name=name" json:"name,omitempty"`
+	FileName         *string  `protobuf:"bytes,2,req,name=fileName" json:"fileName,omitempty"`
+	IsFailed         *bool    `protobuf:"varint,3,req,name=isFailed" json:"isFailed,omitempty"`
+	Tags             []string `protobuf:"bytes,4,rep,name=tags" json:"tags,omitempty"`
+	XXX_unrecognized []byte   `json:"-"`
+}
+
+func (m *SpecInfo) Reset()         { *m = SpecInfo{} }
+func (m *SpecInfo) String() string { return proto.CompactTextString(m) }
+func (*SpecInfo) ProtoMessage()    {}
+
+func (m *SpecInfo) GetName() string {
+	if m != nil && m.Name != nil {
+		return *m.Name
+	}
+	return ""
+}
+
+func (m *SpecInfo) GetFileName() string {
+	if m != nil && m.FileName != nil {
+		return *m.FileName
+	}
+	return ""
+}
+
+func (m *SpecInfo) GetIsFailed() bool {
+	if m != nil && m.IsFailed != nil {
+		return *m.IsFailed
+	}
+	return false
+}
+
+func (m *SpecInfo) GetTags() []string {
+	if m != nil {
+		return m.Tags
+	}
+	return nil
+}
+
+type ScenarioInfo struct {
+	Name             *string  `protobuf:"bytes,1,req,name=name" json:"name,omitempty"`
+	IsFailed         *bool    `protobuf:"varint,2,req,name=isFailed" json:"isFailed,omitempty"`
+	Tags             []string `protobuf:"bytes,3,rep,name=tags" json:"tags,omitempty"`
+	XXX_unrecognized []byte   `json:"-"`
+}
+
+func (m *ScenarioInfo) Reset()         { *m = ScenarioInfo{} }
+func (m *ScenarioInfo) String() string { return proto.CompactTextString(m) }
+func (*ScenarioInfo) ProtoMessage()    {}
+
+func (m *ScenarioInfo) GetName() string {
+	if m != nil && m.Name != nil {
+		return *m.Name
+	}
+	return ""
+}
+
+func (m *ScenarioInfo) GetIsFailed() bool {
+	if m != nil && m.IsFailed != nil {
+		return *m.IsFailed
+	}
+	return false
+}
+
+func (m *ScenarioInfo) GetTags() []string {
+	if m != nil {
+		return m.Tags
+	}
+	return nil
+}
+
+type StepInfo struct {
+	Step             *ExecuteStepRequest `protobuf:"bytes,1,req,name=step" json:"step,omitempty"`
+	IsFailed         *bool               `protobuf:"varint,2,req,name=isFailed" json:"isFailed,omitempty"`
+	XXX_unrecognized []byte              `json:"-"`
+}
+
+func (m *StepInfo) Reset()         { *m = StepInfo{} }
+func (m *StepInfo) String() string { return proto.CompactTextString(m) }
+func (*StepInfo) ProtoMessage()    {}
+
+func (m *StepInfo) GetStep() *ExecuteStepRequest {
+	if m != nil {
+		return m.Step
+	}
+	return nil
+}
+
+func (m *StepInfo) GetIsFailed() bool {
+	if m != nil && m.IsFailed != nil {
+		return *m.IsFailed
+	}
+	return false
+}
+
 type ExecuteStepRequest struct {
-	StepText         *string     `protobuf:"bytes,1,req,name=stepText" json:"stepText,omitempty"`
-	ScenarioFailing  *bool       `protobuf:"varint,2,opt,name=scenarioFailing" json:"scenarioFailing,omitempty"`
-	Args             []*Argument `protobuf:"bytes,3,rep,name=args" json:"args,omitempty"`
+	ActualStepText   *string     `protobuf:"bytes,1,req,name=actualStepText" json:"actualStepText,omitempty"`
+	ParsedStepText   *string     `protobuf:"bytes,2,req,name=parsedStepText" json:"parsedStepText,omitempty"`
+	ScenarioFailing  *bool       `protobuf:"varint,3,opt,name=scenarioFailing" json:"scenarioFailing,omitempty"`
+	Args             []*Argument `protobuf:"bytes,4,rep,name=args" json:"args,omitempty"`
 	XXX_unrecognized []byte      `json:"-"`
 }
 
@@ -278,9 +443,16 @@ func (m *ExecuteStepRequest) Reset()         { *m = ExecuteStepRequest{} }
 func (m *ExecuteStepRequest) String() string { return proto.CompactTextString(m) }
 func (*ExecuteStepRequest) ProtoMessage()    {}
 
-func (m *ExecuteStepRequest) GetStepText() string {
-	if m != nil && m.StepText != nil {
-		return *m.StepText
+func (m *ExecuteStepRequest) GetActualStepText() string {
+	if m != nil && m.ActualStepText != nil {
+		return *m.ActualStepText
+	}
+	return ""
+}
+
+func (m *ExecuteStepRequest) GetParsedStepText() string {
+	if m != nil && m.ParsedStepText != nil {
+		return *m.ParsedStepText
 	}
 	return ""
 }
@@ -396,12 +568,20 @@ func (m *StepValidateResponse) GetIsValid() bool {
 }
 
 type ExecutionEndingRequest struct {
-	XXX_unrecognized []byte `json:"-"`
+	CurrentExecutionInfo *ExecutionInfo `protobuf:"bytes,1,opt,name=currentExecutionInfo" json:"currentExecutionInfo,omitempty"`
+	XXX_unrecognized     []byte         `json:"-"`
 }
 
 func (m *ExecutionEndingRequest) Reset()         { *m = ExecutionEndingRequest{} }
 func (m *ExecutionEndingRequest) String() string { return proto.CompactTextString(m) }
 func (*ExecutionEndingRequest) ProtoMessage()    {}
+
+func (m *ExecutionEndingRequest) GetCurrentExecutionInfo() *ExecutionInfo {
+	if m != nil {
+		return m.CurrentExecutionInfo
+	}
+	return nil
+}
 
 // This is the message which gets transferred all the time
 // with proper message type set

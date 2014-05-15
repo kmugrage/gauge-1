@@ -59,7 +59,7 @@ func (parser *conceptParser) createConcepts(tokens []*token) ([]*step, *parseErr
 			parser.processTableHeader(token)
 			addStates(&parser.currentState, tableScope)
 		} else if parser.isTableDataRow(token) {
-			parser.processTableDataRow(token)
+			parser.processTableDataRow(token, &parser.currentConcept.lookup)
 		}
 	}
 	if !isInState(parser.currentState, stepScope) && parser.currentState != initial {
@@ -90,14 +90,14 @@ func (parser *conceptParser) isTableDataRow(token *token) bool {
 
 func (parser *conceptParser) processConceptHeading(token *token) (*step, *parseError) {
 	processStep(new(specParser), token)
-	concept, err := new(specification).createStep(token, nil)
+	if !parser.hasOnlyDynamicParams(token) {
+		return nil, &parseError{lineNo: token.lineNo, message: "Concept heading can have only Dynamic Parameters"}
+	}
+	concept, err := new(specification).createStepUsingLookup(token, nil)
 	if err != nil {
 		return nil, err
 	}
 	concept.isConcept = true
-	if !parser.hasOnlyDynamicParams(concept) {
-		return nil, &parseError{lineNo: concept.lineNo, message: "Concept heading can have only Dynamic Parameters"}
-	}
 	parser.createConceptLookup(concept)
 	return concept, nil
 
@@ -105,7 +105,7 @@ func (parser *conceptParser) processConceptHeading(token *token) (*step, *parseE
 
 func (parser *conceptParser) processConceptStep(token *token) *parseError {
 	processStep(new(specParser), token)
-	conceptStep, err := new(specification).createStep(token, &parser.currentConcept.lookup)
+	conceptStep, err := new(specification).createStepUsingLookup(token, &parser.currentConcept.lookup)
 	if err != nil {
 		return err
 	}
@@ -119,15 +119,16 @@ func (parser *conceptParser) processTableHeader(token *token) {
 	addInlineTableHeader(currentStep, token)
 }
 
-func (parser *conceptParser) processTableDataRow(token *token) {
+func (parser *conceptParser) processTableDataRow(token *token, argLookup *argLookup) {
 	steps := parser.currentConcept.conceptSteps
 	currentStep := steps[len(steps)-1]
-	addInlineTableRow(currentStep, token)
+	addInlineTableRow(currentStep, token, argLookup)
 }
 
-func (parser *conceptParser) hasOnlyDynamicParams(concept *step) bool {
-	for _, arg := range concept.args {
-		if arg.argType != dynamic {
+func (parser *conceptParser) hasOnlyDynamicParams(token *token) bool {
+	_, kinds := new(specification).extractStepValueAndParameterTypes(token.value)
+	for _, argKind := range kinds {
+		if argKind != "dynamic" {
 			return false
 		}
 	}

@@ -6,11 +6,48 @@ import (
 	"net"
 )
 
+type itemExecutor func(item, *specExecutor) *stepExecutionStatus
+
 type specExecutor struct {
-	specification     *specification
-	dataTableIndex    int
-	connection        net.Conn
-	conceptDictionary *conceptDictionary
+	specification        *specification
+	dataTableIndex       int
+	connection           net.Conn
+	conceptDictionary    *conceptDictionary
+	pluginHandler        *pluginHandler
+	currentExecutionInfo *ExecutionInfo
+	itemExecutors        map[tokenKind]itemExecutor
+}
+
+func (specExecutor *specExecutor) initialize(specificationToExecute *specification, connection net.Conn, pluginHandler *pluginHandler) {
+	specExecutor.specification = specificationToExecute
+	specExecutor.connection = connection
+	specExecutor.pluginHandler = pluginHandler
+	specExecutor.itemExecutors = getItemExecutors()
+}
+
+func getItemExecutors() map[tokenKind]itemExecutor {
+	return map[tokenKind]itemExecutor{
+		//add item executor for tokenKinds if necessary
+		stepKind: func(item item, executor *specExecutor) *stepExecutionStatus {
+			argLookup := new(argLookup).fromDataTableRow(&executor.specification.dataTable, executor.dataTableIndex)
+			step := item.(*step)
+			if step.isConcept {
+				return executor.executeConcept(step, argLookup)
+			} else {
+				return executor.executeStep(step, argLookup)
+			}
+		},
+		commentKind: func(item item, executor *specExecutor) *stepExecutionStatus {
+			comment := item.(*comment)
+			fmt.Printf("\x1b[30;1m%s\n\x1b[0m", comment.value)
+			return nil
+		},
+		headingKind: func(item item, executor *specExecutor) *stepExecutionStatus {
+			heading := item.(*heading)
+			fmt.Printf("\x1b[33;1m%s\n\x1b[0m", heading.value)
+			return nil
+		},
+	}
 }
 
 type specExecutionStatus struct {
@@ -53,23 +90,24 @@ func (status *specExecutionStatus) isFailed() bool {
 
 func (e *specExecutor) executeBeforeSpecHook() *ExecutionStatus {
 	message := &Message{MessageType: Message_SpecExecutionStarting.Enum(),
-		SpecExecutionStartingRequest: &SpecExecutionStartingRequest{SpecName: proto.String(e.specification.heading.value),
-			SpecFile: proto.String(e.specification.fileName)}}
+		SpecExecutionStartingRequest: &SpecExecutionStartingRequest{CurrentExecutionInfo: e.currentExecutionInfo}}
 
+	e.pluginHandler.notifyPlugins(message)
 	return executeAndGetStatus(e.connection, message)
 }
 
 func (e *specExecutor) executeAfterSpecHook() *ExecutionStatus {
 	message := &Message{MessageType: Message_SpecExecutionEnding.Enum(),
-		SpecExecutionEndingRequest: &SpecExecutionEndingRequest{SpecName: proto.String(e.specification.heading.value),
-			SpecFile: proto.String(e.specification.fileName)}}
-
+		SpecExecutionEndingRequest: &SpecExecutionEndingRequest{CurrentExecutionInfo: e.currentExecutionInfo}}
+	e.pluginHandler.notifyPlugins(message)
 	return executeAndGetStatus(e.connection, message)
 }
 
 func (executor *specExecutor) execute() *specExecutionStatus {
-	specExecutionStatus := &specExecutionStatus{specification: executor.specification, scenariosExecutionStatuses: make(map[int][]*scenarioExecutionStatus)}
+	specInfo := &SpecInfo{Name: proto.String(executor.specification.heading.value), FileName: proto.String(executor.specification.fileName), IsFailed: proto.Bool(false), Tags: getTagValue(executor.specification.tags)}
+	executor.currentExecutionInfo = &ExecutionInfo{CurrentSpec: specInfo}
 
+	specExecutionStatus := &specExecutionStatus{specification: executor.specification, scenariosExecutionStatuses: make(map[int][]*scenarioExecutionStatus)}
 	beforeSpecHookStatus := executor.executeBeforeSpecHook()
 	if beforeSpecHookStatus.GetPassed() {
 		dataTableRowCount := executor.specification.dataTable.getRowCount()
@@ -82,12 +120,22 @@ func (executor *specExecutor) execute() *specExecutionStatus {
 				specExecutionStatus.scenariosExecutionStatuses[executor.dataTableIndex] = scenariosExecutionStatuses
 			}
 		}
+	} else {
+		executor.currentExecutionInfo.setSpecFailure()
 	}
 
 	afterSpecHookStatus := executor.executeAfterSpecHook()
 	specExecutionStatus.hooksExecutionStatuses = append(specExecutionStatus.hooksExecutionStatuses, beforeSpecHookStatus, afterSpecHookStatus)
 
 	return specExecutionStatus
+}
+
+func getTagValue(tags *tags) []string {
+	tagValues := make([]string, 0)
+	if tags != nil {
+		tagValues = append(tagValues, tags.values...)
+	}
+	return tagValues
 }
 
 type scenarioExecutionStatus struct {
@@ -175,51 +223,68 @@ func (executor *specExecutor) validateStep(step *step) *stepValidationError {
 	return nil
 }
 
-func (executor *specExecutor) executeBeforeScenarioHook() *ExecutionStatus {
+func (e *specExecutor) executeBeforeScenarioHook(scenario *scenario) *ExecutionStatus {
 	message := &Message{MessageType: Message_ScenarioExecutionStarting.Enum(),
-		ScenarioExecutionStartingRequest: &ScenarioExecutionStartingRequest{}}
-	return executeAndGetStatus(executor.connection, message)
+		ScenarioExecutionStartingRequest: &ScenarioExecutionStartingRequest{CurrentExecutionInfo: e.currentExecutionInfo}}
+	e.pluginHandler.notifyPlugins(message)
+	return executeAndGetStatus(e.connection, message)
 }
 
 func (executor *specExecutor) executeAfterScenarioHook() *ExecutionStatus {
 	message := &Message{MessageType: Message_ScenarioExecutionEnding.Enum(),
-		ScenarioExecutionEndingRequest: &ScenarioExecutionEndingRequest{}}
+		ScenarioExecutionEndingRequest: &ScenarioExecutionEndingRequest{CurrentExecutionInfo: executor.currentExecutionInfo}}
+	executor.pluginHandler.notifyPlugins(message)
 	return executeAndGetStatus(executor.connection, message)
 }
 
 func (executor *specExecutor) executeScenarios() []*scenarioExecutionStatus {
 	var scenarioExecutionStatuses []*scenarioExecutionStatus
-	argLookup := new(argLookup).fromDataTableRow(&executor.specification.dataTable, executor.dataTableIndex)
 	for _, scenario := range executor.specification.scenarios {
-		status := executor.executeScenario(scenario, argLookup)
+		status := executor.executeScenario(scenario)
 		scenarioExecutionStatuses = append(scenarioExecutionStatuses, status)
 	}
 	return scenarioExecutionStatuses
 }
 
-func (executor *specExecutor) executeScenario(scenario *scenario, argLookup *argLookup) *scenarioExecutionStatus {
+func (executor *specExecutor) executeScenario(scenario *scenario) *scenarioExecutionStatus {
 	scenarioExecutionStatus := &scenarioExecutionStatus{scenario: scenario}
-	beforeHookExecutionStatus := executor.executeBeforeScenarioHook()
-	if beforeHookExecutionStatus.GetPassed() {
-		contextStepsExecutionStatuses := executor.executeSteps(executor.specification.contexts, argLookup)
-		scenarioExecutionStatus.stepExecutionStatuses = append(scenarioExecutionStatus.stepExecutionStatuses, contextStepsExecutionStatuses...)
-		contextFailed := false
-		for _, s := range contextStepsExecutionStatuses {
-			if !s.passed {
-				contextFailed = true
-				break
-			}
-		}
+	executor.currentExecutionInfo.CurrentScenario = &ScenarioInfo{Name: proto.String(scenario.heading.value), Tags: getTagValue(scenario.tags), IsFailed: proto.Bool(false)}
 
-		if !contextFailed {
-			stepExecutionStatuses := executor.executeSteps(scenario.steps, argLookup)
+	beforeHookExecutionStatus := executor.executeBeforeScenarioHook(scenario)
+	if beforeHookExecutionStatus.GetPassed() {
+		contextStepsExecutionStatuses, passed := executor.executeItems(executor.specification.items)
+		scenarioExecutionStatus.stepExecutionStatuses = append(scenarioExecutionStatus.stepExecutionStatuses, contextStepsExecutionStatuses...)
+
+		if passed {
+			stepExecutionStatuses, _ := executor.executeItems(scenario.items)
 			scenarioExecutionStatus.stepExecutionStatuses = append(scenarioExecutionStatus.stepExecutionStatuses, stepExecutionStatuses...)
 		}
+	} else {
+		executor.currentExecutionInfo.setScenarioFailure()
 	}
 
 	afterHookExecutionStatus := executor.executeAfterScenarioHook()
 	scenarioExecutionStatus.hooksExecutionStatuses = append(scenarioExecutionStatus.hooksExecutionStatuses, afterHookExecutionStatus)
 	return scenarioExecutionStatus
+}
+
+func (executor *specExecutor) executeItems(items []item) ([]*stepExecutionStatus, bool) {
+	isFailure := false
+	executionStatuses := make([]*stepExecutionStatus, 0)
+	for _, item := range items {
+		executeFn, found := executor.itemExecutors[item.kind()]
+		if found {
+			executionStatus := executeFn(item, executor)
+			if executionStatus != nil {
+				executionStatuses = append(executionStatuses, executionStatus)
+				if !executionStatus.passed {
+					isFailure = true
+					break
+				}
+			}
+		}
+	}
+	return executionStatuses, !isFailure
 }
 
 type stepExecutionStatus struct {
@@ -239,14 +304,9 @@ func (s *stepExecutionStatus) addExecutionStatus(executionStatus *ExecutionStatu
 }
 
 func (executor *specExecutor) executeSteps(steps []*step, argLookup *argLookup) []*stepExecutionStatus {
-	var status *stepExecutionStatus
 	var statuses []*stepExecutionStatus
 	for _, step := range steps {
-		if step.isConcept {
-			status = executor.executeConcept(step, argLookup)
-		} else {
-			status = executor.executeStep(step, argLookup)
-		}
+		status := executor.executeStep(step, argLookup)
 		statuses = append(statuses, status)
 		// TODO: handle recoverable error when verification API is done
 		if !status.passed {
@@ -269,41 +329,41 @@ func (executor *specExecutor) executeConcept(concept *step, dataTableLookup *arg
 	return conceptExecutionStatus
 
 }
+
+func printStatus(execStatus *ExecutionStatus) {
+	fmt.Printf("\x1b[31;1m%s\n\x1b[0m", execStatus.GetErrorMessage())
+	fmt.Printf("\x1b[31;1m%s\n\x1b[0m", execStatus.GetStackTrace())
+}
+
 func (executor *specExecutor) executeStep(step *step, argLookup *argLookup) *stepExecutionStatus {
 	stepExecStatus := &stepExecutionStatus{passed: true}
-	printStatus := func(execStatus *ExecutionStatus) {
-		fmt.Printf("\x1b[31;1m%s\n\x1b[0m", execStatus.GetErrorMessage())
-		fmt.Printf("\x1b[31;1m%s\n\x1b[0m", execStatus.GetStackTrace())
-	}
+	stepRequest := executor.createStepRequest(step, argLookup)
+	executor.currentExecutionInfo.CurrentStep = &StepInfo{Step: stepRequest, IsFailed: proto.Bool(false)}
 
-	message := &Message{MessageType: Message_StepExecutionStarting.Enum(),
-		StepExecutionStartingRequest: &StepExecutionStartingRequest{}}
-	var status *ExecutionStatus
-	status = executeAndGetStatus(executor.connection, message)
-	if status.GetPassed() {
-		stepRequest := executor.createStepRequest(step, argLookup)
-		message = &Message{MessageType: Message_ExecuteStep.Enum(),
-			ExecuteStepRequest: stepRequest}
-		status = executeAndGetStatus(executor.connection, message)
-		if !status.GetPassed() {
-			printStatus(status)
-			stepExecStatus.addExecutionStatus(status)
+	beforeHookStatus := executor.executeBeforeStepHook()
+	if beforeHookStatus.GetPassed() {
+		executeStepMessage := &Message{MessageType: Message_ExecuteStep.Enum(), ExecuteStepRequest: stepRequest}
+		stepExecutionStatus := executeAndGetStatus(executor.connection, executeStepMessage)
+		if !stepExecutionStatus.GetPassed() {
+			executor.currentExecutionInfo.setStepFailure()
+			printStatus(stepExecutionStatus)
+			stepExecStatus.addExecutionStatus(stepExecutionStatus)
 		}
 	} else {
-		printStatus(status)
-		stepExecStatus.addExecutionStatus(status)
+		executor.currentExecutionInfo.setStepFailure()
+		printStatus(beforeHookStatus)
+		stepExecStatus.addExecutionStatus(beforeHookStatus)
 	}
 
-	message = &Message{MessageType: Message_StepExecutionEnding.Enum(),
-		StepExecutionEndingRequest: &StepExecutionEndingRequest{}}
-	status = executeAndGetStatus(executor.connection, message)
-	if !status.GetPassed() {
-		printStatus(status)
-		stepExecStatus.executionStatus = append(stepExecStatus.executionStatus, status)
+	afterStepHookStatus := executor.executeAfterStepHook()
+	if !afterStepHookStatus.GetPassed() {
+		executor.currentExecutionInfo.setStepFailure()
+		printStatus(afterStepHookStatus)
+		stepExecStatus.addExecutionStatus(afterStepHookStatus)
 	}
 
 	if stepExecStatus.passed {
-		fmt.Printf("=> \x1b[32;1m%s\n\x1b[0m", step.lineText)
+		fmt.Printf("\x1b[32;1m%s\n\x1b[0m", step.lineText)
 	} else {
 		fmt.Printf("\x1b[31;1m%s\n\x1b[0m", step.lineText)
 	}
@@ -311,8 +371,22 @@ func (executor *specExecutor) executeStep(step *step, argLookup *argLookup) *ste
 	return stepExecStatus
 }
 
+func (executor *specExecutor) executeBeforeStepHook() *ExecutionStatus {
+	message := &Message{MessageType: Message_StepExecutionStarting.Enum(),
+		StepExecutionStartingRequest: &StepExecutionStartingRequest{CurrentExecutionInfo: executor.currentExecutionInfo}}
+	executor.pluginHandler.notifyPlugins(message)
+	return executeAndGetStatus(executor.connection, message)
+}
+
+func (executor *specExecutor) executeAfterStepHook() *ExecutionStatus {
+	message := &Message{MessageType: Message_StepExecutionEnding.Enum(),
+		StepExecutionEndingRequest: &StepExecutionEndingRequest{CurrentExecutionInfo: executor.currentExecutionInfo}}
+	executor.pluginHandler.notifyPlugins(message)
+	return executeAndGetStatus(executor.connection, message)
+}
+
 func (executor *specExecutor) createStepRequest(step *step, argLookup *argLookup) *ExecuteStepRequest {
-	stepRequest := &ExecuteStepRequest{StepText: proto.String(step.value)}
+	stepRequest := &ExecuteStepRequest{ParsedStepText: proto.String(step.value), ActualStepText: proto.String(step.lineText)}
 	stepRequest.Args = executor.createStepArgs(step.args, argLookup)
 	return stepRequest
 }
@@ -321,7 +395,7 @@ func (executor *specExecutor) createStepArgs(args []*stepArg, argLookup *argLook
 	arguments := make([]*Argument, 0)
 	for _, arg := range args {
 		argument := new(Argument)
-		if arg.argType == static || arg.argType == specialString {
+		if arg.argType == static {
 			argument.Type = proto.String("string")
 			argument.Value = proto.String(arg.value)
 		} else if arg.argType == dynamic {
@@ -329,14 +403,14 @@ func (executor *specExecutor) createStepArgs(args []*stepArg, argLookup *argLook
 			//In case a special table used in a concept, you will get a dynamic table value which has to be resolved from the concept lookup
 			if resolvedArg.table.isInitialized() {
 				argument.Type = proto.String("table")
-				argument.Table = executor.createStepTable(&resolvedArg.table)
+				argument.Table = executor.createStepTable(&resolvedArg.table, argLookup)
 			} else {
 				argument.Type = proto.String("string")
 				argument.Value = proto.String(resolvedArg.value)
 			}
 		} else {
 			argument.Type = proto.String("table")
-			argument.Table = executor.createStepTable(&arg.table)
+			argument.Table = executor.createStepTable(&arg.table, argLookup)
 		}
 		arguments = append(arguments, argument)
 	}
@@ -345,17 +419,29 @@ func (executor *specExecutor) createStepArgs(args []*stepArg, argLookup *argLook
 }
 
 func (executor *specExecutor) getCurrentDataTableValueFor(columnName string) string {
-	return executor.specification.dataTable.get(columnName)[executor.dataTableIndex]
+	return executor.specification.dataTable.get(columnName)[executor.dataTableIndex].value
 }
 
-func (executor *specExecutor) createStepTable(table *table) *ProtoTable {
+func (executor *specExecutor) createStepTable(table *table, lookup *argLookup) *ProtoTable {
 	protoTable := new(ProtoTable)
 	tableRows := make([]*TableRow, 0)
 	tableRows = append(tableRows, &TableRow{Cells: table.headers})
 	for i := 0; i < len(table.columns[0]); i++ {
 		row := make([]string, 0)
 		for _, header := range table.headers {
-			row = append(row, table.get(header)[i])
+			tableCell := table.get(header)[i]
+			value := tableCell.value
+			if tableCell.cellType == dynamic {
+				if lookup.containsArg(tableCell.value) {
+					value = lookup.getArg(tableCell.value).value
+				} else {
+					//if concept has a table with dynamic cell, arglookup won't have the table value, so fetch from datatable itself
+					//todo cleanup
+					tableLookup := new(argLookup).fromDataTableRow(&executor.specification.dataTable, executor.dataTableIndex)
+					value = tableLookup.getArg(tableCell.value).value
+				}
+			}
+			row = append(row, value)
 		}
 		tableRows = append(tableRows, &TableRow{Cells: row})
 	}
@@ -388,4 +474,18 @@ func (executor *specExecutor) populateConceptDynamicParams(conceptLookup *argLoo
 			conceptLookup.addArgValue(key, resolvedArg)
 		}
 	}
+}
+
+func (executionInfo *ExecutionInfo) setSpecFailure() {
+	executionInfo.CurrentSpec.IsFailed = proto.Bool(true)
+}
+
+func (executionInfo *ExecutionInfo) setScenarioFailure() {
+	executionInfo.setSpecFailure()
+	executionInfo.CurrentScenario.IsFailed = proto.Bool(true)
+}
+
+func (executionInfo *ExecutionInfo) setStepFailure() {
+	executionInfo.setScenarioFailure()
+	executionInfo.CurrentStep.IsFailed = proto.Bool(true)
 }

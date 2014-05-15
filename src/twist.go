@@ -32,8 +32,22 @@ func init() {
 	acceptedExtensions[".md"] = true
 }
 
+type pluginDetails struct {
+	Id      string
+	Version string
+}
+
 type manifest struct {
 	Language string
+	Plugins  []pluginDetails
+}
+
+func (m *manifest) save() error {
+	b, err := json.MarshalIndent(m, "", "  ")
+	if err != nil {
+		return err
+	}
+	return ioutil.WriteFile(common.ManifestFile, b, common.NewFilePermissions)
 }
 
 // All the environment variables loaded from the
@@ -48,7 +62,11 @@ func getProjectManifest() *manifest {
 		fmt.Printf("Failed to read manifest: %s \n", err.Error())
 		os.Exit(1)
 	}
-	contents := common.ReadFileContents(path.Join(projectRoot, common.ManifestFile))
+	contents, err := common.ReadFileContents(path.Join(projectRoot, common.ManifestFile))
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
 	dec := json.NewDecoder(strings.NewReader(contents))
 
 	var m manifest
@@ -92,7 +110,11 @@ func parseScenarioFiles(fileChan <-chan string) {
 
 		parser := new(specParser)
 		//todo: parse concepts
-		specification, result := parser.parse(common.ReadFileContents(scenarioFilePath), new(conceptDictionary))
+		scenarioContent, err := common.ReadFileContents(scenarioFilePath)
+		if err != nil {
+			fmt.Println(err)
+		}
+		specification, result := parser.parse(scenarioContent, new(conceptDictionary))
 
 		if result.ok {
 			availableSteps = append(availableSteps, specification.contexts...)
@@ -140,16 +162,14 @@ func createProjectTemplate(language string) error {
 		showMessage("skip", common.ManifestFile)
 	}
 	manifest := &manifest{Language: language}
-	b, err := json.Marshal(manifest)
-	if err != nil {
+	if err := manifest.save(); err != nil {
 		return err
 	}
-	ioutil.WriteFile(common.ManifestFile, b, common.NewFilePermissions)
 
 	// creating the spec directory
 	showMessage("create", specsDirName)
 	if !common.DirExists(specsDirName) {
-		err = os.Mkdir(specsDirName, common.NewDirectoryPermissions)
+		err := os.Mkdir(specsDirName, common.NewDirectoryPermissions)
 		if err != nil {
 			showMessage("error", fmt.Sprintf("Failed to create %s. %s", specsDirName, err.Error()))
 		}
@@ -244,6 +264,8 @@ func loadEnvironment(env string) error {
 var daemonize = flag.Bool("daemonize", false, "Run as a daemon")
 var initialize = flag.String("init", "", "Initializes project structure in the current directory")
 var currentEnv = flag.String("env", "default", "Specifies the environment")
+var addPlugin = flag.String("add-plugin", "", "Adds the specified plugin to the current project")
+var pluginArgs = flag.String("plugin-args", "", "Specified additional arguments to the plugin. This is used together with --add-plugin")
 
 func printUsage() {
 	fmt.Fprintf(os.Stderr, "usage: twist [options] scenario\n")
@@ -278,6 +300,24 @@ func main() {
 			os.Exit(1)
 		}
 		fmt.Println("Successfully initialized the project")
+	} else if *addPlugin != "" {
+		pluginName := *addPlugin
+		additionalArgs := make(map[string]string)
+		if *pluginArgs != "" {
+			// plugin args will be comma separated values
+			// eg: version=1.0, foo_version = 2.41
+			args := strings.Split(*pluginArgs, ",")
+			for _, arg := range args {
+				keyValuePair := strings.Split(arg, "=")
+				if len(keyValuePair) == 2 {
+					additionalArgs[strings.TrimSpace(keyValuePair[0])] = strings.TrimSpace(keyValuePair[1])
+				}
+			}
+		}
+		if err := addPluginToTheProject(pluginName, additionalArgs, getProjectManifest()); err != nil {
+			fmt.Println(err.Error())
+			os.Exit(1)
+		}
 	} else {
 		if len(flag.Args()) == 0 {
 			printUsage()
@@ -308,19 +348,29 @@ func main() {
 		handleParseResult(specParseResults...)
 
 		manifest := getProjectManifest()
+
+		pluginHandler, warnings := startPluginsForExecution(manifest)
+		handleWarningMessages(warnings)
+
+		listener, listenerErr := newListener()
+		if listenerErr != nil {
+			fmt.Printf("Failed to start a runner. %s\n", listenerErr.Error())
+			os.Exit(1)
+		}
+
 		_, runnerError := startRunner(manifest)
 		if runnerError != nil {
 			fmt.Printf("Failed to start a runner. %s\n", runnerError.Error())
 			os.Exit(1)
 		}
 
-		conn, connectionError := acceptConnection()
+		runnerConnection, connectionError := listener.acceptConnection(runnerConnectionTimeOut)
 		if connectionError != nil {
 			fmt.Printf("Failed to get a runner. %s\n", connectionError.Error())
 			os.Exit(1)
 		}
 
-		execution := newExecution(manifest, specs, conn)
+		execution := newExecution(manifest, specs, runnerConnection, pluginHandler)
 		validationErrors := execution.validate(concepts)
 		if len(validationErrors) > 0 {
 			fmt.Println("Validation failed. The following steps are not implemented")
@@ -443,7 +493,10 @@ func createConceptsDictionary() (*conceptDictionary, *parseResult) {
 }
 
 func addConcepts(conceptFile string, conceptDictionary *conceptDictionary) *parseError {
-	fileText := common.ReadFileContents(conceptFile)
+	fileText, fileReadErr := common.ReadFileContents(conceptFile)
+	if fileReadErr != nil {
+		return &parseError{message: fmt.Sprintf("failed to read concept file %s", conceptFile)}
+	}
 	concepts, err := new(conceptParser).parse(fileText)
 	if err != nil {
 		return err
@@ -467,15 +520,19 @@ func findSpecs(specSource string, conceptDictionary *conceptDictionary) ([]*spec
 
 	specs := make([]*specification, 0)
 	for _, specFile := range specFiles {
-		specFileContent := common.ReadFileContents(specFile)
+		specFileContent, err := common.ReadFileContents(specFile)
+		if err != nil {
+			fmt.Println(err)
+			parseResults = append(parseResults, &parseResult{error: &parseError{message: err.Error()}, ok: false, fileName: specFile})
+		}
 		spec, parseResult := new(specParser).parse(specFileContent, conceptDictionary)
 		parseResult.fileName = specFile
-		spec.fileName = specFile
 		if !parseResult.ok {
 			return nil, append(parseResults, parseResult)
 		} else {
 			parseResults = append(parseResults, parseResult)
 		}
+		spec.fileName = specFile
 		specs = append(specs, spec)
 	}
 	return specs, parseResults
@@ -488,4 +545,10 @@ func findSpecsFilesIn(dirRoot string) []string {
 
 func isValidSpecExtension(path string) bool {
 	return acceptedExtensions[filepath.Ext(path)]
+}
+
+func handleWarningMessages(warnings []string) {
+	for _, warning := range warnings {
+		fmt.Println(fmt.Sprintf("[Warning] %s", warning))
+	}
 }
