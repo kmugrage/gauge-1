@@ -87,3 +87,15 @@ func getTableCell(value string) tableCell {
 func getDefaultTableCell() tableCell {
 	return tableCell{value: "", cellType: static}
 }
+
+func tableFrom(protoTable *ProtoTable) *table {
+	table := &table{}
+	for i, row := range protoTable.GetRows() {
+		if i == 0 {
+			table.addHeaders(row.GetCells())
+		} else {
+			table.addRows(row.GetCells())
+		}
+	}
+	return table
+}

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/wsxiaoys/terminal"
 	"os"
+	"strings"
 )
 
 const (
@@ -82,16 +83,29 @@ func (writer *consoleWriter) writeScenarioHeading(scenarioHeading string) {
 }
 
 func (writer *consoleWriter) writeStep(stepRequest *ExecuteStepRequest) {
-	terminal.Stdout.Colorf("@b%s\n", stepRequest.GetActualStepText())
+	terminal.Stdout.Colorf("@b%s\n", formatStepText(extractStepWithResolvedParameters(stepRequest)))
 	writer.enableBuffering()
+}
+
+func extractStepWithResolvedParameters(stepRequest *ExecuteStepRequest) string {
+	text := stepRequest.GetParsedStepText()
+	paramCount := strings.Count(text, PARAMETER_PLACEHOLDER)
+	for i := 0; i < paramCount; i++ {
+		text = strings.Replace(text, PARAMETER_PLACEHOLDER, resolveParameterText(stepRequest.GetArgs()[i]), 1)
+	}
+	return text
+}
+
+func resolveParameterText(argument *Argument) string {
+	return fmt.Sprintf("\"%s\"", argument.GetValue())
 }
 
 func (writer *consoleWriter) writeStepFinished(stepRequest *ExecuteStepRequest, isPassed bool) {
 	terminal.Stdout.Up(1)
 	if isPassed {
-		terminal.Stdout.Colorf("@g%s\n", stepRequest.GetActualStepText())
+		terminal.Stdout.Colorf("@g%s\n", formatStepText(extractStepWithResolvedParameters(stepRequest)))
 	} else {
-		terminal.Stdout.Colorf("@r%s\n", stepRequest.GetActualStepText())
+		terminal.Stdout.Colorf("@r%s\n", formatStepText(extractStepWithResolvedParameters(stepRequest)))
 	}
 	writer.flush()
 	writer.disableBuffering()

@@ -17,9 +17,10 @@ type scenario struct {
 type argType int
 
 const (
-	static   argType = iota
-	dynamic  argType = iota
-	tableArg argType = iota
+	static                argType = iota
+	dynamic               argType = iota
+	tableArg              argType = iota
+	PARAMETER_PLACEHOLDER         = "{}"
 )
 
 type stepArg struct {
@@ -420,7 +421,7 @@ func (spec *specification) extractStepValueAndParameterTypes(stepTokenValue stri
 		//arg[1] extracts the first group
 		argsType = append(argsType, arg[1])
 	}
-	return r.ReplaceAllString(stepTokenValue, "{}"), argsType
+	return r.ReplaceAllString(stepTokenValue, PARAMETER_PLACEHOLDER), argsType
 }
 
 func (spec *specification) populateConceptLookup(lookup *argLookup, conceptArgs []*stepArg, stepArgs []*stepArg) {
@@ -454,7 +455,7 @@ func addInlineTableHeader(step *step, token *token) {
 	tableArg := &stepArg{argType: tableArg}
 	tableArg.table.addHeaders(token.args)
 	step.args = append(step.args, tableArg)
-	step.value = fmt.Sprintf("%s {}", step.value)
+	step.value = fmt.Sprintf("%s %s", step.value, PARAMETER_PLACEHOLDER)
 }
 
 func addInlineTableRow(step *step, token *token, argLookup *argLookup) parseResult {
