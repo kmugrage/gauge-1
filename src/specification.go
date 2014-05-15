@@ -63,9 +63,17 @@ type item interface {
 	kind() tokenKind
 }
 
+type headingType int
+
+const (
+	specHeading     = 0
+	scenarioHeading = 1
+)
+
 type heading struct {
-	value  string
-	lineNo int
+	value       string
+	lineNo      int
+	headingType headingType
 }
 
 type comment struct {
@@ -162,7 +170,7 @@ func (specParser *specParser) initializeConverters() []func(*token, *int, *speci
 			}
 		}
 		scenario := &scenario{}
-		scenario.addHeading(&heading{token.value, token.lineNo})
+		scenario.addHeading(&heading{value: token.value, lineNo: token.lineNo})
 		spec.addScenario(scenario)
 
 		retainStates(state, specScope)
@@ -340,6 +348,7 @@ func (specification *specification) addItem(itemToAdd item) {
 }
 
 func (specification *specification) addHeading(heading *heading) {
+	heading.headingType = specHeading
 	specification.heading = heading
 	specification.addItem(heading)
 }
@@ -548,6 +557,7 @@ func (scenario scenario) kind() tokenKind {
 }
 
 func (scenario *scenario) addHeading(heading *heading) {
+	heading.headingType = scenarioHeading
 	scenario.heading = heading
 	scenario.addItem(heading)
 }

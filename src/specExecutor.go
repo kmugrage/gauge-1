@@ -42,9 +42,14 @@ func getItemExecutors() map[tokenKind]itemExecutor {
 			fmt.Printf("\x1b[30;1m%s\n\x1b[0m", comment.value)
 			return nil
 		},
+		//TODO: should remove this
 		headingKind: func(item item, executor *specExecutor) *stepExecutionStatus {
 			heading := item.(*heading)
-			fmt.Printf("\x1b[33;1m%s\n\x1b[0m", heading.value)
+			if heading.headingType == specHeading {
+				//fmt.Printf("\x1b[33;1m%s\n\x1b[0m", heading.value)
+			} else {
+				//fmt.Printf("\x1b[33;1m%s\n\x1b[0m", heading.value)
+			}
 			return nil
 		},
 	}
@@ -106,6 +111,7 @@ func (e *specExecutor) executeAfterSpecHook() *ExecutionStatus {
 func (executor *specExecutor) execute() *specExecutionStatus {
 	specInfo := &SpecInfo{Name: proto.String(executor.specification.heading.value), FileName: proto.String(executor.specification.fileName), IsFailed: proto.Bool(false), Tags: getTagValue(executor.specification.tags)}
 	executor.currentExecutionInfo = &ExecutionInfo{CurrentSpec: specInfo}
+	getCurrentConsole().writeSpecExecutionHeading(executor.specification.heading.value)
 
 	specExecutionStatus := &specExecutionStatus{specification: executor.specification, scenariosExecutionStatuses: make(map[int][]*scenarioExecutionStatus)}
 	beforeSpecHookStatus := executor.executeBeforeSpecHook()
@@ -249,6 +255,7 @@ func (executor *specExecutor) executeScenarios() []*scenarioExecutionStatus {
 func (executor *specExecutor) executeScenario(scenario *scenario) *scenarioExecutionStatus {
 	scenarioExecutionStatus := &scenarioExecutionStatus{scenario: scenario}
 	executor.currentExecutionInfo.CurrentScenario = &ScenarioInfo{Name: proto.String(scenario.heading.value), Tags: getTagValue(scenario.tags), IsFailed: proto.Bool(false)}
+	getCurrentConsole().writeScenarioHeading(scenario.heading.value)
 
 	beforeHookExecutionStatus := executor.executeBeforeScenarioHook(scenario)
 	if beforeHookExecutionStatus.GetPassed() {
@@ -336,8 +343,10 @@ func printStatus(execStatus *ExecutionStatus) {
 }
 
 func (executor *specExecutor) executeStep(step *step, argLookup *argLookup) *stepExecutionStatus {
-	stepExecStatus := &stepExecutionStatus{passed: true}
 	stepRequest := executor.createStepRequest(step, argLookup)
+	getCurrentConsole().writeStep(stepRequest)
+
+	stepExecStatus := &stepExecutionStatus{passed: true}
 	executor.currentExecutionInfo.CurrentStep = &StepInfo{Step: stepRequest, IsFailed: proto.Bool(false)}
 
 	beforeHookStatus := executor.executeBeforeStepHook()
@@ -362,12 +371,7 @@ func (executor *specExecutor) executeStep(step *step, argLookup *argLookup) *ste
 		stepExecStatus.addExecutionStatus(afterStepHookStatus)
 	}
 
-	if stepExecStatus.passed {
-		fmt.Printf("\x1b[32;1m%s\n\x1b[0m", step.lineText)
-	} else {
-		fmt.Printf("\x1b[31;1m%s\n\x1b[0m", step.lineText)
-	}
-
+	getCurrentConsole().writeStepFinished(stepRequest, stepExecStatus.passed)
 	return stepExecStatus
 }
 
