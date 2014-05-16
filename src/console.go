@@ -83,7 +83,7 @@ func (writer *consoleWriter) writeScenarioHeading(scenarioHeading string) {
 }
 
 func (writer *consoleWriter) writeStep(stepRequest *ExecuteStepRequest) {
-	terminal.Stdout.Colorf("@b%s\n", formatStepText(extractStepWithResolvedParameters(stepRequest)))
+	terminal.Stdout.Colorf("@b%s\n", formatStepRequest(stepRequest))
 	writer.enableBuffering()
 }
 
@@ -97,16 +97,26 @@ func extractStepWithResolvedParameters(stepRequest *ExecuteStepRequest) string {
 }
 
 func resolveParameterText(argument *Argument) string {
+	if argument.GetType() == "table" {
+		table := tableFrom(argument.GetTable())
+		formattedTable := formatTable(table)
+		return fmt.Sprintf("\n%s", formattedTable)
+	}
 	return fmt.Sprintf("\"%s\"", argument.GetValue())
 }
 
 func (writer *consoleWriter) writeStepFinished(stepRequest *ExecuteStepRequest, isPassed bool) {
-	terminal.Stdout.Up(1)
+	stepText := formatStepRequest(stepRequest)
+	terminal.Stdout.Up(strings.Count(stepText, "\n") + 1)
 	if isPassed {
-		terminal.Stdout.Colorf("@g%s\n", formatStepText(extractStepWithResolvedParameters(stepRequest)))
+		terminal.Stdout.Colorf("@g%s\n", stepText)
 	} else {
-		terminal.Stdout.Colorf("@r%s\n", formatStepText(extractStepWithResolvedParameters(stepRequest)))
+		terminal.Stdout.Colorf("@r%s\n", stepText)
 	}
 	writer.flush()
 	writer.disableBuffering()
+}
+
+func formatStepRequest(stepRequest *ExecuteStepRequest) string {
+	return formatStepText(extractStepWithResolvedParameters(stepRequest))
 }

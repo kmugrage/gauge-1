@@ -3,7 +3,7 @@ package main
 import (
 	"bytes"
 	"fmt"
-	"math"
+	//"math"
 )
 
 func getRepeatedChars(character string, repeatCount int) string {
@@ -37,41 +37,50 @@ func formatHeading(heading, headingChar string) string {
 }
 
 func formatTable(table *table) string {
-	columnIndexToWidthMap := make(map[int]int)
+	columnToWidthMap := make(map[int]int)
 	for i, header := range table.headers {
 		//table.get(header) returns a list of cells in that particular column
-		columnCells := table.get(header)
-		columnIndexToWidthMap[i] = longestColumnCellLength(columnCells, len(header))
+		cells := table.get(header)
+		columnToWidthMap[i] = findLongestCellWidth(cells, len(header))
 	}
 
-	var tableStringBuffer *bytes.Buffer
-    tableStringBuffer.WriteString("|")
-    for i, header := range table.headers {
-        width := columnIndexToWidthMap[i]
-        centerToCell(header, width)
-        tableStringBuffer.WriteString(fmt.Sprintf("%s|"))
-    }
-    for _, table.getRowCount()
+	var tableStringBuffer bytes.Buffer
+	tableStringBuffer.WriteString("|")
+	for i, header := range table.headers {
+		width := columnToWidthMap[i]
+		tableStringBuffer.WriteString(fmt.Sprintf("%s|", addPaddingToCell(header, width)))
+	}
 
+	tableStringBuffer.WriteString("\n")
+	tableStringBuffer.WriteString("|")
+	for i, _ := range table.headers {
+		width := columnToWidthMap[i]
+		cell := getRepeatedChars("-", width)
+		tableStringBuffer.WriteString(fmt.Sprintf("%s|", addPaddingToCell(cell, width)))
+	}
 
+	tableStringBuffer.WriteString("\n")
+	for _, row := range table.getRows() {
+		tableStringBuffer.WriteString("|")
+		for i, cell := range row {
+			width := columnToWidthMap[i]
+			tableStringBuffer.WriteString(fmt.Sprintf("%s|", addPaddingToCell(cell, width)))
+		}
+		tableStringBuffer.WriteString("\n")
+	}
+
+	return string(tableStringBuffer.Bytes())
 }
 
-
-func centerToCell(cellValue string, width int) {
-    paddinglen := math.Floor((len(cellValue) - width)/2)
-    padding := getRepeatedChars(" ",int(paddinglen))
-    padded := fmt.Sprintf("%s%s%s", padding, cellValue, padding))
-    // When paddingLen is odd
-    if(len(padded) != width) {
-        padded =  fmt.Sprintf("%s ",padded )
-    } 
-    return padded
+func addPaddingToCell(cellValue string, width int) string {
+	padding := getRepeatedChars(" ", width-len(cellValue))
+	return fmt.Sprintf("%s%s", cellValue, padding)
 }
 
-func longestColumnCellLength(columnCells []string, minValue int) int {
+func findLongestCellWidth(columnCells []tableCell, minValue int) int {
 	longestLength := minValue
 	for _, cellValue := range columnCells {
-		cellValueLen = len(cellValue)
+		cellValueLen := len(cellValue.value)
 		if cellValueLen > longestLength {
 			longestLength = cellValueLen
 		}
