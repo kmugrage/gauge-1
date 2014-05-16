@@ -14,13 +14,15 @@ const (
 )
 
 type consoleWriter struct {
-	mode   int
-	buffer *bytes.Buffer
+	mode        int
+	buffer      *bytes.Buffer
+	errorBuffer *bytes.Buffer
 }
 
 func newConsoleWriter() *consoleWriter {
 	var b bytes.Buffer
-	return &consoleWriter{buffer: &b, mode: mode_unbuffered}
+	var eb bytes.Buffer
+	return &consoleWriter{buffer: &b, errorBuffer: &eb, mode: mode_unbuffered}
 }
 
 var currentConsoleWriter *consoleWriter
@@ -55,6 +57,18 @@ func (writer *consoleWriter) Write(b []byte) (int, error) {
 	return length, nil
 }
 
+func (writer *consoleWriter) writeString(value string) {
+	writer.Write([]byte(value))
+}
+
+func (writer *consoleWriter) writeError(value string) {
+	if writer.mode == mode_unbuffered {
+		terminal.Stdout.Colorf("@r%s", value)
+	} else {
+		writer.errorBuffer.Write([]byte(value))
+	}
+}
+
 func (writer *consoleWriter) writeToStdout(b []byte) int {
 	length, err := os.Stdout.Write(b)
 	if err != nil {
@@ -69,12 +83,31 @@ func (writer *consoleWriter) flush() (int, error) {
 	if err != nil {
 		writer.buffer.Reset()
 	}
+
+	terminal.Stderr.Colorf("@r%s", writer.errorBuffer.Bytes())
+	writer.errorBuffer.Reset()
+
 	return i, err
 }
 
-func (writer *consoleWriter) writeSpecExecutionHeading(specHeading string) {
-	formattedHeading := formatSpecHeading(specHeading)
+func (writer *consoleWriter) writeSpec(spec *specification) {
+	formattedHeading := formatSpecHeading(spec.heading.value)
 	writer.Write([]byte(formattedHeading))
+	for _, item := range spec.items {
+		writer.writeItem(item)
+	}
+}
+
+func (writer *consoleWriter) writeItem(item item) {
+	switch item.kind() {
+	case commentKind:
+		comment := item.(*comment)
+		writer.writeComment(comment)
+	}
+}
+
+func (writer *consoleWriter) writeComment(comment *comment) {
+	terminal.Stdout.Colorf("@k%s\n\n", comment.value)
 }
 
 func (writer *consoleWriter) writeScenarioHeading(scenarioHeading string) {

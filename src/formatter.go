@@ -3,7 +3,10 @@ package main
 import (
 	"bytes"
 	"fmt"
-	//"math"
+)
+
+const (
+	HEADING_UNDERLINE_LENGTH = 20
 )
 
 func getRepeatedChars(character string, repeatCount int) string {
@@ -29,11 +32,11 @@ func formatStepText(stepText string) string {
 
 func formatHeading(heading, headingChar string) string {
 	length := len(heading)
-	if length > 10 {
-		length = 10
+	if length > HEADING_UNDERLINE_LENGTH {
+		length = HEADING_UNDERLINE_LENGTH
 	}
 
-	return fmt.Sprintf("%s\n%s\n", heading, getRepeatedChars(headingChar, length))
+	return fmt.Sprintf("%s\n%s\n\n", heading, getRepeatedChars(headingChar, length))
 }
 
 func formatTable(table *table) string {

@@ -2,7 +2,6 @@ package main
 
 import (
 	"code.google.com/p/goprotobuf/proto"
-	"fmt"
 	"net"
 )
 
@@ -38,18 +37,7 @@ func getItemExecutors() map[tokenKind]itemExecutor {
 			}
 		},
 		commentKind: func(item item, executor *specExecutor) *stepExecutionStatus {
-			comment := item.(*comment)
-			fmt.Printf("\x1b[30;1m%s\n\x1b[0m", comment.value)
-			return nil
-		},
-		//TODO: should remove this
-		headingKind: func(item item, executor *specExecutor) *stepExecutionStatus {
-			heading := item.(*heading)
-			if heading.headingType == specHeading {
-				//fmt.Printf("\x1b[33;1m%s\n\x1b[0m", heading.value)
-			} else {
-				//fmt.Printf("\x1b[33;1m%s\n\x1b[0m", heading.value)
-			}
+			getCurrentConsole().writeItem(item)
 			return nil
 		},
 	}
@@ -111,7 +99,7 @@ func (e *specExecutor) executeAfterSpecHook() *ExecutionStatus {
 func (executor *specExecutor) execute() *specExecutionStatus {
 	specInfo := &SpecInfo{Name: proto.String(executor.specification.heading.value), FileName: proto.String(executor.specification.fileName), IsFailed: proto.Bool(false), Tags: getTagValue(executor.specification.tags)}
 	executor.currentExecutionInfo = &ExecutionInfo{CurrentSpec: specInfo}
-	getCurrentConsole().writeSpecExecutionHeading(executor.specification.heading.value)
+	getCurrentConsole().writeSpec(executor.specification)
 
 	specExecutionStatus := &specExecutionStatus{specification: executor.specification, scenariosExecutionStatuses: make(map[int][]*scenarioExecutionStatus)}
 	beforeSpecHookStatus := executor.executeBeforeSpecHook()
@@ -338,8 +326,8 @@ func (executor *specExecutor) executeConcept(concept *step, dataTableLookup *arg
 }
 
 func printStatus(execStatus *ExecutionStatus) {
-	fmt.Printf("\x1b[31;1m%s\n\x1b[0m", execStatus.GetErrorMessage())
-	fmt.Printf("\x1b[31;1m%s\n\x1b[0m", execStatus.GetStackTrace())
+	getCurrentConsole().writeError(execStatus.GetErrorMessage())
+	getCurrentConsole().writeError(execStatus.GetStackTrace())
 }
 
 func (executor *specExecutor) executeStep(step *step, argLookup *argLookup) *stepExecutionStatus {
