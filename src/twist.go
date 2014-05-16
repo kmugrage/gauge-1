@@ -269,7 +269,7 @@ var pluginArgs = flag.String("plugin-args", "", "Specified additional arguments 
 var noColors = flag.Bool("no-colors", false, "Specify true if console don't have ANSI color support")
 
 func printUsage() {
-	fmt.Fprintf(os.Stderr, "usage: twist [options] scenario\n")
+	fmt.Fprintf(os.Stderr, "usage: gauge [options] scenario\n")
 	flag.PrintDefaults()
 	os.Exit(2)
 }
@@ -374,11 +374,11 @@ func main() {
 		execution := newExecution(manifest, specs, runnerConnection, pluginHandler)
 		validationErrors := execution.validate(concepts)
 		if len(validationErrors) > 0 {
-			fmt.Println("Validation failed. The following steps are not implemented")
+			fmt.Println("Validation failed. The following steps have errors")
 			for _, stepValidationErrors := range validationErrors {
 				for _, stepValidationError := range stepValidationErrors {
 					s := stepValidationError.step
-					fmt.Printf("\x1b[31;1m  %s:%d: %s\n\x1b[0m", stepValidationError.fileName, s.lineNo, s.lineText)
+					fmt.Printf("\x1b[31;1m  %s:%d: %s. %s\n\x1b[0m", stepValidationError.fileName, s.lineNo, stepValidationError.message, s.lineText)
 				}
 			}
 			err := execution.killProcess()
