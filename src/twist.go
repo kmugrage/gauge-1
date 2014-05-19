@@ -262,6 +262,7 @@ func loadEnvironment(env string) error {
 
 // Command line flags
 var daemonize = flag.Bool("daemonize", false, "Run as a daemon")
+var version = flag.Bool("v", false, "Current version")
 var initialize = flag.String("init", "", "Initializes project structure in the current directory")
 var currentEnv = flag.String("env", "default", "Specifies the environment")
 var addPlugin = flag.String("add-plugin", "", "Adds the specified plugin to the current project")
@@ -294,6 +295,8 @@ func main() {
 	if *daemonize {
 		makeListOfAvailableSteps()
 		startAPIService()
+	} else if *version {
+		printVersion()
 	} else if *initialize != "" {
 		err := createProjectTemplate(*initialize)
 		if err != nil {
@@ -552,4 +555,8 @@ func handleWarningMessages(warnings []string) {
 	for _, warning := range warnings {
 		fmt.Println(fmt.Sprintf("[Warning] %s", warning))
 	}
+}
+
+func printVersion() {
+	fmt.Printf("%d.%d.%d\n", MAJOR_VERSION, MINOR_VERSION, PATCH_VERSION)
 }
