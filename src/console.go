@@ -1,28 +1,18 @@
 package main
 
 import (
-	"bytes"
 	"fmt"
 	"github.com/wsxiaoys/terminal"
-	"os"
 	"strings"
 )
 
-const (
-	mode_unbuffered = 0
-	mode_buffered   = 1
-)
-
 type consoleWriter struct {
-	mode        int
-	buffer      *bytes.Buffer
-	errorBuffer *bytes.Buffer
+	linesAfterLastStep int
+	isInsideStep       bool
 }
 
 func newConsoleWriter() *consoleWriter {
-	var b bytes.Buffer
-	var eb bytes.Buffer
-	return &consoleWriter{buffer: &b, errorBuffer: &eb, mode: mode_unbuffered}
+	return &consoleWriter{linesAfterLastStep: 0, isInsideStep: false}
 }
 
 var currentConsoleWriter *consoleWriter
@@ -34,29 +24,13 @@ func getCurrentConsole() *consoleWriter {
 	return currentConsoleWriter
 }
 
-func (writer *consoleWriter) enableBuffering() {
-	writer.mode = mode_buffered
-}
-
-func (writer *consoleWriter) disableBuffering() {
-	writer.flush()
-	writer.mode = mode_unbuffered
-}
-
 func (writer *consoleWriter) Write(b []byte) (int, error) {
-	length := 0
-	var err error
-	if writer.mode == mode_unbuffered {
-		length = writer.writeToStdout(b)
-	} else {
-		length, err = writer.buffer.Write(b)
-		if err != nil {
-			writer.writeToStdout([]byte(fmt.Sprintf("[Error] Failed to buffer. %s\n", err.Error())))
-			writer.writeToStdout(b)
-		}
+	message := string(b)
+	if writer.isInsideStep {
+		writer.linesAfterLastStep += strings.Count(message, "\n")
 	}
-
-	return length, err
+	fmt.Print(message)
+	return len(b), nil
 }
 
 func (writer *consoleWriter) writeString(value string) {
@@ -64,32 +38,10 @@ func (writer *consoleWriter) writeString(value string) {
 }
 
 func (writer *consoleWriter) writeError(value string) {
-	if writer.mode == mode_unbuffered {
-		terminal.Stdout.Colorf("@r%s", value)
-	} else {
-		writer.errorBuffer.Write([]byte(value))
+	if writer.isInsideStep {
+		writer.linesAfterLastStep += strings.Count(value, "\n")
 	}
-}
-
-func (writer *consoleWriter) writeToStdout(b []byte) int {
-	length, err := os.Stdout.Write(b)
-	if err != nil {
-		panic(err)
-	}
-
-	return length
-}
-
-func (writer *consoleWriter) flush() (int, error) {
-	i, err := os.Stdout.Write(writer.buffer.Bytes())
-	if err != nil {
-		writer.buffer.Reset()
-	}
-
-	terminal.Stderr.Colorf("@r%s", writer.errorBuffer.Bytes())
-	writer.errorBuffer.Reset()
-
-	return i, err
+	terminal.Stdout.Colorf("@r%s", value)
 }
 
 func (writer *consoleWriter) writeSpecHeading(spec *specification) {
@@ -128,17 +80,20 @@ func (writer *consoleWriter) writeScenarioHeading(scenarioHeading string) {
 
 func (writer *consoleWriter) writeStep(step *step) {
 	terminal.Stdout.Colorf("@b%s\n", formatStep(step))
+	writer.isInsideStep = true
 }
 
 func (writer *consoleWriter) writeStepFinished(step *step, isPassed bool) {
 	stepText := formatStep(step)
-	terminal.Stdout.Up(strings.Count(stepText, "\n") + 1)
+	terminal.Stdout.Up(writer.linesAfterLastStep + 1)
 	if isPassed {
 		terminal.Stdout.Colorf("@g%s\n", stepText)
 	} else {
 		terminal.Stdout.Colorf("@r%s\n", stepText)
 	}
-	writer.flush()
+	terminal.Stdout.Down(writer.linesAfterLastStep + 1)
+	writer.linesAfterLastStep = 0
+	writer.isInsideStep = false
 }
 
 func (writer *consoleWriter) writeTable(table *table) {

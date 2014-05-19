@@ -337,7 +337,6 @@ func (executor *specExecutor) executeStep(step *step, argLookup *argLookup) *ste
 	stepWithResolvedArgs := createStepFromStepRequest(stepRequest)
 	console := getCurrentConsole()
 	console.writeStep(stepWithResolvedArgs)
-	console.enableBuffering()
 
 	stepExecStatus := &stepExecutionStatus{passed: true}
 	executor.currentExecutionInfo.CurrentStep = &StepInfo{Step: stepRequest, IsFailed: proto.Bool(false)}
@@ -365,7 +364,6 @@ func (executor *specExecutor) executeStep(step *step, argLookup *argLookup) *ste
 	}
 
 	console.writeStepFinished(stepWithResolvedArgs, stepExecStatus.passed)
-	console.disableBuffering()
 	return stepExecStatus
 }
 

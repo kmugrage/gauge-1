@@ -7,6 +7,7 @@ import (
 
 const (
 	HEADING_UNDERLINE_LENGTH = 20
+	TABLE_LEFT_SPACING       = 10
 )
 
 func getRepeatedChars(character string, repeatCount int) string {
@@ -48,14 +49,14 @@ func formatTable(table *table) string {
 	}
 
 	var tableStringBuffer bytes.Buffer
-	tableStringBuffer.WriteString("|")
+	tableStringBuffer.WriteString(fmt.Sprintf("%s|", getRepeatedChars(" ", TABLE_LEFT_SPACING)))
 	for i, header := range table.headers {
 		width := columnToWidthMap[i]
 		tableStringBuffer.WriteString(fmt.Sprintf("%s|", addPaddingToCell(header, width)))
 	}
 
 	tableStringBuffer.WriteString("\n")
-	tableStringBuffer.WriteString("|")
+	tableStringBuffer.WriteString(fmt.Sprintf("%s|", getRepeatedChars(" ", TABLE_LEFT_SPACING)))
 	for i, _ := range table.headers {
 		width := columnToWidthMap[i]
 		cell := getRepeatedChars("-", width)
@@ -64,7 +65,7 @@ func formatTable(table *table) string {
 
 	tableStringBuffer.WriteString("\n")
 	for _, row := range table.getRows() {
-		tableStringBuffer.WriteString("|")
+		tableStringBuffer.WriteString(fmt.Sprintf("%s|", getRepeatedChars(" ", TABLE_LEFT_SPACING)))
 		for i, cell := range row {
 			width := columnToWidthMap[i]
 			tableStringBuffer.WriteString(fmt.Sprintf("%s|", addPaddingToCell(cell, width)))
