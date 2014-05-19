@@ -111,6 +111,9 @@ func (writer *consoleWriter) writeItem(item item) {
 	case stepKind:
 		step := item.(*step)
 		writer.writeStep(step)
+	case tableKind:
+		table := item.(*table)
+		writer.writeTable(table)
 	}
 }
 
@@ -136,6 +139,11 @@ func (writer *consoleWriter) writeStepFinished(step *step, isPassed bool) {
 		terminal.Stdout.Colorf("@r%s\n", stepText)
 	}
 	writer.flush()
+}
+
+func (writer *consoleWriter) writeTable(table *table) {
+	formattedTable := formatTable(table)
+	terminal.Stdout.Colorf("@m%s\n", formattedTable)
 }
 
 func formatStep(step *step) string {
