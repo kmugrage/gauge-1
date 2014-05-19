@@ -23,7 +23,7 @@ func formatSpecHeading(specHeading string) string {
 }
 
 func formatScenarioHeading(scenarioHeading string) string {
-	return formatHeading(scenarioHeading, "-")
+	return fmt.Sprintf("\n%s", formatHeading(scenarioHeading, "-"))
 }
 
 func formatStepText(stepText string) string {

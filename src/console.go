@@ -39,22 +39,24 @@ func (writer *consoleWriter) enableBuffering() {
 }
 
 func (writer *consoleWriter) disableBuffering() {
+	writer.flush()
 	writer.mode = mode_unbuffered
 }
 
 func (writer *consoleWriter) Write(b []byte) (int, error) {
 	length := 0
+	var err error
 	if writer.mode == mode_unbuffered {
 		length = writer.writeToStdout(b)
 	} else {
-		_, err := writer.buffer.Write(b)
+		length, err = writer.buffer.Write(b)
 		if err != nil {
 			writer.writeToStdout([]byte(fmt.Sprintf("[Error] Failed to buffer. %s\n", err.Error())))
 			writer.writeToStdout(b)
 		}
 	}
 
-	return length, nil
+	return length, err
 }
 
 func (writer *consoleWriter) writeString(value string) {
@@ -90,10 +92,13 @@ func (writer *consoleWriter) flush() (int, error) {
 	return i, err
 }
 
-func (writer *consoleWriter) writeSpec(spec *specification) {
+func (writer *consoleWriter) writeSpecHeading(spec *specification) {
 	formattedHeading := formatSpecHeading(spec.heading.value)
 	writer.Write([]byte(formattedHeading))
-	for _, item := range spec.items {
+}
+
+func (writer *consoleWriter) writeItems(items []item) {
+	for _, item := range items {
 		writer.writeItem(item)
 	}
 }
@@ -103,6 +108,9 @@ func (writer *consoleWriter) writeItem(item item) {
 	case commentKind:
 		comment := item.(*comment)
 		writer.writeComment(comment)
+	case stepKind:
+		step := item.(*step)
+		writer.writeStep(step)
 	}
 }
 
@@ -115,31 +123,12 @@ func (writer *consoleWriter) writeScenarioHeading(scenarioHeading string) {
 	writer.Write([]byte(formattedHeading))
 }
 
-func (writer *consoleWriter) writeStep(stepRequest *ExecuteStepRequest) {
-	terminal.Stdout.Colorf("@b%s\n", formatStepRequest(stepRequest))
-	writer.enableBuffering()
+func (writer *consoleWriter) writeStep(step *step) {
+	terminal.Stdout.Colorf("@b%s\n", formatStep(step))
 }
 
-func extractStepWithResolvedParameters(stepRequest *ExecuteStepRequest) string {
-	text := stepRequest.GetParsedStepText()
-	paramCount := strings.Count(text, PARAMETER_PLACEHOLDER)
-	for i := 0; i < paramCount; i++ {
-		text = strings.Replace(text, PARAMETER_PLACEHOLDER, resolveParameterText(stepRequest.GetArgs()[i]), 1)
-	}
-	return text
-}
-
-func resolveParameterText(argument *Argument) string {
-	if argument.GetType() == "table" {
-		table := tableFrom(argument.GetTable())
-		formattedTable := formatTable(table)
-		return fmt.Sprintf("\n%s", formattedTable)
-	}
-	return fmt.Sprintf("\"%s\"", argument.GetValue())
-}
-
-func (writer *consoleWriter) writeStepFinished(stepRequest *ExecuteStepRequest, isPassed bool) {
-	stepText := formatStepRequest(stepRequest)
+func (writer *consoleWriter) writeStepFinished(step *step, isPassed bool) {
+	stepText := formatStep(step)
 	terminal.Stdout.Up(strings.Count(stepText, "\n") + 1)
 	if isPassed {
 		terminal.Stdout.Colorf("@g%s\n", stepText)
@@ -147,9 +136,22 @@ func (writer *consoleWriter) writeStepFinished(stepRequest *ExecuteStepRequest, 
 		terminal.Stdout.Colorf("@r%s\n", stepText)
 	}
 	writer.flush()
-	writer.disableBuffering()
 }
 
-func formatStepRequest(stepRequest *ExecuteStepRequest) string {
-	return formatStepText(extractStepWithResolvedParameters(stepRequest))
+func formatStep(step *step) string {
+	text := step.value
+	paramCount := strings.Count(text, PARAMETER_PLACEHOLDER)
+	for i := 0; i < paramCount; i++ {
+		argument := step.args[i]
+		formattedArg := ""
+		if argument.argType == tableArg {
+			formattedTable := formatTable(&argument.table)
+			formattedArg = fmt.Sprintf("\n%s", formattedTable)
+		} else {
+			formattedArg = fmt.Sprintf("\"%s\"", argument.value)
+		}
+		text = strings.Replace(text, PARAMETER_PLACEHOLDER, formattedArg, 1)
+	}
+
+	return formatStepText(text)
 }

@@ -49,6 +49,21 @@ type step struct {
 	conceptSteps []*step
 }
 
+func createStepFromStepRequest(stepReq *ExecuteStepRequest) *step {
+	var args []*stepArg
+	for _, arg := range stepReq.GetArgs() {
+		var a *stepArg
+		if arg.GetType() == "table" {
+			a = &stepArg{value: arg.GetValue(), argType: tableArg, table: *(tableFrom(arg.GetTable()))}
+		} else {
+			a = &stepArg{value: arg.GetValue(), argType: static}
+		}
+		args = append(args, a)
+	}
+	return &step{value: stepReq.GetParsedStepText(),
+		lineText: stepReq.GetActualStepText(), args: args}
+}
+
 type specification struct {
 	heading   *heading
 	scenarios []*scenario
@@ -599,6 +614,6 @@ func (tags *tags) kind() tokenKind {
 	return tagKind
 }
 
-func (step *step) kind() tokenKind {
+func (step step) kind() tokenKind {
 	return stepKind
 }
