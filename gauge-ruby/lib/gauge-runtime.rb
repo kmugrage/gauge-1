@@ -7,6 +7,7 @@ require_relative 'message-processor'
 
 HOST_NAME = 'localhost'
 PORT = 8888
+PORT_ENV = "GAUGE_INTERNAL_PORT"
 DEFAULT_IMPLEMENTATIONS_DIR_PATH = "#{Dir.pwd}/ruby/steps_implementation"
 
 def dispatch_messages(socket)
@@ -38,8 +39,16 @@ def write_message(socket, message)
 	socket.write serialized_message
 end
 
+def port()
+  port = ENV[PORT_ENV]
+  if (port.nil?)
+    raise RuntimeError, "Could not find Env variable :#{PORT_ENV}"
+  end
 
-socket = TCPSocket.open(HOST_NAME, PORT)
+end
+
+
+socket = TCPSocket.open(HOST_NAME, port())
 load_steps(DEFAULT_IMPLEMENTATIONS_DIR_PATH)
 dispatch_messages(socket)
 
