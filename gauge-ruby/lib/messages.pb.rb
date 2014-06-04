@@ -5,30 +5,54 @@ require 'protocol_buffers'
 
 module Main
   # forward declarations
-  class ExecutionStatus < ::ProtocolBuffers::Message; end
-  class KillProcessRequest < ::ProtocolBuffers::Message; end
-  class ExecutionStatusResponse < ::ProtocolBuffers::Message; end
-  class ExecutionStartingRequest < ::ProtocolBuffers::Message; end
-  class SpecExecutionStartingRequest < ::ProtocolBuffers::Message; end
-  class SpecExecutionEndingRequest < ::ProtocolBuffers::Message; end
-  class ScenarioExecutionStartingRequest < ::ProtocolBuffers::Message; end
-  class ScenarioExecutionEndingRequest < ::ProtocolBuffers::Message; end
-  class StepExecutionStartingRequest < ::ProtocolBuffers::Message; end
-  class StepExecutionEndingRequest < ::ProtocolBuffers::Message; end
-  class ExecutionInfo < ::ProtocolBuffers::Message; end
-  class SpecInfo < ::ProtocolBuffers::Message; end
-  class ScenarioInfo < ::ProtocolBuffers::Message; end
-  class StepInfo < ::ProtocolBuffers::Message; end
-  class ExecuteStepRequest < ::ProtocolBuffers::Message; end
-  class ProtoTable < ::ProtocolBuffers::Message; end
-  class TableRow < ::ProtocolBuffers::Message; end
-  class Argument < ::ProtocolBuffers::Message; end
-  class StepValidateRequest < ::ProtocolBuffers::Message; end
-  class StepValidateResponse < ::ProtocolBuffers::Message; end
-  class ExecutionEndingRequest < ::ProtocolBuffers::Message; end
-  class StepNamesRequest < ::ProtocolBuffers::Message; end
-  class StepNamesResponse < ::ProtocolBuffers::Message; end
-  class Message < ::ProtocolBuffers::Message; end
+  class ExecutionStatus < ::ProtocolBuffers::Message;
+  end
+  class KillProcessRequest < ::ProtocolBuffers::Message;
+  end
+  class ExecutionStatusResponse < ::ProtocolBuffers::Message;
+  end
+  class ExecutionStartingRequest < ::ProtocolBuffers::Message;
+  end
+  class SpecExecutionStartingRequest < ::ProtocolBuffers::Message;
+  end
+  class SpecExecutionEndingRequest < ::ProtocolBuffers::Message;
+  end
+  class ScenarioExecutionStartingRequest < ::ProtocolBuffers::Message;
+  end
+  class ScenarioExecutionEndingRequest < ::ProtocolBuffers::Message;
+  end
+  class StepExecutionStartingRequest < ::ProtocolBuffers::Message;
+  end
+  class StepExecutionEndingRequest < ::ProtocolBuffers::Message;
+  end
+  class ExecutionInfo < ::ProtocolBuffers::Message;
+  end
+  class SpecInfo < ::ProtocolBuffers::Message;
+  end
+  class ScenarioInfo < ::ProtocolBuffers::Message;
+  end
+  class StepInfo < ::ProtocolBuffers::Message;
+  end
+  class ExecuteStepRequest < ::ProtocolBuffers::Message;
+  end
+  class ProtoTable < ::ProtocolBuffers::Message;
+  end
+  class TableRow < ::ProtocolBuffers::Message;
+  end
+  class Argument < ::ProtocolBuffers::Message;
+  end
+  class StepValidateRequest < ::ProtocolBuffers::Message;
+  end
+  class StepValidateResponse < ::ProtocolBuffers::Message;
+  end
+  class ExecutionEndingRequest < ::ProtocolBuffers::Message;
+  end
+  class StepNamesRequest < ::ProtocolBuffers::Message;
+  end
+  class StepNamesResponse < ::ProtocolBuffers::Message;
+  end
+  class Message < ::ProtocolBuffers::Message;
+  end
 
   class ExecutionStatus < ::ProtocolBuffers::Message
     set_fully_qualified_name "main.ExecutionStatus"
