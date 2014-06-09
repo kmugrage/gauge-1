@@ -18,6 +18,9 @@ var BUILD_DIR_BIN = filepath.Join(BUILD_DIR, "bin")
 var BUILD_DIR_SRC = filepath.Join(BUILD_DIR, "src")
 var BUILD_DIR_PKG = filepath.Join(BUILD_DIR, "pkg")
 
+var gaugePackages = []string{"common"}
+var gaugeExecutables = []string{"gauge", "gauge-java"}
+
 func isExecMode(mode os.FileMode) bool {
 	return (mode & 0111) != 0
 }
@@ -114,9 +117,6 @@ func copyDepsToGoPath() {
 	}
 }
 
-var gaugePackages = []string{"common"}
-var gaugeExecutables = []string{"gauge"}
-
 func copyGaugePackagesToGoPath() {
 	for _, p := range gaugePackages {
 		err := mirrorDir(p, filepath.Join(BUILD_DIR_SRC, p))
@@ -143,13 +143,9 @@ func compilePackages() {
 		panic(err)
 	}
 
-	args := []string{"install"}
-	for i, p := range gaugeExecutables {
-		if i+1 == len(gaugeExecutables) {
-			args = append(args, fmt.Sprintf("%s", p))
-		} else {
-			args = append(args, fmt.Sprintf("%s ", p))
-		}
+	args := []string{"install", "-v"}
+	for _, p := range gaugeExecutables {
+		args = append(args, p)
 	}
 
 	cmd := exec.Command("go", args...)
@@ -163,6 +159,17 @@ func compilePackages() {
 	}
 }
 
+func compileJavaClasses() {
+	cmd := exec.Command("ant", "jar")
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	cmd.Dir = "gauge-java"
+	log.Printf("Execute %v\n", cmd.Args)
+	err := cmd.Run()
+	if err != nil {
+		panic(err)
+	}
+}
 func copyBinaries() {
 	err := os.MkdirAll("bin", 0755)
 	if err != nil {
@@ -174,7 +181,12 @@ func copyBinaries() {
 		panic(err)
 	}
 
-	log.Println("Binaries are available at: bin")
+	absBin, err := filepath.Abs("bin")
+	if err != nil {
+		panic(err)
+	}
+
+	log.Printf("Binaries are available at: %s\n", absBin)
 }
 
 func main() {
@@ -182,5 +194,6 @@ func main() {
 	copyDepsToGoPath()
 	copyGaugePackagesToGoPath()
 	compilePackages()
+	compileJavaClasses()
 	copyBinaries()
 }
