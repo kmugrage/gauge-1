@@ -1,6 +1,7 @@
 package main;
 // Defines communication messages for API
 // Every API call will have a Request & Response pair
+import "gauge/messages.proto";
 
 message GetProjectRootRequest {
 }
@@ -64,6 +65,13 @@ message ProtoStep {
     required string text = 1;
     repeated Parameter parameters = 2;
     repeated Fragment fragments = 3;
+    repeated ProtoStepExecutionStatus execStatus = 4;
+}
+
+message ProtoStepExecutionStatus {
+    required bool isPassed = 1;
+    optional string stackTrace = 2;
+    required ExecuteStepRequest stepExecRequest = 3;
 }
 
 message ProtoConcept {
