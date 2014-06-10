@@ -373,6 +373,7 @@ func (specification *specification) addItem(itemToAdd item) {
 func (specification *specification) addHeading(heading *heading) {
 	heading.headingType = specHeading
 	specification.heading = heading
+	specification.addItem(heading)
 }
 
 func (specification *specification) addScenario(scenario *scenario) {
@@ -581,6 +582,7 @@ func (scenario scenario) kind() tokenKind {
 func (scenario *scenario) addHeading(heading *heading) {
 	heading.headingType = scenarioHeading
 	scenario.heading = heading
+	scenario.addItem(heading)
 }
 
 func (scenario *scenario) addStep(step *step) {

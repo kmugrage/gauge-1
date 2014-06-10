@@ -250,7 +250,7 @@ func convertToProtoStep(step *step) *ProtoStep {
 }
 
 func getProtoStepResult(executionResults []*stepExecutionResult) []*ProtoStepExecutionResult {
-	protoResults := make([]*ProtoStepExecutionResult, len(executionResults))
+	protoResults := make([]*ProtoStepExecutionResult, 0)
 	for _, result := range executionResults {
 		protoResult := &ProtoStepExecutionResult{IsPassed: proto.Bool(result.isPassed), StackTrace: proto.String(result.stackTrace), Argument: result.argument}
 		protoResults = append(protoResults, protoResult)

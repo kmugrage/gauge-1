@@ -39,11 +39,11 @@ func (e *execution) endExecution() *ExecutionStatus {
 func (e *execution) notifyExecutionResult(testExecutionStatus *testExecutionStatus) {
 	protoSpecs := make([]*ProtoSpec, 0)
 	for _, spec := range testExecutionStatus.specifications {
-		protoSpecs = append(protoSpecs, convertToProtoSpec(spec))
+		protoSpec := convertToProtoSpec(spec)
+		protoSpecs = append(protoSpecs, protoSpec)
 	}
 	message := &Message{MessageType: Message_SuiteExecutionResult.Enum(),
 		SuiteExecutionResult: &SuiteExecutionResult{Specs: protoSpecs}}
-
 	e.pluginHandler.notifyPlugins(message)
 }
 
@@ -116,7 +116,6 @@ func (exe *execution) start() *testExecutionStatus {
 		for _, specificationToExecute := range exe.specifications {
 			executor := newSpecExecutor(specificationToExecute, exe.connection, exe.pluginHandler)
 			specExecutionStatus := executor.execute()
-			testExecutionStatus.specifications = append(testExecutionStatus.specifications, specificationToExecute)
 			testExecutionStatus.specExecutionStatuses = append(testExecutionStatus.specExecutionStatuses, specExecutionStatus)
 		}
 	}
