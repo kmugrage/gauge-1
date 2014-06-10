@@ -14,7 +14,6 @@ import (
 	"os"
 	"path"
 	"path/filepath"
-	"strconv"
 	"strings"
 	"sync"
 )
@@ -237,16 +236,14 @@ func main() {
 
 	if *daemonize {
 		loadGaugeEnvironment()
-		makeListOfAvailableSteps(nil)
 		port, err := getPortFromEnvironmentVariable(apiPortEnvVariableName)
 		if err != nil {
 			fmt.Printf("Failed to start API Service. %s", err.Error())
 			os.Exit(1)
 		}
-		apiChannel := make(chan bool, 1)
 		var wg sync.WaitGroup
-		wg.Add(1)
-		go startAPIService(port, apiChannel, &wg)
+		runAPIServiceIndefinitely(port, &wg)
+		makeListOfAvailableSteps(nil)
 		wg.Wait()
 	} else if *version {
 		printVersion()
@@ -307,20 +304,20 @@ func main() {
 		handleParseResult(specParseResults...)
 
 		manifest := getProjectManifest()
+
+		err := startAPIService(0)
+		if err != nil {
+			fmt.Printf("Failed to start gauge API. %s\n", err.Error())
+			os.Exit(1)
+		}
 		runnerConnection, runnerError := startRunnerAndMakeConnection(manifest)
 		if runnerError != nil {
 			fmt.Printf("Failed to start a runner. %s\n", runnerError.Error())
 			os.Exit(1)
 		}
-
 		makeListOfAvailableSteps(runnerConnection)
 
-		var wg sync.WaitGroup
-		apiChannel := make(chan bool, 1)
-		wg.Add(1)
-		go startAPIService(0, apiChannel, &wg)
-
-		pluginHandler, warnings := startPluginsForExecution(manifest, apiChannel)
+		pluginHandler, warnings := startPluginsForExecution(manifest)
 		handleWarningMessages(warnings)
 
 		execution := newExecution(manifest, specs, runnerConnection, pluginHandler)
@@ -374,7 +371,7 @@ func startRunnerAndMakeConnection(manifest *manifest) (net.Conn, error) {
 	if listenerErr != nil {
 		return nil, listenerErr
 	}
-	if err := common.SetEnvVariable(common.GaugeInternalPortEnvName, strconv.Itoa(listener.tcpListener.Addr().(*net.TCPAddr).Port)); err != nil {
+	if err := common.SetEnvVariable(common.GaugeInternalPortEnvName, listener.portNumber()); err != nil {
 		return nil, errors.New(fmt.Sprintf("Failed to set %s. %s", common.GaugePortEnvName, err.Error()))
 	}
 
