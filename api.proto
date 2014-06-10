@@ -23,6 +23,15 @@ message GetAllSpecsResponse {
     repeated ProtoSpec specs = 1;
 }
 
+message GetStepValueRequest {
+    required string stepText = 1;
+}
+
+message GetStepValueResponse {
+    required string stepValue = 1;
+    repeated string parameters = 2;
+}
+
 message ProtoSpec {
     repeated ProtoItem items = 1;
 }
@@ -114,6 +123,8 @@ message APIMessage {
         GetAllStepResponse = 4;
         GetAllSpecsRequest = 5;
         GetAllSpecsResponse = 6;
+        GetStepValueRequest = 7;
+        GetStepValueResponse = 8;
     }
 
     required APIMessageType messageType = 1;
@@ -125,6 +136,8 @@ message APIMessage {
     optional GetAllStepsResponse allStepsResponse = 6;
     optional GetAllSpecsRequest allSpecsRequest = 7;
     optional GetAllSpecsResponse allSpecsResponse = 8;
+    optional GetStepValueRequest stepValueRequest = 9;
+    optional GetStepValueResponse stepValueResponse = 10;
 
 }
 

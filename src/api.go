@@ -150,6 +150,9 @@ func (handler *GaugeApiMessageHandler) messageReceived(bytesRead []byte, conn ne
 		case APIMessage_GetAllSpecsRequest:
 			handler.respondToGetAllSpecsRequest(apiMessage, conn)
 			break
+		case APIMessage_GetStepValueRequest:
+			handler.respondToGetStepValueRequest(apiMessage, conn)
+			break
 		}
 	}
 }
@@ -174,6 +177,14 @@ func (handler *GaugeApiMessageHandler) respondToGetAllStepsRequest(message *APIM
 func (handler *GaugeApiMessageHandler) respondToGetAllSpecsRequest(message *APIMessage, conn net.Conn) {
 	getAllSpecsResponse := handler.createGetAllSpecsResponseMessageFor(availableSpecs)
 	responseApiMessage := &APIMessage{MessageType: APIMessage_GetAllSpecsResponse.Enum(), MessageId: message.MessageId, AllSpecsResponse: getAllSpecsResponse}
+	handler.sendMessage(responseApiMessage, conn)
+}
+
+func (handler *GaugeApiMessageHandler) respondToGetStepValueRequest(message *APIMessage, conn net.Conn) {
+	stepText := message.GetStepValueRequest().GetStepText()
+	stepValue, params := extractStepValueAndParams(stepText)
+	stepValueResponse := &GetStepValueResponse{StepValue: proto.String(stepValue), Parameters: params}
+	responseApiMessage := &APIMessage{MessageType: APIMessage_GetStepValueResponse.Enum(), MessageId: message.MessageId, StepValueResponse: stepValueResponse}
 	handler.sendMessage(responseApiMessage, conn)
 }
 
@@ -301,4 +312,14 @@ func (handler *GaugeApiMessageHandler) sendMessage(message *APIMessage, conn net
 	if err := writeMessage(conn, message); err != nil {
 		fmt.Printf("[Warning] Failed to respond to API request. %s\n", err.Error())
 	}
+}
+
+func extractStepValueAndParams(stepText string) (string, []string) {
+	stepValueWithPlaceHolders, args, err := processStepText(stepText)
+	if err != nil {
+		return "", nil
+	}
+	stepValue, _ := extractStepValueAndParameterTypes(stepValueWithPlaceHolders)
+	return stepValue, args
+
 }

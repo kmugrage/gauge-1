@@ -15,6 +15,8 @@ It has these top-level messages:
 	GetAllStepsResponse
 	GetAllSpecsRequest
 	GetAllSpecsResponse
+	GetStepValueRequest
+	GetStepValueResponse
 	ProtoSpec
 	ProtoItem
 	ProtoHeading
@@ -32,10 +34,12 @@ It has these top-level messages:
 package main
 
 import proto "code.google.com/p/goprotobuf/proto"
+import json "encoding/json"
 import math "math"
 
-// Reference imports to suppress errors if they are not otherwise used.
+// Reference proto, json, and math imports to suppress error if they are not otherwise used.
 var _ = proto.Marshal
+var _ = &json.SyntaxError{}
 var _ = math.Inf
 
 type ProtoItem_ItemType int32
@@ -200,6 +204,8 @@ const (
 	APIMessage_GetAllStepResponse     APIMessage_APIMessageType = 4
 	APIMessage_GetAllSpecsRequest     APIMessage_APIMessageType = 5
 	APIMessage_GetAllSpecsResponse    APIMessage_APIMessageType = 6
+	APIMessage_GetStepValueRequest    APIMessage_APIMessageType = 7
+	APIMessage_GetStepValueResponse   APIMessage_APIMessageType = 8
 )
 
 var APIMessage_APIMessageType_name = map[int32]string{
@@ -209,6 +215,8 @@ var APIMessage_APIMessageType_name = map[int32]string{
 	4: "GetAllStepResponse",
 	5: "GetAllSpecsRequest",
 	6: "GetAllSpecsResponse",
+	7: "GetStepValueRequest",
+	8: "GetStepValueResponse",
 }
 var APIMessage_APIMessageType_value = map[string]int32{
 	"GetProjectRootRequest":  1,
@@ -217,6 +225,8 @@ var APIMessage_APIMessageType_value = map[string]int32{
 	"GetAllStepResponse":     4,
 	"GetAllSpecsRequest":     5,
 	"GetAllSpecsResponse":    6,
+	"GetStepValueRequest":    7,
+	"GetStepValueResponse":   8,
 }
 
 func (x APIMessage_APIMessageType) Enum() *APIMessage_APIMessageType {
@@ -304,6 +314,46 @@ func (*GetAllSpecsResponse) ProtoMessage()    {}
 func (m *GetAllSpecsResponse) GetSpecs() []*ProtoSpec {
 	if m != nil {
 		return m.Specs
+	}
+	return nil
+}
+
+type GetStepValueRequest struct {
+	StepText         *string `protobuf:"bytes,1,req,name=stepText" json:"stepText,omitempty"`
+	XXX_unrecognized []byte  `json:"-"`
+}
+
+func (m *GetStepValueRequest) Reset()         { *m = GetStepValueRequest{} }
+func (m *GetStepValueRequest) String() string { return proto.CompactTextString(m) }
+func (*GetStepValueRequest) ProtoMessage()    {}
+
+func (m *GetStepValueRequest) GetStepText() string {
+	if m != nil && m.StepText != nil {
+		return *m.StepText
+	}
+	return ""
+}
+
+type GetStepValueResponse struct {
+	StepValue        *string  `protobuf:"bytes,1,req,name=stepValue" json:"stepValue,omitempty"`
+	Parameters       []string `protobuf:"bytes,2,rep,name=parameters" json:"parameters,omitempty"`
+	XXX_unrecognized []byte   `json:"-"`
+}
+
+func (m *GetStepValueResponse) Reset()         { *m = GetStepValueResponse{} }
+func (m *GetStepValueResponse) String() string { return proto.CompactTextString(m) }
+func (*GetStepValueResponse) ProtoMessage()    {}
+
+func (m *GetStepValueResponse) GetStepValue() string {
+	if m != nil && m.StepValue != nil {
+		return *m.StepValue
+	}
+	return ""
+}
+
+func (m *GetStepValueResponse) GetParameters() []string {
+	if m != nil {
+		return m.Parameters
 	}
 	return nil
 }
@@ -621,6 +671,8 @@ type APIMessage struct {
 	AllStepsResponse    *GetAllStepsResponse       `protobuf:"bytes,6,opt,name=allStepsResponse" json:"allStepsResponse,omitempty"`
 	AllSpecsRequest     *GetAllSpecsRequest        `protobuf:"bytes,7,opt,name=allSpecsRequest" json:"allSpecsRequest,omitempty"`
 	AllSpecsResponse    *GetAllSpecsResponse       `protobuf:"bytes,8,opt,name=allSpecsResponse" json:"allSpecsResponse,omitempty"`
+	StepValueRequest    *GetStepValueRequest       `protobuf:"bytes,9,opt,name=stepValueRequest" json:"stepValueRequest,omitempty"`
+	StepValueResponse   *GetStepValueResponse      `protobuf:"bytes,10,opt,name=stepValueResponse" json:"stepValueResponse,omitempty"`
 	XXX_unrecognized    []byte                     `json:"-"`
 }
 
@@ -680,6 +732,20 @@ func (m *APIMessage) GetAllSpecsRequest() *GetAllSpecsRequest {
 func (m *APIMessage) GetAllSpecsResponse() *GetAllSpecsResponse {
 	if m != nil {
 		return m.AllSpecsResponse
+	}
+	return nil
+}
+
+func (m *APIMessage) GetStepValueRequest() *GetStepValueRequest {
+	if m != nil {
+		return m.StepValueRequest
+	}
+	return nil
+}
+
+func (m *APIMessage) GetStepValueResponse() *GetStepValueResponse {
+	if m != nil {
+		return m.StepValueResponse
 	}
 	return nil
 }
