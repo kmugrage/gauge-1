@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"io"
 	"log"
@@ -170,6 +171,20 @@ func compileJavaClasses() {
 		panic(err)
 	}
 }
+
+func runTests(packageName string) {
+	cmd := exec.Command("go", "test", packageName)
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	cmd.Dir = BUILD_DIR
+	log.Printf("Execute %v\n", cmd.Args)
+	err := cmd.Run()
+	if err != nil {
+		panic(err)
+	}
+
+}
+
 func copyBinaries() {
 	err := os.MkdirAll("bin", 0755)
 	if err != nil {
@@ -189,11 +204,42 @@ func copyBinaries() {
 	log.Printf("Binaries are available at: %s\n", absBin)
 }
 
+func installGaugeFiles() {
+	installBin := filepath.Join(*installPrefix, "bin")
+	err := mirrorFile(filepath.Join("bin/gauge"), filepath.Join(installBin, "gauge"))
+	if err != nil {
+		panic(err)
+	}
+}
+
+func installGaugeJavaFiles() {
+	installBin := filepath.Join(*installPrefix, "bin")
+	err := mirrorFile(filepath.Join("bin/gauge-java"), installBin)
+	if err != nil {
+		panic(err)
+	}
+}
+
+var test = flag.Bool("test", false, "Run the test cases")
+var install = flag.Bool("install", false, "Install to the specified prefix")
+var installPrefix = flag.String("prefix", "", "Specifies the prefix where files will be installed")
+
 func main() {
-	createGoPathForBuild()
-	copyDepsToGoPath()
-	copyGaugePackagesToGoPath()
-	compilePackages()
-	compileJavaClasses()
-	copyBinaries()
+	flag.Parse()
+	if *test {
+		runTests("gauge")
+	} else if *install {
+		if *installPrefix == "" {
+			*installPrefix = "/usr/local"
+		}
+		installGaugeFiles()
+		installGaugeJavaFiles()
+	} else {
+		createGoPathForBuild()
+		copyDepsToGoPath()
+		copyGaugePackagesToGoPath()
+		compilePackages()
+		compileJavaClasses()
+		copyBinaries()
+	}
 }
