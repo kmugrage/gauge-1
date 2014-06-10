@@ -17,6 +17,7 @@ It has these top-level messages:
 	GetAllSpecsResponse
 	GetStepValueRequest
 	GetStepValueResponse
+	ErrorResponse
 	ProtoSpec
 	ProtoItem
 	ProtoHeading
@@ -206,6 +207,7 @@ const (
 	APIMessage_GetAllSpecsResponse    APIMessage_APIMessageType = 6
 	APIMessage_GetStepValueRequest    APIMessage_APIMessageType = 7
 	APIMessage_GetStepValueResponse   APIMessage_APIMessageType = 8
+	APIMessage_ErrorResponse          APIMessage_APIMessageType = 9
 )
 
 var APIMessage_APIMessageType_name = map[int32]string{
@@ -217,6 +219,7 @@ var APIMessage_APIMessageType_name = map[int32]string{
 	6: "GetAllSpecsResponse",
 	7: "GetStepValueRequest",
 	8: "GetStepValueResponse",
+	9: "ErrorResponse",
 }
 var APIMessage_APIMessageType_value = map[string]int32{
 	"GetProjectRootRequest":  1,
@@ -227,6 +230,7 @@ var APIMessage_APIMessageType_value = map[string]int32{
 	"GetAllSpecsResponse":    6,
 	"GetStepValueRequest":    7,
 	"GetStepValueResponse":   8,
+	"ErrorResponse":          9,
 }
 
 func (x APIMessage_APIMessageType) Enum() *APIMessage_APIMessageType {
@@ -356,6 +360,22 @@ func (m *GetStepValueResponse) GetParameters() []string {
 		return m.Parameters
 	}
 	return nil
+}
+
+type ErrorResponse struct {
+	Error            *string `protobuf:"bytes,1,req,name=error" json:"error,omitempty"`
+	XXX_unrecognized []byte  `json:"-"`
+}
+
+func (m *ErrorResponse) Reset()         { *m = ErrorResponse{} }
+func (m *ErrorResponse) String() string { return proto.CompactTextString(m) }
+func (*ErrorResponse) ProtoMessage()    {}
+
+func (m *ErrorResponse) GetError() string {
+	if m != nil && m.Error != nil {
+		return *m.Error
+	}
+	return ""
 }
 
 type ProtoSpec struct {
@@ -673,6 +693,7 @@ type APIMessage struct {
 	AllSpecsResponse    *GetAllSpecsResponse       `protobuf:"bytes,8,opt,name=allSpecsResponse" json:"allSpecsResponse,omitempty"`
 	StepValueRequest    *GetStepValueRequest       `protobuf:"bytes,9,opt,name=stepValueRequest" json:"stepValueRequest,omitempty"`
 	StepValueResponse   *GetStepValueResponse      `protobuf:"bytes,10,opt,name=stepValueResponse" json:"stepValueResponse,omitempty"`
+	Error               *ErrorResponse             `protobuf:"bytes,11,opt,name=error" json:"error,omitempty"`
 	XXX_unrecognized    []byte                     `json:"-"`
 }
 
@@ -746,6 +767,13 @@ func (m *APIMessage) GetStepValueRequest() *GetStepValueRequest {
 func (m *APIMessage) GetStepValueResponse() *GetStepValueResponse {
 	if m != nil {
 		return m.StepValueResponse
+	}
+	return nil
+}
+
+func (m *APIMessage) GetError() *ErrorResponse {
+	if m != nil {
+		return m.Error
 	}
 	return nil
 }
