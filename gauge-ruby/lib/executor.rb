@@ -1,3 +1,5 @@
+require_relative 'connector'
+
 $steps_map = Hash.new
 $before_suite_hooks = []
 $after_suite_hooks = []
@@ -9,7 +11,7 @@ $before_step_hooks = []
 $after_step_hooks = []
 
 def step(text, &block)
-  $steps_map[text] = block;
+  $steps_map[Connector.step_value(text)] = block;
 end
 
 def before_step(&block)

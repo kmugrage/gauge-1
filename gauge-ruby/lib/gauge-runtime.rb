@@ -3,15 +3,16 @@ require 'protocol_buffers'
 
 require_relative 'messages.pb'
 require_relative 'executor'
+require_relative 'connector'
 require_relative 'message-processor'
 
 HOST_NAME = 'localhost'
-PORT_ENV = "GAUGE_INTERNAL_PORT"
-DEFAULT_IMPLEMENTATIONS_DIR_PATH = "#{Dir.pwd}/step_implementations"
+
+DEFAULT_IMPLEMENTATIONS_DIR_PATH = File.join(Dir.pwd, 'step_implementations')
 
 def dispatch_messages(socket)
   while (!socket.eof?)
-    len = message_length(socket)
+    len = Connector.message_length(socket)
     data = socket.read len
     message = Main::Message.parse(data)
     handle_message(socket, message)
@@ -32,10 +33,6 @@ def handle_message(socket, message)
   end
 end
 
-def message_length(socket)
-  ProtocolBuffers::Varint.decode socket
-end
-
 def write_message(socket, message)
   serialized_message = message.to_s
   size = serialized_message.bytesize
@@ -43,16 +40,16 @@ def write_message(socket, message)
   socket.write serialized_message
 end
 
-def port()
-  port = ENV[PORT_ENV]
+def portFromEnvVariable(envVariable)
+  port = ENV[envVariable]
   if (port.nil?)
-    raise RuntimeError, "Could not find Env variable :#{PORT_ENV}"
+    raise RuntimeError, "Could not find Env variable :#{envVariable}"
   end
   return port
 end
 
 STDOUT.sync = true
-socket = TCPSocket.open(HOST_NAME, port())
+Connector.make_connections()
 load_steps(DEFAULT_IMPLEMENTATIONS_DIR_PATH)
-dispatch_messages(socket)
+dispatch_messages(Connector.executionSocket)
 
