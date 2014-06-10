@@ -1,0 +1,101 @@
+package main;
+
+message ProtoSpec {
+    repeated ProtoItem items = 1;
+}
+
+message ProtoItem {
+    enum ItemType {
+        Heading = 1;
+        Step = 2;
+        Concept = 4;
+        Scenario = 5;
+        Comment = 6;
+        Table = 7;
+        Tags = 8;
+    }
+    required ItemType itemType = 1;
+    optional ProtoHeading heading = 2;
+    optional ProtoStep step = 3;
+    optional ProtoConcept concept = 4;
+    optional ProtoScenario scenario = 5;
+    optional ProtoComment comment = 6;
+    optional ProtoTable table = 7;
+    optional ProtoTags tags = 8;
+}
+
+message ProtoHeading {
+    enum HeadingType {
+        Spec = 1;
+        Scenario = 2;
+    }
+    required HeadingType headingType = 1;
+    required string text = 2;
+}
+
+message ProtoScenario {
+    repeated ProtoItem scenarioItems = 1;
+}
+
+message ProtoStep {
+    required string text = 1;
+    repeated Parameter parameters = 2;
+    repeated Fragment fragments = 3;
+    repeated ProtoStepExecutionResult result = 4;
+}
+
+message ProtoConcept {
+    required ProtoStep conceptStep = 1;
+    repeated ProtoStep steps = 2;
+}
+
+message ProtoTags {
+    repeated string tags = 1;
+}
+
+message Fragment {
+    enum FragmentType {
+        Text = 1;
+        Parameter = 2;
+    }
+    required FragmentType fragmentType = 1;
+    optional string text = 2;
+    optional Parameter parameter = 3;
+}
+
+message Parameter {
+    enum ParameterType {
+        Static = 1;
+        Dynamic = 2;
+        Special = 3;
+        Table = 4;
+    }
+    required ParameterType parameterType = 1;
+    optional string value = 2;
+    optional ProtoTable table = 3;
+}
+
+message Argument {
+    required string type = 1;
+    optional string value = 2;
+    optional ProtoTable table = 3;
+}
+
+message ProtoComment {
+    required string text = 1;
+}
+
+message ProtoTable {
+    required ProtoTableRow headers = 1;
+    repeated ProtoTableRow rows = 2;
+}
+
+message ProtoTableRow {
+    repeated string cells = 1;
+}
+
+message ProtoStepExecutionResult {
+    required bool isPassed = 1;
+    optional string stackTrace = 2;
+    repeated Argument argument = 3;
+}

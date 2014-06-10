@@ -36,6 +36,17 @@ func (e *execution) endExecution() *ExecutionStatus {
 	return executeAndGetStatus(e.connection, message)
 }
 
+func (e *execution) notifyExecutionResult(testExecutionStatus *testExecutionStatus) {
+	protoSpecs := make([]*ProtoSpec, 0)
+	for _, spec := range testExecutionStatus.specifications {
+		protoSpecs = append(protoSpecs, convertToProtoSpec(spec))
+	}
+	message := &Message{MessageType: Message_SuiteExecutionResult.Enum(),
+		SuiteExecutionResult: &SuiteExecutionResult{Specs: protoSpecs}}
+
+	e.pluginHandler.notifyPlugins(message)
+}
+
 func (e *execution) notifyExecutionStop() {
 	message := &Message{MessageType: Message_KillProcessRequest.Enum(),
 		KillProcessRequest: &KillProcessRequest{}}
@@ -112,7 +123,7 @@ func (exe *execution) start() *testExecutionStatus {
 
 	afterSuiteHookExecStatus := exe.endExecution()
 	testExecutionStatus.hooksExecutionStatuses = append(testExecutionStatus.hooksExecutionStatuses, beforeSuiteHookExecStatus, afterSuiteHookExecStatus)
-
+	exe.notifyExecutionResult(testExecutionStatus)
 	exe.notifyExecutionStop()
 	return testExecutionStatus
 }

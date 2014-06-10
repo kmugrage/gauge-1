@@ -40,13 +40,20 @@ type argLookup struct {
 }
 
 type step struct {
-	lineNo       int
-	value        string
-	lineText     string
-	args         []*stepArg
-	isConcept    bool
-	lookup       argLookup
-	conceptSteps []*step
+	lineNo           int
+	value            string
+	lineText         string
+	args             []*stepArg
+	isConcept        bool
+	lookup           argLookup
+	conceptSteps     []*step
+	executionResults []*stepExecutionResult
+}
+
+type stepExecutionResult struct {
+	isPassed   bool
+	stackTrace string
+	argument   []*Argument
 }
 
 func createStepFromStepRequest(stepReq *ExecuteStepRequest) *step {
@@ -317,7 +324,7 @@ func (spec *specification) createStepUsingLookup(stepToken *token, lookup *argLo
 	if argsType != nil && len(argsType) != len(stepToken.args) {
 		return nil, &parseError{stepToken.lineNo, "Step text should not have '{static}' or '{dynamic}' or '{special}'", stepToken.lineText}
 	}
-	step := &step{lineNo: stepToken.lineNo, value: stepValue, lineText: strings.TrimSpace(stepToken.lineText)}
+	step := &step{lineNo: stepToken.lineNo, value: stepValue, lineText: strings.TrimSpace(stepToken.lineText), executionResults: make([]*stepExecutionResult, 0)}
 	var argument *stepArg
 	var err *parseError
 	for i, argType := range argsType {

@@ -8776,12 +8776,12 @@ public final class Messages {
     /**
      * <code>repeated .main.Argument args = 4;</code>
      */
-    java.util.List<main.Messages.Argument> 
+    java.util.List<main.Spec.Argument> 
         getArgsList();
     /**
      * <code>repeated .main.Argument args = 4;</code>
      */
-    main.Messages.Argument getArgs(int index);
+    main.Spec.Argument getArgs(int index);
     /**
      * <code>repeated .main.Argument args = 4;</code>
      */
@@ -8789,12 +8789,12 @@ public final class Messages {
     /**
      * <code>repeated .main.Argument args = 4;</code>
      */
-    java.util.List<? extends main.Messages.ArgumentOrBuilder> 
+    java.util.List<? extends main.Spec.ArgumentOrBuilder> 
         getArgsOrBuilderList();
     /**
      * <code>repeated .main.Argument args = 4;</code>
      */
-    main.Messages.ArgumentOrBuilder getArgsOrBuilder(
+    main.Spec.ArgumentOrBuilder getArgsOrBuilder(
         int index);
   }
   /**
@@ -8865,10 +8865,10 @@ public final class Messages {
             }
             case 34: {
               if (!((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
-                args_ = new java.util.ArrayList<main.Messages.Argument>();
+                args_ = new java.util.ArrayList<main.Spec.Argument>();
                 mutable_bitField0_ |= 0x00000008;
               }
-              args_.add(input.readMessage(main.Messages.Argument.PARSER, extensionRegistry));
+              args_.add(input.readMessage(main.Spec.Argument.PARSER, extensionRegistry));
               break;
             }
           }
@@ -9018,17 +9018,17 @@ public final class Messages {
 
     // repeated .main.Argument args = 4;
     public static final int ARGS_FIELD_NUMBER = 4;
-    private java.util.List<main.Messages.Argument> args_;
+    private java.util.List<main.Spec.Argument> args_;
     /**
      * <code>repeated .main.Argument args = 4;</code>
      */
-    public java.util.List<main.Messages.Argument> getArgsList() {
+    public java.util.List<main.Spec.Argument> getArgsList() {
       return args_;
     }
     /**
      * <code>repeated .main.Argument args = 4;</code>
      */
-    public java.util.List<? extends main.Messages.ArgumentOrBuilder> 
+    public java.util.List<? extends main.Spec.ArgumentOrBuilder> 
         getArgsOrBuilderList() {
       return args_;
     }
@@ -9041,13 +9041,13 @@ public final class Messages {
     /**
      * <code>repeated .main.Argument args = 4;</code>
      */
-    public main.Messages.Argument getArgs(int index) {
+    public main.Spec.Argument getArgs(int index) {
       return args_.get(index);
     }
     /**
      * <code>repeated .main.Argument args = 4;</code>
      */
-    public main.Messages.ArgumentOrBuilder getArgsOrBuilder(
+    public main.Spec.ArgumentOrBuilder getArgsOrBuilder(
         int index) {
       return args_.get(index);
     }
@@ -9577,22 +9577,22 @@ public final class Messages {
       }
 
       // repeated .main.Argument args = 4;
-      private java.util.List<main.Messages.Argument> args_ =
+      private java.util.List<main.Spec.Argument> args_ =
         java.util.Collections.emptyList();
       private void ensureArgsIsMutable() {
         if (!((bitField0_ & 0x00000008) == 0x00000008)) {
-          args_ = new java.util.ArrayList<main.Messages.Argument>(args_);
+          args_ = new java.util.ArrayList<main.Spec.Argument>(args_);
           bitField0_ |= 0x00000008;
          }
       }
 
       private com.google.protobuf.RepeatedFieldBuilder<
-          main.Messages.Argument, main.Messages.Argument.Builder, main.Messages.ArgumentOrBuilder> argsBuilder_;
+          main.Spec.Argument, main.Spec.Argument.Builder, main.Spec.ArgumentOrBuilder> argsBuilder_;
 
       /**
        * <code>repeated .main.Argument args = 4;</code>
        */
-      public java.util.List<main.Messages.Argument> getArgsList() {
+      public java.util.List<main.Spec.Argument> getArgsList() {
         if (argsBuilder_ == null) {
           return java.util.Collections.unmodifiableList(args_);
         } else {
@@ -9612,7 +9612,7 @@ public final class Messages {
       /**
        * <code>repeated .main.Argument args = 4;</code>
        */
-      public main.Messages.Argument getArgs(int index) {
+      public main.Spec.Argument getArgs(int index) {
         if (argsBuilder_ == null) {
           return args_.get(index);
         } else {
@@ -9623,7 +9623,7 @@ public final class Messages {
        * <code>repeated .main.Argument args = 4;</code>
        */
       public Builder setArgs(
-          int index, main.Messages.Argument value) {
+          int index, main.Spec.Argument value) {
         if (argsBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -9640,7 +9640,7 @@ public final class Messages {
        * <code>repeated .main.Argument args = 4;</code>
        */
       public Builder setArgs(
-          int index, main.Messages.Argument.Builder builderForValue) {
+          int index, main.Spec.Argument.Builder builderForValue) {
         if (argsBuilder_ == null) {
           ensureArgsIsMutable();
           args_.set(index, builderForValue.build());
@@ -9653,7 +9653,7 @@ public final class Messages {
       /**
        * <code>repeated .main.Argument args = 4;</code>
        */
-      public Builder addArgs(main.Messages.Argument value) {
+      public Builder addArgs(main.Spec.Argument value) {
         if (argsBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -9670,7 +9670,7 @@ public final class Messages {
        * <code>repeated .main.Argument args = 4;</code>
        */
       public Builder addArgs(
-          int index, main.Messages.Argument value) {
+          int index, main.Spec.Argument value) {
         if (argsBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -9687,7 +9687,7 @@ public final class Messages {
        * <code>repeated .main.Argument args = 4;</code>
        */
       public Builder addArgs(
-          main.Messages.Argument.Builder builderForValue) {
+          main.Spec.Argument.Builder builderForValue) {
         if (argsBuilder_ == null) {
           ensureArgsIsMutable();
           args_.add(builderForValue.build());
@@ -9701,7 +9701,7 @@ public final class Messages {
        * <code>repeated .main.Argument args = 4;</code>
        */
       public Builder addArgs(
-          int index, main.Messages.Argument.Builder builderForValue) {
+          int index, main.Spec.Argument.Builder builderForValue) {
         if (argsBuilder_ == null) {
           ensureArgsIsMutable();
           args_.add(index, builderForValue.build());
@@ -9715,7 +9715,7 @@ public final class Messages {
        * <code>repeated .main.Argument args = 4;</code>
        */
       public Builder addAllArgs(
-          java.lang.Iterable<? extends main.Messages.Argument> values) {
+          java.lang.Iterable<? extends main.Spec.Argument> values) {
         if (argsBuilder_ == null) {
           ensureArgsIsMutable();
           super.addAll(values, args_);
@@ -9754,14 +9754,14 @@ public final class Messages {
       /**
        * <code>repeated .main.Argument args = 4;</code>
        */
-      public main.Messages.Argument.Builder getArgsBuilder(
+      public main.Spec.Argument.Builder getArgsBuilder(
           int index) {
         return getArgsFieldBuilder().getBuilder(index);
       }
       /**
        * <code>repeated .main.Argument args = 4;</code>
        */
-      public main.Messages.ArgumentOrBuilder getArgsOrBuilder(
+      public main.Spec.ArgumentOrBuilder getArgsOrBuilder(
           int index) {
         if (argsBuilder_ == null) {
           return args_.get(index);  } else {
@@ -9771,7 +9771,7 @@ public final class Messages {
       /**
        * <code>repeated .main.Argument args = 4;</code>
        */
-      public java.util.List<? extends main.Messages.ArgumentOrBuilder> 
+      public java.util.List<? extends main.Spec.ArgumentOrBuilder> 
            getArgsOrBuilderList() {
         if (argsBuilder_ != null) {
           return argsBuilder_.getMessageOrBuilderList();
@@ -9782,31 +9782,31 @@ public final class Messages {
       /**
        * <code>repeated .main.Argument args = 4;</code>
        */
-      public main.Messages.Argument.Builder addArgsBuilder() {
+      public main.Spec.Argument.Builder addArgsBuilder() {
         return getArgsFieldBuilder().addBuilder(
-            main.Messages.Argument.getDefaultInstance());
+            main.Spec.Argument.getDefaultInstance());
       }
       /**
        * <code>repeated .main.Argument args = 4;</code>
        */
-      public main.Messages.Argument.Builder addArgsBuilder(
+      public main.Spec.Argument.Builder addArgsBuilder(
           int index) {
         return getArgsFieldBuilder().addBuilder(
-            index, main.Messages.Argument.getDefaultInstance());
+            index, main.Spec.Argument.getDefaultInstance());
       }
       /**
        * <code>repeated .main.Argument args = 4;</code>
        */
-      public java.util.List<main.Messages.Argument.Builder> 
+      public java.util.List<main.Spec.Argument.Builder> 
            getArgsBuilderList() {
         return getArgsFieldBuilder().getBuilderList();
       }
       private com.google.protobuf.RepeatedFieldBuilder<
-          main.Messages.Argument, main.Messages.Argument.Builder, main.Messages.ArgumentOrBuilder> 
+          main.Spec.Argument, main.Spec.Argument.Builder, main.Spec.ArgumentOrBuilder> 
           getArgsFieldBuilder() {
         if (argsBuilder_ == null) {
           argsBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
-              main.Messages.Argument, main.Messages.Argument.Builder, main.Messages.ArgumentOrBuilder>(
+              main.Spec.Argument, main.Spec.Argument.Builder, main.Spec.ArgumentOrBuilder>(
                   args_,
                   ((bitField0_ & 0x00000008) == 0x00000008),
                   getParentForChildren(),
@@ -9825,2004 +9825,6 @@ public final class Messages {
     }
 
     // @@protoc_insertion_point(class_scope:main.ExecuteStepRequest)
-  }
-
-  public interface ProtoTableOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
-
-    // repeated .main.TableRow rows = 1;
-    /**
-     * <code>repeated .main.TableRow rows = 1;</code>
-     */
-    java.util.List<main.Messages.TableRow> 
-        getRowsList();
-    /**
-     * <code>repeated .main.TableRow rows = 1;</code>
-     */
-    main.Messages.TableRow getRows(int index);
-    /**
-     * <code>repeated .main.TableRow rows = 1;</code>
-     */
-    int getRowsCount();
-    /**
-     * <code>repeated .main.TableRow rows = 1;</code>
-     */
-    java.util.List<? extends main.Messages.TableRowOrBuilder> 
-        getRowsOrBuilderList();
-    /**
-     * <code>repeated .main.TableRow rows = 1;</code>
-     */
-    main.Messages.TableRowOrBuilder getRowsOrBuilder(
-        int index);
-  }
-  /**
-   * Protobuf type {@code main.ProtoTable}
-   */
-  public static final class ProtoTable extends
-      com.google.protobuf.GeneratedMessage
-      implements ProtoTableOrBuilder {
-    // Use ProtoTable.newBuilder() to construct.
-    private ProtoTable(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
-      super(builder);
-      this.unknownFields = builder.getUnknownFields();
-    }
-    private ProtoTable(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
-
-    private static final ProtoTable defaultInstance;
-    public static ProtoTable getDefaultInstance() {
-      return defaultInstance;
-    }
-
-    public ProtoTable getDefaultInstanceForType() {
-      return defaultInstance;
-    }
-
-    private final com.google.protobuf.UnknownFieldSet unknownFields;
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-        getUnknownFields() {
-      return this.unknownFields;
-    }
-    private ProtoTable(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      initFields();
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-            case 10: {
-              if (!((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
-                rows_ = new java.util.ArrayList<main.Messages.TableRow>();
-                mutable_bitField0_ |= 0x00000001;
-              }
-              rows_.add(input.readMessage(main.Messages.TableRow.PARSER, extensionRegistry));
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e.getMessage()).setUnfinishedMessage(this);
-      } finally {
-        if (((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
-          rows_ = java.util.Collections.unmodifiableList(rows_);
-        }
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return main.Messages.internal_static_main_ProtoTable_descriptor;
-    }
-
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return main.Messages.internal_static_main_ProtoTable_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              main.Messages.ProtoTable.class, main.Messages.ProtoTable.Builder.class);
-    }
-
-    public static com.google.protobuf.Parser<ProtoTable> PARSER =
-        new com.google.protobuf.AbstractParser<ProtoTable>() {
-      public ProtoTable parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new ProtoTable(input, extensionRegistry);
-      }
-    };
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<ProtoTable> getParserForType() {
-      return PARSER;
-    }
-
-    // repeated .main.TableRow rows = 1;
-    public static final int ROWS_FIELD_NUMBER = 1;
-    private java.util.List<main.Messages.TableRow> rows_;
-    /**
-     * <code>repeated .main.TableRow rows = 1;</code>
-     */
-    public java.util.List<main.Messages.TableRow> getRowsList() {
-      return rows_;
-    }
-    /**
-     * <code>repeated .main.TableRow rows = 1;</code>
-     */
-    public java.util.List<? extends main.Messages.TableRowOrBuilder> 
-        getRowsOrBuilderList() {
-      return rows_;
-    }
-    /**
-     * <code>repeated .main.TableRow rows = 1;</code>
-     */
-    public int getRowsCount() {
-      return rows_.size();
-    }
-    /**
-     * <code>repeated .main.TableRow rows = 1;</code>
-     */
-    public main.Messages.TableRow getRows(int index) {
-      return rows_.get(index);
-    }
-    /**
-     * <code>repeated .main.TableRow rows = 1;</code>
-     */
-    public main.Messages.TableRowOrBuilder getRowsOrBuilder(
-        int index) {
-      return rows_.get(index);
-    }
-
-    private void initFields() {
-      rows_ = java.util.Collections.emptyList();
-    }
-    private byte memoizedIsInitialized = -1;
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
-
-      memoizedIsInitialized = 1;
-      return true;
-    }
-
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      getSerializedSize();
-      for (int i = 0; i < rows_.size(); i++) {
-        output.writeMessage(1, rows_.get(i));
-      }
-      getUnknownFields().writeTo(output);
-    }
-
-    private int memoizedSerializedSize = -1;
-    public int getSerializedSize() {
-      int size = memoizedSerializedSize;
-      if (size != -1) return size;
-
-      size = 0;
-      for (int i = 0; i < rows_.size(); i++) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(1, rows_.get(i));
-      }
-      size += getUnknownFields().getSerializedSize();
-      memoizedSerializedSize = size;
-      return size;
-    }
-
-    private static final long serialVersionUID = 0L;
-    @java.lang.Override
-    protected java.lang.Object writeReplace()
-        throws java.io.ObjectStreamException {
-      return super.writeReplace();
-    }
-
-    public static main.Messages.ProtoTable parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static main.Messages.ProtoTable parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static main.Messages.ProtoTable parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static main.Messages.ProtoTable parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static main.Messages.ProtoTable parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static main.Messages.ProtoTable parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-    public static main.Messages.ProtoTable parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input);
-    }
-    public static main.Messages.ProtoTable parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input, extensionRegistry);
-    }
-    public static main.Messages.ProtoTable parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static main.Messages.ProtoTable parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(main.Messages.ProtoTable prototype) {
-      return newBuilder().mergeFrom(prototype);
-    }
-    public Builder toBuilder() { return newBuilder(this); }
-
-    @java.lang.Override
-    protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
-    /**
-     * Protobuf type {@code main.ProtoTable}
-     */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements main.Messages.ProtoTableOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return main.Messages.internal_static_main_ProtoTable_descriptor;
-      }
-
-      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return main.Messages.internal_static_main_ProtoTable_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                main.Messages.ProtoTable.class, main.Messages.ProtoTable.Builder.class);
-      }
-
-      // Construct using main.Messages.ProtoTable.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
-
-      private Builder(
-          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-        super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
-          getRowsFieldBuilder();
-        }
-      }
-      private static Builder create() {
-        return new Builder();
-      }
-
-      public Builder clear() {
-        super.clear();
-        if (rowsBuilder_ == null) {
-          rows_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000001);
-        } else {
-          rowsBuilder_.clear();
-        }
-        return this;
-      }
-
-      public Builder clone() {
-        return create().mergeFrom(buildPartial());
-      }
-
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return main.Messages.internal_static_main_ProtoTable_descriptor;
-      }
-
-      public main.Messages.ProtoTable getDefaultInstanceForType() {
-        return main.Messages.ProtoTable.getDefaultInstance();
-      }
-
-      public main.Messages.ProtoTable build() {
-        main.Messages.ProtoTable result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return result;
-      }
-
-      public main.Messages.ProtoTable buildPartial() {
-        main.Messages.ProtoTable result = new main.Messages.ProtoTable(this);
-        int from_bitField0_ = bitField0_;
-        if (rowsBuilder_ == null) {
-          if (((bitField0_ & 0x00000001) == 0x00000001)) {
-            rows_ = java.util.Collections.unmodifiableList(rows_);
-            bitField0_ = (bitField0_ & ~0x00000001);
-          }
-          result.rows_ = rows_;
-        } else {
-          result.rows_ = rowsBuilder_.build();
-        }
-        onBuilt();
-        return result;
-      }
-
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof main.Messages.ProtoTable) {
-          return mergeFrom((main.Messages.ProtoTable)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-
-      public Builder mergeFrom(main.Messages.ProtoTable other) {
-        if (other == main.Messages.ProtoTable.getDefaultInstance()) return this;
-        if (rowsBuilder_ == null) {
-          if (!other.rows_.isEmpty()) {
-            if (rows_.isEmpty()) {
-              rows_ = other.rows_;
-              bitField0_ = (bitField0_ & ~0x00000001);
-            } else {
-              ensureRowsIsMutable();
-              rows_.addAll(other.rows_);
-            }
-            onChanged();
-          }
-        } else {
-          if (!other.rows_.isEmpty()) {
-            if (rowsBuilder_.isEmpty()) {
-              rowsBuilder_.dispose();
-              rowsBuilder_ = null;
-              rows_ = other.rows_;
-              bitField0_ = (bitField0_ & ~0x00000001);
-              rowsBuilder_ = 
-                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
-                   getRowsFieldBuilder() : null;
-            } else {
-              rowsBuilder_.addAllMessages(other.rows_);
-            }
-          }
-        }
-        this.mergeUnknownFields(other.getUnknownFields());
-        return this;
-      }
-
-      public final boolean isInitialized() {
-        return true;
-      }
-
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        main.Messages.ProtoTable parsedMessage = null;
-        try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (main.Messages.ProtoTable) e.getUnfinishedMessage();
-          throw e;
-        } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
-        return this;
-      }
-      private int bitField0_;
-
-      // repeated .main.TableRow rows = 1;
-      private java.util.List<main.Messages.TableRow> rows_ =
-        java.util.Collections.emptyList();
-      private void ensureRowsIsMutable() {
-        if (!((bitField0_ & 0x00000001) == 0x00000001)) {
-          rows_ = new java.util.ArrayList<main.Messages.TableRow>(rows_);
-          bitField0_ |= 0x00000001;
-         }
-      }
-
-      private com.google.protobuf.RepeatedFieldBuilder<
-          main.Messages.TableRow, main.Messages.TableRow.Builder, main.Messages.TableRowOrBuilder> rowsBuilder_;
-
-      /**
-       * <code>repeated .main.TableRow rows = 1;</code>
-       */
-      public java.util.List<main.Messages.TableRow> getRowsList() {
-        if (rowsBuilder_ == null) {
-          return java.util.Collections.unmodifiableList(rows_);
-        } else {
-          return rowsBuilder_.getMessageList();
-        }
-      }
-      /**
-       * <code>repeated .main.TableRow rows = 1;</code>
-       */
-      public int getRowsCount() {
-        if (rowsBuilder_ == null) {
-          return rows_.size();
-        } else {
-          return rowsBuilder_.getCount();
-        }
-      }
-      /**
-       * <code>repeated .main.TableRow rows = 1;</code>
-       */
-      public main.Messages.TableRow getRows(int index) {
-        if (rowsBuilder_ == null) {
-          return rows_.get(index);
-        } else {
-          return rowsBuilder_.getMessage(index);
-        }
-      }
-      /**
-       * <code>repeated .main.TableRow rows = 1;</code>
-       */
-      public Builder setRows(
-          int index, main.Messages.TableRow value) {
-        if (rowsBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureRowsIsMutable();
-          rows_.set(index, value);
-          onChanged();
-        } else {
-          rowsBuilder_.setMessage(index, value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .main.TableRow rows = 1;</code>
-       */
-      public Builder setRows(
-          int index, main.Messages.TableRow.Builder builderForValue) {
-        if (rowsBuilder_ == null) {
-          ensureRowsIsMutable();
-          rows_.set(index, builderForValue.build());
-          onChanged();
-        } else {
-          rowsBuilder_.setMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .main.TableRow rows = 1;</code>
-       */
-      public Builder addRows(main.Messages.TableRow value) {
-        if (rowsBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureRowsIsMutable();
-          rows_.add(value);
-          onChanged();
-        } else {
-          rowsBuilder_.addMessage(value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .main.TableRow rows = 1;</code>
-       */
-      public Builder addRows(
-          int index, main.Messages.TableRow value) {
-        if (rowsBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureRowsIsMutable();
-          rows_.add(index, value);
-          onChanged();
-        } else {
-          rowsBuilder_.addMessage(index, value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .main.TableRow rows = 1;</code>
-       */
-      public Builder addRows(
-          main.Messages.TableRow.Builder builderForValue) {
-        if (rowsBuilder_ == null) {
-          ensureRowsIsMutable();
-          rows_.add(builderForValue.build());
-          onChanged();
-        } else {
-          rowsBuilder_.addMessage(builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .main.TableRow rows = 1;</code>
-       */
-      public Builder addRows(
-          int index, main.Messages.TableRow.Builder builderForValue) {
-        if (rowsBuilder_ == null) {
-          ensureRowsIsMutable();
-          rows_.add(index, builderForValue.build());
-          onChanged();
-        } else {
-          rowsBuilder_.addMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .main.TableRow rows = 1;</code>
-       */
-      public Builder addAllRows(
-          java.lang.Iterable<? extends main.Messages.TableRow> values) {
-        if (rowsBuilder_ == null) {
-          ensureRowsIsMutable();
-          super.addAll(values, rows_);
-          onChanged();
-        } else {
-          rowsBuilder_.addAllMessages(values);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .main.TableRow rows = 1;</code>
-       */
-      public Builder clearRows() {
-        if (rowsBuilder_ == null) {
-          rows_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000001);
-          onChanged();
-        } else {
-          rowsBuilder_.clear();
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .main.TableRow rows = 1;</code>
-       */
-      public Builder removeRows(int index) {
-        if (rowsBuilder_ == null) {
-          ensureRowsIsMutable();
-          rows_.remove(index);
-          onChanged();
-        } else {
-          rowsBuilder_.remove(index);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .main.TableRow rows = 1;</code>
-       */
-      public main.Messages.TableRow.Builder getRowsBuilder(
-          int index) {
-        return getRowsFieldBuilder().getBuilder(index);
-      }
-      /**
-       * <code>repeated .main.TableRow rows = 1;</code>
-       */
-      public main.Messages.TableRowOrBuilder getRowsOrBuilder(
-          int index) {
-        if (rowsBuilder_ == null) {
-          return rows_.get(index);  } else {
-          return rowsBuilder_.getMessageOrBuilder(index);
-        }
-      }
-      /**
-       * <code>repeated .main.TableRow rows = 1;</code>
-       */
-      public java.util.List<? extends main.Messages.TableRowOrBuilder> 
-           getRowsOrBuilderList() {
-        if (rowsBuilder_ != null) {
-          return rowsBuilder_.getMessageOrBuilderList();
-        } else {
-          return java.util.Collections.unmodifiableList(rows_);
-        }
-      }
-      /**
-       * <code>repeated .main.TableRow rows = 1;</code>
-       */
-      public main.Messages.TableRow.Builder addRowsBuilder() {
-        return getRowsFieldBuilder().addBuilder(
-            main.Messages.TableRow.getDefaultInstance());
-      }
-      /**
-       * <code>repeated .main.TableRow rows = 1;</code>
-       */
-      public main.Messages.TableRow.Builder addRowsBuilder(
-          int index) {
-        return getRowsFieldBuilder().addBuilder(
-            index, main.Messages.TableRow.getDefaultInstance());
-      }
-      /**
-       * <code>repeated .main.TableRow rows = 1;</code>
-       */
-      public java.util.List<main.Messages.TableRow.Builder> 
-           getRowsBuilderList() {
-        return getRowsFieldBuilder().getBuilderList();
-      }
-      private com.google.protobuf.RepeatedFieldBuilder<
-          main.Messages.TableRow, main.Messages.TableRow.Builder, main.Messages.TableRowOrBuilder> 
-          getRowsFieldBuilder() {
-        if (rowsBuilder_ == null) {
-          rowsBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
-              main.Messages.TableRow, main.Messages.TableRow.Builder, main.Messages.TableRowOrBuilder>(
-                  rows_,
-                  ((bitField0_ & 0x00000001) == 0x00000001),
-                  getParentForChildren(),
-                  isClean());
-          rows_ = null;
-        }
-        return rowsBuilder_;
-      }
-
-      // @@protoc_insertion_point(builder_scope:main.ProtoTable)
-    }
-
-    static {
-      defaultInstance = new ProtoTable(true);
-      defaultInstance.initFields();
-    }
-
-    // @@protoc_insertion_point(class_scope:main.ProtoTable)
-  }
-
-  public interface TableRowOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
-
-    // repeated string cells = 1;
-    /**
-     * <code>repeated string cells = 1;</code>
-     */
-    java.util.List<java.lang.String>
-    getCellsList();
-    /**
-     * <code>repeated string cells = 1;</code>
-     */
-    int getCellsCount();
-    /**
-     * <code>repeated string cells = 1;</code>
-     */
-    java.lang.String getCells(int index);
-    /**
-     * <code>repeated string cells = 1;</code>
-     */
-    com.google.protobuf.ByteString
-        getCellsBytes(int index);
-  }
-  /**
-   * Protobuf type {@code main.TableRow}
-   */
-  public static final class TableRow extends
-      com.google.protobuf.GeneratedMessage
-      implements TableRowOrBuilder {
-    // Use TableRow.newBuilder() to construct.
-    private TableRow(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
-      super(builder);
-      this.unknownFields = builder.getUnknownFields();
-    }
-    private TableRow(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
-
-    private static final TableRow defaultInstance;
-    public static TableRow getDefaultInstance() {
-      return defaultInstance;
-    }
-
-    public TableRow getDefaultInstanceForType() {
-      return defaultInstance;
-    }
-
-    private final com.google.protobuf.UnknownFieldSet unknownFields;
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-        getUnknownFields() {
-      return this.unknownFields;
-    }
-    private TableRow(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      initFields();
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-            case 10: {
-              if (!((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
-                cells_ = new com.google.protobuf.LazyStringArrayList();
-                mutable_bitField0_ |= 0x00000001;
-              }
-              cells_.add(input.readBytes());
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e.getMessage()).setUnfinishedMessage(this);
-      } finally {
-        if (((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
-          cells_ = new com.google.protobuf.UnmodifiableLazyStringList(cells_);
-        }
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return main.Messages.internal_static_main_TableRow_descriptor;
-    }
-
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return main.Messages.internal_static_main_TableRow_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              main.Messages.TableRow.class, main.Messages.TableRow.Builder.class);
-    }
-
-    public static com.google.protobuf.Parser<TableRow> PARSER =
-        new com.google.protobuf.AbstractParser<TableRow>() {
-      public TableRow parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new TableRow(input, extensionRegistry);
-      }
-    };
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<TableRow> getParserForType() {
-      return PARSER;
-    }
-
-    // repeated string cells = 1;
-    public static final int CELLS_FIELD_NUMBER = 1;
-    private com.google.protobuf.LazyStringList cells_;
-    /**
-     * <code>repeated string cells = 1;</code>
-     */
-    public java.util.List<java.lang.String>
-        getCellsList() {
-      return cells_;
-    }
-    /**
-     * <code>repeated string cells = 1;</code>
-     */
-    public int getCellsCount() {
-      return cells_.size();
-    }
-    /**
-     * <code>repeated string cells = 1;</code>
-     */
-    public java.lang.String getCells(int index) {
-      return cells_.get(index);
-    }
-    /**
-     * <code>repeated string cells = 1;</code>
-     */
-    public com.google.protobuf.ByteString
-        getCellsBytes(int index) {
-      return cells_.getByteString(index);
-    }
-
-    private void initFields() {
-      cells_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-    }
-    private byte memoizedIsInitialized = -1;
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
-
-      memoizedIsInitialized = 1;
-      return true;
-    }
-
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      getSerializedSize();
-      for (int i = 0; i < cells_.size(); i++) {
-        output.writeBytes(1, cells_.getByteString(i));
-      }
-      getUnknownFields().writeTo(output);
-    }
-
-    private int memoizedSerializedSize = -1;
-    public int getSerializedSize() {
-      int size = memoizedSerializedSize;
-      if (size != -1) return size;
-
-      size = 0;
-      {
-        int dataSize = 0;
-        for (int i = 0; i < cells_.size(); i++) {
-          dataSize += com.google.protobuf.CodedOutputStream
-            .computeBytesSizeNoTag(cells_.getByteString(i));
-        }
-        size += dataSize;
-        size += 1 * getCellsList().size();
-      }
-      size += getUnknownFields().getSerializedSize();
-      memoizedSerializedSize = size;
-      return size;
-    }
-
-    private static final long serialVersionUID = 0L;
-    @java.lang.Override
-    protected java.lang.Object writeReplace()
-        throws java.io.ObjectStreamException {
-      return super.writeReplace();
-    }
-
-    public static main.Messages.TableRow parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static main.Messages.TableRow parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static main.Messages.TableRow parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static main.Messages.TableRow parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static main.Messages.TableRow parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static main.Messages.TableRow parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-    public static main.Messages.TableRow parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input);
-    }
-    public static main.Messages.TableRow parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input, extensionRegistry);
-    }
-    public static main.Messages.TableRow parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static main.Messages.TableRow parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(main.Messages.TableRow prototype) {
-      return newBuilder().mergeFrom(prototype);
-    }
-    public Builder toBuilder() { return newBuilder(this); }
-
-    @java.lang.Override
-    protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
-    /**
-     * Protobuf type {@code main.TableRow}
-     */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements main.Messages.TableRowOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return main.Messages.internal_static_main_TableRow_descriptor;
-      }
-
-      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return main.Messages.internal_static_main_TableRow_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                main.Messages.TableRow.class, main.Messages.TableRow.Builder.class);
-      }
-
-      // Construct using main.Messages.TableRow.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
-
-      private Builder(
-          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-        super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
-        }
-      }
-      private static Builder create() {
-        return new Builder();
-      }
-
-      public Builder clear() {
-        super.clear();
-        cells_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-        bitField0_ = (bitField0_ & ~0x00000001);
-        return this;
-      }
-
-      public Builder clone() {
-        return create().mergeFrom(buildPartial());
-      }
-
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return main.Messages.internal_static_main_TableRow_descriptor;
-      }
-
-      public main.Messages.TableRow getDefaultInstanceForType() {
-        return main.Messages.TableRow.getDefaultInstance();
-      }
-
-      public main.Messages.TableRow build() {
-        main.Messages.TableRow result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return result;
-      }
-
-      public main.Messages.TableRow buildPartial() {
-        main.Messages.TableRow result = new main.Messages.TableRow(this);
-        int from_bitField0_ = bitField0_;
-        if (((bitField0_ & 0x00000001) == 0x00000001)) {
-          cells_ = new com.google.protobuf.UnmodifiableLazyStringList(
-              cells_);
-          bitField0_ = (bitField0_ & ~0x00000001);
-        }
-        result.cells_ = cells_;
-        onBuilt();
-        return result;
-      }
-
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof main.Messages.TableRow) {
-          return mergeFrom((main.Messages.TableRow)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-
-      public Builder mergeFrom(main.Messages.TableRow other) {
-        if (other == main.Messages.TableRow.getDefaultInstance()) return this;
-        if (!other.cells_.isEmpty()) {
-          if (cells_.isEmpty()) {
-            cells_ = other.cells_;
-            bitField0_ = (bitField0_ & ~0x00000001);
-          } else {
-            ensureCellsIsMutable();
-            cells_.addAll(other.cells_);
-          }
-          onChanged();
-        }
-        this.mergeUnknownFields(other.getUnknownFields());
-        return this;
-      }
-
-      public final boolean isInitialized() {
-        return true;
-      }
-
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        main.Messages.TableRow parsedMessage = null;
-        try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (main.Messages.TableRow) e.getUnfinishedMessage();
-          throw e;
-        } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
-        return this;
-      }
-      private int bitField0_;
-
-      // repeated string cells = 1;
-      private com.google.protobuf.LazyStringList cells_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-      private void ensureCellsIsMutable() {
-        if (!((bitField0_ & 0x00000001) == 0x00000001)) {
-          cells_ = new com.google.protobuf.LazyStringArrayList(cells_);
-          bitField0_ |= 0x00000001;
-         }
-      }
-      /**
-       * <code>repeated string cells = 1;</code>
-       */
-      public java.util.List<java.lang.String>
-          getCellsList() {
-        return java.util.Collections.unmodifiableList(cells_);
-      }
-      /**
-       * <code>repeated string cells = 1;</code>
-       */
-      public int getCellsCount() {
-        return cells_.size();
-      }
-      /**
-       * <code>repeated string cells = 1;</code>
-       */
-      public java.lang.String getCells(int index) {
-        return cells_.get(index);
-      }
-      /**
-       * <code>repeated string cells = 1;</code>
-       */
-      public com.google.protobuf.ByteString
-          getCellsBytes(int index) {
-        return cells_.getByteString(index);
-      }
-      /**
-       * <code>repeated string cells = 1;</code>
-       */
-      public Builder setCells(
-          int index, java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  ensureCellsIsMutable();
-        cells_.set(index, value);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated string cells = 1;</code>
-       */
-      public Builder addCells(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  ensureCellsIsMutable();
-        cells_.add(value);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated string cells = 1;</code>
-       */
-      public Builder addAllCells(
-          java.lang.Iterable<java.lang.String> values) {
-        ensureCellsIsMutable();
-        super.addAll(values, cells_);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated string cells = 1;</code>
-       */
-      public Builder clearCells() {
-        cells_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-        bitField0_ = (bitField0_ & ~0x00000001);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated string cells = 1;</code>
-       */
-      public Builder addCellsBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  ensureCellsIsMutable();
-        cells_.add(value);
-        onChanged();
-        return this;
-      }
-
-      // @@protoc_insertion_point(builder_scope:main.TableRow)
-    }
-
-    static {
-      defaultInstance = new TableRow(true);
-      defaultInstance.initFields();
-    }
-
-    // @@protoc_insertion_point(class_scope:main.TableRow)
-  }
-
-  public interface ArgumentOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
-
-    // required string type = 1;
-    /**
-     * <code>required string type = 1;</code>
-     */
-    boolean hasType();
-    /**
-     * <code>required string type = 1;</code>
-     */
-    java.lang.String getType();
-    /**
-     * <code>required string type = 1;</code>
-     */
-    com.google.protobuf.ByteString
-        getTypeBytes();
-
-    // optional string value = 2;
-    /**
-     * <code>optional string value = 2;</code>
-     */
-    boolean hasValue();
-    /**
-     * <code>optional string value = 2;</code>
-     */
-    java.lang.String getValue();
-    /**
-     * <code>optional string value = 2;</code>
-     */
-    com.google.protobuf.ByteString
-        getValueBytes();
-
-    // optional .main.ProtoTable table = 3;
-    /**
-     * <code>optional .main.ProtoTable table = 3;</code>
-     */
-    boolean hasTable();
-    /**
-     * <code>optional .main.ProtoTable table = 3;</code>
-     */
-    main.Messages.ProtoTable getTable();
-    /**
-     * <code>optional .main.ProtoTable table = 3;</code>
-     */
-    main.Messages.ProtoTableOrBuilder getTableOrBuilder();
-  }
-  /**
-   * Protobuf type {@code main.Argument}
-   */
-  public static final class Argument extends
-      com.google.protobuf.GeneratedMessage
-      implements ArgumentOrBuilder {
-    // Use Argument.newBuilder() to construct.
-    private Argument(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
-      super(builder);
-      this.unknownFields = builder.getUnknownFields();
-    }
-    private Argument(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
-
-    private static final Argument defaultInstance;
-    public static Argument getDefaultInstance() {
-      return defaultInstance;
-    }
-
-    public Argument getDefaultInstanceForType() {
-      return defaultInstance;
-    }
-
-    private final com.google.protobuf.UnknownFieldSet unknownFields;
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-        getUnknownFields() {
-      return this.unknownFields;
-    }
-    private Argument(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      initFields();
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-            case 10: {
-              bitField0_ |= 0x00000001;
-              type_ = input.readBytes();
-              break;
-            }
-            case 18: {
-              bitField0_ |= 0x00000002;
-              value_ = input.readBytes();
-              break;
-            }
-            case 26: {
-              main.Messages.ProtoTable.Builder subBuilder = null;
-              if (((bitField0_ & 0x00000004) == 0x00000004)) {
-                subBuilder = table_.toBuilder();
-              }
-              table_ = input.readMessage(main.Messages.ProtoTable.PARSER, extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(table_);
-                table_ = subBuilder.buildPartial();
-              }
-              bitField0_ |= 0x00000004;
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e.getMessage()).setUnfinishedMessage(this);
-      } finally {
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return main.Messages.internal_static_main_Argument_descriptor;
-    }
-
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return main.Messages.internal_static_main_Argument_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              main.Messages.Argument.class, main.Messages.Argument.Builder.class);
-    }
-
-    public static com.google.protobuf.Parser<Argument> PARSER =
-        new com.google.protobuf.AbstractParser<Argument>() {
-      public Argument parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new Argument(input, extensionRegistry);
-      }
-    };
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<Argument> getParserForType() {
-      return PARSER;
-    }
-
-    private int bitField0_;
-    // required string type = 1;
-    public static final int TYPE_FIELD_NUMBER = 1;
-    private java.lang.Object type_;
-    /**
-     * <code>required string type = 1;</code>
-     */
-    public boolean hasType() {
-      return ((bitField0_ & 0x00000001) == 0x00000001);
-    }
-    /**
-     * <code>required string type = 1;</code>
-     */
-    public java.lang.String getType() {
-      java.lang.Object ref = type_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          type_ = s;
-        }
-        return s;
-      }
-    }
-    /**
-     * <code>required string type = 1;</code>
-     */
-    public com.google.protobuf.ByteString
-        getTypeBytes() {
-      java.lang.Object ref = type_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        type_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    // optional string value = 2;
-    public static final int VALUE_FIELD_NUMBER = 2;
-    private java.lang.Object value_;
-    /**
-     * <code>optional string value = 2;</code>
-     */
-    public boolean hasValue() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
-    }
-    /**
-     * <code>optional string value = 2;</code>
-     */
-    public java.lang.String getValue() {
-      java.lang.Object ref = value_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          value_ = s;
-        }
-        return s;
-      }
-    }
-    /**
-     * <code>optional string value = 2;</code>
-     */
-    public com.google.protobuf.ByteString
-        getValueBytes() {
-      java.lang.Object ref = value_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        value_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    // optional .main.ProtoTable table = 3;
-    public static final int TABLE_FIELD_NUMBER = 3;
-    private main.Messages.ProtoTable table_;
-    /**
-     * <code>optional .main.ProtoTable table = 3;</code>
-     */
-    public boolean hasTable() {
-      return ((bitField0_ & 0x00000004) == 0x00000004);
-    }
-    /**
-     * <code>optional .main.ProtoTable table = 3;</code>
-     */
-    public main.Messages.ProtoTable getTable() {
-      return table_;
-    }
-    /**
-     * <code>optional .main.ProtoTable table = 3;</code>
-     */
-    public main.Messages.ProtoTableOrBuilder getTableOrBuilder() {
-      return table_;
-    }
-
-    private void initFields() {
-      type_ = "";
-      value_ = "";
-      table_ = main.Messages.ProtoTable.getDefaultInstance();
-    }
-    private byte memoizedIsInitialized = -1;
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
-
-      if (!hasType()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      memoizedIsInitialized = 1;
-      return true;
-    }
-
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      getSerializedSize();
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeBytes(1, getTypeBytes());
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeBytes(2, getValueBytes());
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeMessage(3, table_);
-      }
-      getUnknownFields().writeTo(output);
-    }
-
-    private int memoizedSerializedSize = -1;
-    public int getSerializedSize() {
-      int size = memoizedSerializedSize;
-      if (size != -1) return size;
-
-      size = 0;
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(1, getTypeBytes());
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(2, getValueBytes());
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(3, table_);
-      }
-      size += getUnknownFields().getSerializedSize();
-      memoizedSerializedSize = size;
-      return size;
-    }
-
-    private static final long serialVersionUID = 0L;
-    @java.lang.Override
-    protected java.lang.Object writeReplace()
-        throws java.io.ObjectStreamException {
-      return super.writeReplace();
-    }
-
-    public static main.Messages.Argument parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static main.Messages.Argument parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static main.Messages.Argument parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static main.Messages.Argument parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static main.Messages.Argument parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static main.Messages.Argument parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-    public static main.Messages.Argument parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input);
-    }
-    public static main.Messages.Argument parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input, extensionRegistry);
-    }
-    public static main.Messages.Argument parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static main.Messages.Argument parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(main.Messages.Argument prototype) {
-      return newBuilder().mergeFrom(prototype);
-    }
-    public Builder toBuilder() { return newBuilder(this); }
-
-    @java.lang.Override
-    protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
-    /**
-     * Protobuf type {@code main.Argument}
-     */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements main.Messages.ArgumentOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return main.Messages.internal_static_main_Argument_descriptor;
-      }
-
-      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return main.Messages.internal_static_main_Argument_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                main.Messages.Argument.class, main.Messages.Argument.Builder.class);
-      }
-
-      // Construct using main.Messages.Argument.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
-
-      private Builder(
-          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-        super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
-          getTableFieldBuilder();
-        }
-      }
-      private static Builder create() {
-        return new Builder();
-      }
-
-      public Builder clear() {
-        super.clear();
-        type_ = "";
-        bitField0_ = (bitField0_ & ~0x00000001);
-        value_ = "";
-        bitField0_ = (bitField0_ & ~0x00000002);
-        if (tableBuilder_ == null) {
-          table_ = main.Messages.ProtoTable.getDefaultInstance();
-        } else {
-          tableBuilder_.clear();
-        }
-        bitField0_ = (bitField0_ & ~0x00000004);
-        return this;
-      }
-
-      public Builder clone() {
-        return create().mergeFrom(buildPartial());
-      }
-
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return main.Messages.internal_static_main_Argument_descriptor;
-      }
-
-      public main.Messages.Argument getDefaultInstanceForType() {
-        return main.Messages.Argument.getDefaultInstance();
-      }
-
-      public main.Messages.Argument build() {
-        main.Messages.Argument result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return result;
-      }
-
-      public main.Messages.Argument buildPartial() {
-        main.Messages.Argument result = new main.Messages.Argument(this);
-        int from_bitField0_ = bitField0_;
-        int to_bitField0_ = 0;
-        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
-          to_bitField0_ |= 0x00000001;
-        }
-        result.type_ = type_;
-        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
-          to_bitField0_ |= 0x00000002;
-        }
-        result.value_ = value_;
-        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
-          to_bitField0_ |= 0x00000004;
-        }
-        if (tableBuilder_ == null) {
-          result.table_ = table_;
-        } else {
-          result.table_ = tableBuilder_.build();
-        }
-        result.bitField0_ = to_bitField0_;
-        onBuilt();
-        return result;
-      }
-
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof main.Messages.Argument) {
-          return mergeFrom((main.Messages.Argument)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-
-      public Builder mergeFrom(main.Messages.Argument other) {
-        if (other == main.Messages.Argument.getDefaultInstance()) return this;
-        if (other.hasType()) {
-          bitField0_ |= 0x00000001;
-          type_ = other.type_;
-          onChanged();
-        }
-        if (other.hasValue()) {
-          bitField0_ |= 0x00000002;
-          value_ = other.value_;
-          onChanged();
-        }
-        if (other.hasTable()) {
-          mergeTable(other.getTable());
-        }
-        this.mergeUnknownFields(other.getUnknownFields());
-        return this;
-      }
-
-      public final boolean isInitialized() {
-        if (!hasType()) {
-          
-          return false;
-        }
-        return true;
-      }
-
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        main.Messages.Argument parsedMessage = null;
-        try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (main.Messages.Argument) e.getUnfinishedMessage();
-          throw e;
-        } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
-        return this;
-      }
-      private int bitField0_;
-
-      // required string type = 1;
-      private java.lang.Object type_ = "";
-      /**
-       * <code>required string type = 1;</code>
-       */
-      public boolean hasType() {
-        return ((bitField0_ & 0x00000001) == 0x00000001);
-      }
-      /**
-       * <code>required string type = 1;</code>
-       */
-      public java.lang.String getType() {
-        java.lang.Object ref = type_;
-        if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          type_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
-      }
-      /**
-       * <code>required string type = 1;</code>
-       */
-      public com.google.protobuf.ByteString
-          getTypeBytes() {
-        java.lang.Object ref = type_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          type_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>required string type = 1;</code>
-       */
-      public Builder setType(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000001;
-        type_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required string type = 1;</code>
-       */
-      public Builder clearType() {
-        bitField0_ = (bitField0_ & ~0x00000001);
-        type_ = getDefaultInstance().getType();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required string type = 1;</code>
-       */
-      public Builder setTypeBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000001;
-        type_ = value;
-        onChanged();
-        return this;
-      }
-
-      // optional string value = 2;
-      private java.lang.Object value_ = "";
-      /**
-       * <code>optional string value = 2;</code>
-       */
-      public boolean hasValue() {
-        return ((bitField0_ & 0x00000002) == 0x00000002);
-      }
-      /**
-       * <code>optional string value = 2;</code>
-       */
-      public java.lang.String getValue() {
-        java.lang.Object ref = value_;
-        if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          value_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
-      }
-      /**
-       * <code>optional string value = 2;</code>
-       */
-      public com.google.protobuf.ByteString
-          getValueBytes() {
-        java.lang.Object ref = value_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          value_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>optional string value = 2;</code>
-       */
-      public Builder setValue(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000002;
-        value_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string value = 2;</code>
-       */
-      public Builder clearValue() {
-        bitField0_ = (bitField0_ & ~0x00000002);
-        value_ = getDefaultInstance().getValue();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string value = 2;</code>
-       */
-      public Builder setValueBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000002;
-        value_ = value;
-        onChanged();
-        return this;
-      }
-
-      // optional .main.ProtoTable table = 3;
-      private main.Messages.ProtoTable table_ = main.Messages.ProtoTable.getDefaultInstance();
-      private com.google.protobuf.SingleFieldBuilder<
-          main.Messages.ProtoTable, main.Messages.ProtoTable.Builder, main.Messages.ProtoTableOrBuilder> tableBuilder_;
-      /**
-       * <code>optional .main.ProtoTable table = 3;</code>
-       */
-      public boolean hasTable() {
-        return ((bitField0_ & 0x00000004) == 0x00000004);
-      }
-      /**
-       * <code>optional .main.ProtoTable table = 3;</code>
-       */
-      public main.Messages.ProtoTable getTable() {
-        if (tableBuilder_ == null) {
-          return table_;
-        } else {
-          return tableBuilder_.getMessage();
-        }
-      }
-      /**
-       * <code>optional .main.ProtoTable table = 3;</code>
-       */
-      public Builder setTable(main.Messages.ProtoTable value) {
-        if (tableBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          table_ = value;
-          onChanged();
-        } else {
-          tableBuilder_.setMessage(value);
-        }
-        bitField0_ |= 0x00000004;
-        return this;
-      }
-      /**
-       * <code>optional .main.ProtoTable table = 3;</code>
-       */
-      public Builder setTable(
-          main.Messages.ProtoTable.Builder builderForValue) {
-        if (tableBuilder_ == null) {
-          table_ = builderForValue.build();
-          onChanged();
-        } else {
-          tableBuilder_.setMessage(builderForValue.build());
-        }
-        bitField0_ |= 0x00000004;
-        return this;
-      }
-      /**
-       * <code>optional .main.ProtoTable table = 3;</code>
-       */
-      public Builder mergeTable(main.Messages.ProtoTable value) {
-        if (tableBuilder_ == null) {
-          if (((bitField0_ & 0x00000004) == 0x00000004) &&
-              table_ != main.Messages.ProtoTable.getDefaultInstance()) {
-            table_ =
-              main.Messages.ProtoTable.newBuilder(table_).mergeFrom(value).buildPartial();
-          } else {
-            table_ = value;
-          }
-          onChanged();
-        } else {
-          tableBuilder_.mergeFrom(value);
-        }
-        bitField0_ |= 0x00000004;
-        return this;
-      }
-      /**
-       * <code>optional .main.ProtoTable table = 3;</code>
-       */
-      public Builder clearTable() {
-        if (tableBuilder_ == null) {
-          table_ = main.Messages.ProtoTable.getDefaultInstance();
-          onChanged();
-        } else {
-          tableBuilder_.clear();
-        }
-        bitField0_ = (bitField0_ & ~0x00000004);
-        return this;
-      }
-      /**
-       * <code>optional .main.ProtoTable table = 3;</code>
-       */
-      public main.Messages.ProtoTable.Builder getTableBuilder() {
-        bitField0_ |= 0x00000004;
-        onChanged();
-        return getTableFieldBuilder().getBuilder();
-      }
-      /**
-       * <code>optional .main.ProtoTable table = 3;</code>
-       */
-      public main.Messages.ProtoTableOrBuilder getTableOrBuilder() {
-        if (tableBuilder_ != null) {
-          return tableBuilder_.getMessageOrBuilder();
-        } else {
-          return table_;
-        }
-      }
-      /**
-       * <code>optional .main.ProtoTable table = 3;</code>
-       */
-      private com.google.protobuf.SingleFieldBuilder<
-          main.Messages.ProtoTable, main.Messages.ProtoTable.Builder, main.Messages.ProtoTableOrBuilder> 
-          getTableFieldBuilder() {
-        if (tableBuilder_ == null) {
-          tableBuilder_ = new com.google.protobuf.SingleFieldBuilder<
-              main.Messages.ProtoTable, main.Messages.ProtoTable.Builder, main.Messages.ProtoTableOrBuilder>(
-                  table_,
-                  getParentForChildren(),
-                  isClean());
-          table_ = null;
-        }
-        return tableBuilder_;
-      }
-
-      // @@protoc_insertion_point(builder_scope:main.Argument)
-    }
-
-    static {
-      defaultInstance = new Argument(true);
-      defaultInstance.initFields();
-    }
-
-    // @@protoc_insertion_point(class_scope:main.Argument)
   }
 
   public interface StepValidateRequestOrBuilder
@@ -13472,6 +11474,692 @@ public final class Messages {
     // @@protoc_insertion_point(class_scope:main.ExecutionEndingRequest)
   }
 
+  public interface SuiteExecutionResultOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+
+    // repeated .main.ProtoSpec specs = 1;
+    /**
+     * <code>repeated .main.ProtoSpec specs = 1;</code>
+     */
+    java.util.List<main.Spec.ProtoSpec> 
+        getSpecsList();
+    /**
+     * <code>repeated .main.ProtoSpec specs = 1;</code>
+     */
+    main.Spec.ProtoSpec getSpecs(int index);
+    /**
+     * <code>repeated .main.ProtoSpec specs = 1;</code>
+     */
+    int getSpecsCount();
+    /**
+     * <code>repeated .main.ProtoSpec specs = 1;</code>
+     */
+    java.util.List<? extends main.Spec.ProtoSpecOrBuilder> 
+        getSpecsOrBuilderList();
+    /**
+     * <code>repeated .main.ProtoSpec specs = 1;</code>
+     */
+    main.Spec.ProtoSpecOrBuilder getSpecsOrBuilder(
+        int index);
+  }
+  /**
+   * Protobuf type {@code main.SuiteExecutionResult}
+   */
+  public static final class SuiteExecutionResult extends
+      com.google.protobuf.GeneratedMessage
+      implements SuiteExecutionResultOrBuilder {
+    // Use SuiteExecutionResult.newBuilder() to construct.
+    private SuiteExecutionResult(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      super(builder);
+      this.unknownFields = builder.getUnknownFields();
+    }
+    private SuiteExecutionResult(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+    private static final SuiteExecutionResult defaultInstance;
+    public static SuiteExecutionResult getDefaultInstance() {
+      return defaultInstance;
+    }
+
+    public SuiteExecutionResult getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private SuiteExecutionResult(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 10: {
+              if (!((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
+                specs_ = new java.util.ArrayList<main.Spec.ProtoSpec>();
+                mutable_bitField0_ |= 0x00000001;
+              }
+              specs_.add(input.readMessage(main.Spec.ProtoSpec.PARSER, extensionRegistry));
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        if (((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
+          specs_ = java.util.Collections.unmodifiableList(specs_);
+        }
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return main.Messages.internal_static_main_SuiteExecutionResult_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return main.Messages.internal_static_main_SuiteExecutionResult_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              main.Messages.SuiteExecutionResult.class, main.Messages.SuiteExecutionResult.Builder.class);
+    }
+
+    public static com.google.protobuf.Parser<SuiteExecutionResult> PARSER =
+        new com.google.protobuf.AbstractParser<SuiteExecutionResult>() {
+      public SuiteExecutionResult parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new SuiteExecutionResult(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<SuiteExecutionResult> getParserForType() {
+      return PARSER;
+    }
+
+    // repeated .main.ProtoSpec specs = 1;
+    public static final int SPECS_FIELD_NUMBER = 1;
+    private java.util.List<main.Spec.ProtoSpec> specs_;
+    /**
+     * <code>repeated .main.ProtoSpec specs = 1;</code>
+     */
+    public java.util.List<main.Spec.ProtoSpec> getSpecsList() {
+      return specs_;
+    }
+    /**
+     * <code>repeated .main.ProtoSpec specs = 1;</code>
+     */
+    public java.util.List<? extends main.Spec.ProtoSpecOrBuilder> 
+        getSpecsOrBuilderList() {
+      return specs_;
+    }
+    /**
+     * <code>repeated .main.ProtoSpec specs = 1;</code>
+     */
+    public int getSpecsCount() {
+      return specs_.size();
+    }
+    /**
+     * <code>repeated .main.ProtoSpec specs = 1;</code>
+     */
+    public main.Spec.ProtoSpec getSpecs(int index) {
+      return specs_.get(index);
+    }
+    /**
+     * <code>repeated .main.ProtoSpec specs = 1;</code>
+     */
+    public main.Spec.ProtoSpecOrBuilder getSpecsOrBuilder(
+        int index) {
+      return specs_.get(index);
+    }
+
+    private void initFields() {
+      specs_ = java.util.Collections.emptyList();
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+
+      for (int i = 0; i < getSpecsCount(); i++) {
+        if (!getSpecs(i).isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      for (int i = 0; i < specs_.size(); i++) {
+        output.writeMessage(1, specs_.get(i));
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      for (int i = 0; i < specs_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(1, specs_.get(i));
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+
+    public static main.Messages.SuiteExecutionResult parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static main.Messages.SuiteExecutionResult parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static main.Messages.SuiteExecutionResult parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static main.Messages.SuiteExecutionResult parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static main.Messages.SuiteExecutionResult parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static main.Messages.SuiteExecutionResult parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+    public static main.Messages.SuiteExecutionResult parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input);
+    }
+    public static main.Messages.SuiteExecutionResult parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+    }
+    public static main.Messages.SuiteExecutionResult parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static main.Messages.SuiteExecutionResult parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(main.Messages.SuiteExecutionResult prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code main.SuiteExecutionResult}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements main.Messages.SuiteExecutionResultOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return main.Messages.internal_static_main_SuiteExecutionResult_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return main.Messages.internal_static_main_SuiteExecutionResult_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                main.Messages.SuiteExecutionResult.class, main.Messages.SuiteExecutionResult.Builder.class);
+      }
+
+      // Construct using main.Messages.SuiteExecutionResult.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+          getSpecsFieldBuilder();
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+
+      public Builder clear() {
+        super.clear();
+        if (specsBuilder_ == null) {
+          specs_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000001);
+        } else {
+          specsBuilder_.clear();
+        }
+        return this;
+      }
+
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return main.Messages.internal_static_main_SuiteExecutionResult_descriptor;
+      }
+
+      public main.Messages.SuiteExecutionResult getDefaultInstanceForType() {
+        return main.Messages.SuiteExecutionResult.getDefaultInstance();
+      }
+
+      public main.Messages.SuiteExecutionResult build() {
+        main.Messages.SuiteExecutionResult result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public main.Messages.SuiteExecutionResult buildPartial() {
+        main.Messages.SuiteExecutionResult result = new main.Messages.SuiteExecutionResult(this);
+        int from_bitField0_ = bitField0_;
+        if (specsBuilder_ == null) {
+          if (((bitField0_ & 0x00000001) == 0x00000001)) {
+            specs_ = java.util.Collections.unmodifiableList(specs_);
+            bitField0_ = (bitField0_ & ~0x00000001);
+          }
+          result.specs_ = specs_;
+        } else {
+          result.specs_ = specsBuilder_.build();
+        }
+        onBuilt();
+        return result;
+      }
+
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof main.Messages.SuiteExecutionResult) {
+          return mergeFrom((main.Messages.SuiteExecutionResult)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(main.Messages.SuiteExecutionResult other) {
+        if (other == main.Messages.SuiteExecutionResult.getDefaultInstance()) return this;
+        if (specsBuilder_ == null) {
+          if (!other.specs_.isEmpty()) {
+            if (specs_.isEmpty()) {
+              specs_ = other.specs_;
+              bitField0_ = (bitField0_ & ~0x00000001);
+            } else {
+              ensureSpecsIsMutable();
+              specs_.addAll(other.specs_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.specs_.isEmpty()) {
+            if (specsBuilder_.isEmpty()) {
+              specsBuilder_.dispose();
+              specsBuilder_ = null;
+              specs_ = other.specs_;
+              bitField0_ = (bitField0_ & ~0x00000001);
+              specsBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getSpecsFieldBuilder() : null;
+            } else {
+              specsBuilder_.addAllMessages(other.specs_);
+            }
+          }
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        for (int i = 0; i < getSpecsCount(); i++) {
+          if (!getSpecs(i).isInitialized()) {
+            
+            return false;
+          }
+        }
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        main.Messages.SuiteExecutionResult parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (main.Messages.SuiteExecutionResult) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      // repeated .main.ProtoSpec specs = 1;
+      private java.util.List<main.Spec.ProtoSpec> specs_ =
+        java.util.Collections.emptyList();
+      private void ensureSpecsIsMutable() {
+        if (!((bitField0_ & 0x00000001) == 0x00000001)) {
+          specs_ = new java.util.ArrayList<main.Spec.ProtoSpec>(specs_);
+          bitField0_ |= 0x00000001;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilder<
+          main.Spec.ProtoSpec, main.Spec.ProtoSpec.Builder, main.Spec.ProtoSpecOrBuilder> specsBuilder_;
+
+      /**
+       * <code>repeated .main.ProtoSpec specs = 1;</code>
+       */
+      public java.util.List<main.Spec.ProtoSpec> getSpecsList() {
+        if (specsBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(specs_);
+        } else {
+          return specsBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <code>repeated .main.ProtoSpec specs = 1;</code>
+       */
+      public int getSpecsCount() {
+        if (specsBuilder_ == null) {
+          return specs_.size();
+        } else {
+          return specsBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .main.ProtoSpec specs = 1;</code>
+       */
+      public main.Spec.ProtoSpec getSpecs(int index) {
+        if (specsBuilder_ == null) {
+          return specs_.get(index);
+        } else {
+          return specsBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .main.ProtoSpec specs = 1;</code>
+       */
+      public Builder setSpecs(
+          int index, main.Spec.ProtoSpec value) {
+        if (specsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureSpecsIsMutable();
+          specs_.set(index, value);
+          onChanged();
+        } else {
+          specsBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .main.ProtoSpec specs = 1;</code>
+       */
+      public Builder setSpecs(
+          int index, main.Spec.ProtoSpec.Builder builderForValue) {
+        if (specsBuilder_ == null) {
+          ensureSpecsIsMutable();
+          specs_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          specsBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .main.ProtoSpec specs = 1;</code>
+       */
+      public Builder addSpecs(main.Spec.ProtoSpec value) {
+        if (specsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureSpecsIsMutable();
+          specs_.add(value);
+          onChanged();
+        } else {
+          specsBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .main.ProtoSpec specs = 1;</code>
+       */
+      public Builder addSpecs(
+          int index, main.Spec.ProtoSpec value) {
+        if (specsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureSpecsIsMutable();
+          specs_.add(index, value);
+          onChanged();
+        } else {
+          specsBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .main.ProtoSpec specs = 1;</code>
+       */
+      public Builder addSpecs(
+          main.Spec.ProtoSpec.Builder builderForValue) {
+        if (specsBuilder_ == null) {
+          ensureSpecsIsMutable();
+          specs_.add(builderForValue.build());
+          onChanged();
+        } else {
+          specsBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .main.ProtoSpec specs = 1;</code>
+       */
+      public Builder addSpecs(
+          int index, main.Spec.ProtoSpec.Builder builderForValue) {
+        if (specsBuilder_ == null) {
+          ensureSpecsIsMutable();
+          specs_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          specsBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .main.ProtoSpec specs = 1;</code>
+       */
+      public Builder addAllSpecs(
+          java.lang.Iterable<? extends main.Spec.ProtoSpec> values) {
+        if (specsBuilder_ == null) {
+          ensureSpecsIsMutable();
+          super.addAll(values, specs_);
+          onChanged();
+        } else {
+          specsBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .main.ProtoSpec specs = 1;</code>
+       */
+      public Builder clearSpecs() {
+        if (specsBuilder_ == null) {
+          specs_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000001);
+          onChanged();
+        } else {
+          specsBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .main.ProtoSpec specs = 1;</code>
+       */
+      public Builder removeSpecs(int index) {
+        if (specsBuilder_ == null) {
+          ensureSpecsIsMutable();
+          specs_.remove(index);
+          onChanged();
+        } else {
+          specsBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .main.ProtoSpec specs = 1;</code>
+       */
+      public main.Spec.ProtoSpec.Builder getSpecsBuilder(
+          int index) {
+        return getSpecsFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .main.ProtoSpec specs = 1;</code>
+       */
+      public main.Spec.ProtoSpecOrBuilder getSpecsOrBuilder(
+          int index) {
+        if (specsBuilder_ == null) {
+          return specs_.get(index);  } else {
+          return specsBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <code>repeated .main.ProtoSpec specs = 1;</code>
+       */
+      public java.util.List<? extends main.Spec.ProtoSpecOrBuilder> 
+           getSpecsOrBuilderList() {
+        if (specsBuilder_ != null) {
+          return specsBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(specs_);
+        }
+      }
+      /**
+       * <code>repeated .main.ProtoSpec specs = 1;</code>
+       */
+      public main.Spec.ProtoSpec.Builder addSpecsBuilder() {
+        return getSpecsFieldBuilder().addBuilder(
+            main.Spec.ProtoSpec.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .main.ProtoSpec specs = 1;</code>
+       */
+      public main.Spec.ProtoSpec.Builder addSpecsBuilder(
+          int index) {
+        return getSpecsFieldBuilder().addBuilder(
+            index, main.Spec.ProtoSpec.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .main.ProtoSpec specs = 1;</code>
+       */
+      public java.util.List<main.Spec.ProtoSpec.Builder> 
+           getSpecsBuilderList() {
+        return getSpecsFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          main.Spec.ProtoSpec, main.Spec.ProtoSpec.Builder, main.Spec.ProtoSpecOrBuilder> 
+          getSpecsFieldBuilder() {
+        if (specsBuilder_ == null) {
+          specsBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              main.Spec.ProtoSpec, main.Spec.ProtoSpec.Builder, main.Spec.ProtoSpecOrBuilder>(
+                  specs_,
+                  ((bitField0_ & 0x00000001) == 0x00000001),
+                  getParentForChildren(),
+                  isClean());
+          specs_ = null;
+        }
+        return specsBuilder_;
+      }
+
+      // @@protoc_insertion_point(builder_scope:main.SuiteExecutionResult)
+    }
+
+    static {
+      defaultInstance = new SuiteExecutionResult(true);
+      defaultInstance.initFields();
+    }
+
+    // @@protoc_insertion_point(class_scope:main.SuiteExecutionResult)
+  }
+
   public interface StepNamesRequestOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
   }
@@ -14519,17 +13207,31 @@ public final class Messages {
      */
     main.Messages.StepNamesResponseOrBuilder getStepNamesResponseOrBuilder();
 
-    // optional .main.KillProcessRequest killProcessRequest = 17;
+    // optional .main.SuiteExecutionResult suiteExecutionResult = 17;
     /**
-     * <code>optional .main.KillProcessRequest killProcessRequest = 17;</code>
+     * <code>optional .main.SuiteExecutionResult suiteExecutionResult = 17;</code>
+     */
+    boolean hasSuiteExecutionResult();
+    /**
+     * <code>optional .main.SuiteExecutionResult suiteExecutionResult = 17;</code>
+     */
+    main.Messages.SuiteExecutionResult getSuiteExecutionResult();
+    /**
+     * <code>optional .main.SuiteExecutionResult suiteExecutionResult = 17;</code>
+     */
+    main.Messages.SuiteExecutionResultOrBuilder getSuiteExecutionResultOrBuilder();
+
+    // optional .main.KillProcessRequest killProcessRequest = 18;
+    /**
+     * <code>optional .main.KillProcessRequest killProcessRequest = 18;</code>
      */
     boolean hasKillProcessRequest();
     /**
-     * <code>optional .main.KillProcessRequest killProcessRequest = 17;</code>
+     * <code>optional .main.KillProcessRequest killProcessRequest = 18;</code>
      */
     main.Messages.KillProcessRequest getKillProcessRequest();
     /**
-     * <code>optional .main.KillProcessRequest killProcessRequest = 17;</code>
+     * <code>optional .main.KillProcessRequest killProcessRequest = 18;</code>
      */
     main.Messages.KillProcessRequestOrBuilder getKillProcessRequestOrBuilder();
   }
@@ -14788,8 +13490,21 @@ public final class Messages {
               break;
             }
             case 138: {
-              main.Messages.KillProcessRequest.Builder subBuilder = null;
+              main.Messages.SuiteExecutionResult.Builder subBuilder = null;
               if (((bitField0_ & 0x00010000) == 0x00010000)) {
+                subBuilder = suiteExecutionResult_.toBuilder();
+              }
+              suiteExecutionResult_ = input.readMessage(main.Messages.SuiteExecutionResult.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(suiteExecutionResult_);
+                suiteExecutionResult_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00010000;
+              break;
+            }
+            case 146: {
+              main.Messages.KillProcessRequest.Builder subBuilder = null;
+              if (((bitField0_ & 0x00020000) == 0x00020000)) {
                 subBuilder = killProcessRequest_.toBuilder();
               }
               killProcessRequest_ = input.readMessage(main.Messages.KillProcessRequest.PARSER, extensionRegistry);
@@ -14797,7 +13512,7 @@ public final class Messages {
                 subBuilder.mergeFrom(killProcessRequest_);
                 killProcessRequest_ = subBuilder.buildPartial();
               }
-              bitField0_ |= 0x00010000;
+              bitField0_ |= 0x00020000;
               break;
             }
           }
@@ -14904,6 +13619,10 @@ public final class Messages {
        * <code>KillProcessRequest = 14;</code>
        */
       KillProcessRequest(14, 14),
+      /**
+       * <code>SuiteExecutionResult = 15;</code>
+       */
+      SuiteExecutionResult(15, 15),
       ;
 
       /**
@@ -14966,6 +13685,10 @@ public final class Messages {
        * <code>KillProcessRequest = 14;</code>
        */
       public static final int KillProcessRequest_VALUE = 14;
+      /**
+       * <code>SuiteExecutionResult = 15;</code>
+       */
+      public static final int SuiteExecutionResult_VALUE = 15;
 
 
       public final int getNumber() { return value; }
@@ -14987,6 +13710,7 @@ public final class Messages {
           case 12: return StepNamesRequest;
           case 13: return StepNamesResponse;
           case 14: return KillProcessRequest;
+          case 15: return SuiteExecutionResult;
           default: return null;
         }
       }
@@ -15401,23 +14125,45 @@ public final class Messages {
       return stepNamesResponse_;
     }
 
-    // optional .main.KillProcessRequest killProcessRequest = 17;
-    public static final int KILLPROCESSREQUEST_FIELD_NUMBER = 17;
-    private main.Messages.KillProcessRequest killProcessRequest_;
+    // optional .main.SuiteExecutionResult suiteExecutionResult = 17;
+    public static final int SUITEEXECUTIONRESULT_FIELD_NUMBER = 17;
+    private main.Messages.SuiteExecutionResult suiteExecutionResult_;
     /**
-     * <code>optional .main.KillProcessRequest killProcessRequest = 17;</code>
+     * <code>optional .main.SuiteExecutionResult suiteExecutionResult = 17;</code>
      */
-    public boolean hasKillProcessRequest() {
+    public boolean hasSuiteExecutionResult() {
       return ((bitField0_ & 0x00010000) == 0x00010000);
     }
     /**
-     * <code>optional .main.KillProcessRequest killProcessRequest = 17;</code>
+     * <code>optional .main.SuiteExecutionResult suiteExecutionResult = 17;</code>
+     */
+    public main.Messages.SuiteExecutionResult getSuiteExecutionResult() {
+      return suiteExecutionResult_;
+    }
+    /**
+     * <code>optional .main.SuiteExecutionResult suiteExecutionResult = 17;</code>
+     */
+    public main.Messages.SuiteExecutionResultOrBuilder getSuiteExecutionResultOrBuilder() {
+      return suiteExecutionResult_;
+    }
+
+    // optional .main.KillProcessRequest killProcessRequest = 18;
+    public static final int KILLPROCESSREQUEST_FIELD_NUMBER = 18;
+    private main.Messages.KillProcessRequest killProcessRequest_;
+    /**
+     * <code>optional .main.KillProcessRequest killProcessRequest = 18;</code>
+     */
+    public boolean hasKillProcessRequest() {
+      return ((bitField0_ & 0x00020000) == 0x00020000);
+    }
+    /**
+     * <code>optional .main.KillProcessRequest killProcessRequest = 18;</code>
      */
     public main.Messages.KillProcessRequest getKillProcessRequest() {
       return killProcessRequest_;
     }
     /**
-     * <code>optional .main.KillProcessRequest killProcessRequest = 17;</code>
+     * <code>optional .main.KillProcessRequest killProcessRequest = 18;</code>
      */
     public main.Messages.KillProcessRequestOrBuilder getKillProcessRequestOrBuilder() {
       return killProcessRequest_;
@@ -15440,6 +14186,7 @@ public final class Messages {
       executionStatusResponse_ = main.Messages.ExecutionStatusResponse.getDefaultInstance();
       stepNamesRequest_ = main.Messages.StepNamesRequest.getDefaultInstance();
       stepNamesResponse_ = main.Messages.StepNamesResponse.getDefaultInstance();
+      suiteExecutionResult_ = main.Messages.SuiteExecutionResult.getDefaultInstance();
       killProcessRequest_ = main.Messages.KillProcessRequest.getDefaultInstance();
     }
     private byte memoizedIsInitialized = -1;
@@ -15527,6 +14274,12 @@ public final class Messages {
           return false;
         }
       }
+      if (hasSuiteExecutionResult()) {
+        if (!getSuiteExecutionResult().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
       memoizedIsInitialized = 1;
       return true;
     }
@@ -15583,7 +14336,10 @@ public final class Messages {
         output.writeMessage(16, stepNamesResponse_);
       }
       if (((bitField0_ & 0x00010000) == 0x00010000)) {
-        output.writeMessage(17, killProcessRequest_);
+        output.writeMessage(17, suiteExecutionResult_);
+      }
+      if (((bitField0_ & 0x00020000) == 0x00020000)) {
+        output.writeMessage(18, killProcessRequest_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -15660,7 +14416,11 @@ public final class Messages {
       }
       if (((bitField0_ & 0x00010000) == 0x00010000)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(17, killProcessRequest_);
+          .computeMessageSize(17, suiteExecutionResult_);
+      }
+      if (((bitField0_ & 0x00020000) == 0x00020000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(18, killProcessRequest_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -15789,6 +14549,7 @@ public final class Messages {
           getExecutionStatusResponseFieldBuilder();
           getStepNamesRequestFieldBuilder();
           getStepNamesResponseFieldBuilder();
+          getSuiteExecutionResultFieldBuilder();
           getKillProcessRequestFieldBuilder();
         }
       }
@@ -15886,12 +14647,18 @@ public final class Messages {
           stepNamesResponseBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00008000);
+        if (suiteExecutionResultBuilder_ == null) {
+          suiteExecutionResult_ = main.Messages.SuiteExecutionResult.getDefaultInstance();
+        } else {
+          suiteExecutionResultBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00010000);
         if (killProcessRequestBuilder_ == null) {
           killProcessRequest_ = main.Messages.KillProcessRequest.getDefaultInstance();
         } else {
           killProcessRequestBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00010000);
+        bitField0_ = (bitField0_ & ~0x00020000);
         return this;
       }
 
@@ -16043,6 +14810,14 @@ public final class Messages {
         if (((from_bitField0_ & 0x00010000) == 0x00010000)) {
           to_bitField0_ |= 0x00010000;
         }
+        if (suiteExecutionResultBuilder_ == null) {
+          result.suiteExecutionResult_ = suiteExecutionResult_;
+        } else {
+          result.suiteExecutionResult_ = suiteExecutionResultBuilder_.build();
+        }
+        if (((from_bitField0_ & 0x00020000) == 0x00020000)) {
+          to_bitField0_ |= 0x00020000;
+        }
         if (killProcessRequestBuilder_ == null) {
           result.killProcessRequest_ = killProcessRequest_;
         } else {
@@ -16111,6 +14886,9 @@ public final class Messages {
         }
         if (other.hasStepNamesResponse()) {
           mergeStepNamesResponse(other.getStepNamesResponse());
+        }
+        if (other.hasSuiteExecutionResult()) {
+          mergeSuiteExecutionResult(other.getSuiteExecutionResult());
         }
         if (other.hasKillProcessRequest()) {
           mergeKillProcessRequest(other.getKillProcessRequest());
@@ -16196,6 +14974,12 @@ public final class Messages {
         }
         if (hasExecutionStatusResponse()) {
           if (!getExecutionStatusResponse().isInitialized()) {
+            
+            return false;
+          }
+        }
+        if (hasSuiteExecutionResult()) {
+          if (!getSuiteExecutionResult().isInitialized()) {
             
             return false;
           }
@@ -17985,18 +16769,135 @@ public final class Messages {
         return stepNamesResponseBuilder_;
       }
 
-      // optional .main.KillProcessRequest killProcessRequest = 17;
+      // optional .main.SuiteExecutionResult suiteExecutionResult = 17;
+      private main.Messages.SuiteExecutionResult suiteExecutionResult_ = main.Messages.SuiteExecutionResult.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          main.Messages.SuiteExecutionResult, main.Messages.SuiteExecutionResult.Builder, main.Messages.SuiteExecutionResultOrBuilder> suiteExecutionResultBuilder_;
+      /**
+       * <code>optional .main.SuiteExecutionResult suiteExecutionResult = 17;</code>
+       */
+      public boolean hasSuiteExecutionResult() {
+        return ((bitField0_ & 0x00010000) == 0x00010000);
+      }
+      /**
+       * <code>optional .main.SuiteExecutionResult suiteExecutionResult = 17;</code>
+       */
+      public main.Messages.SuiteExecutionResult getSuiteExecutionResult() {
+        if (suiteExecutionResultBuilder_ == null) {
+          return suiteExecutionResult_;
+        } else {
+          return suiteExecutionResultBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>optional .main.SuiteExecutionResult suiteExecutionResult = 17;</code>
+       */
+      public Builder setSuiteExecutionResult(main.Messages.SuiteExecutionResult value) {
+        if (suiteExecutionResultBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          suiteExecutionResult_ = value;
+          onChanged();
+        } else {
+          suiteExecutionResultBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00010000;
+        return this;
+      }
+      /**
+       * <code>optional .main.SuiteExecutionResult suiteExecutionResult = 17;</code>
+       */
+      public Builder setSuiteExecutionResult(
+          main.Messages.SuiteExecutionResult.Builder builderForValue) {
+        if (suiteExecutionResultBuilder_ == null) {
+          suiteExecutionResult_ = builderForValue.build();
+          onChanged();
+        } else {
+          suiteExecutionResultBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00010000;
+        return this;
+      }
+      /**
+       * <code>optional .main.SuiteExecutionResult suiteExecutionResult = 17;</code>
+       */
+      public Builder mergeSuiteExecutionResult(main.Messages.SuiteExecutionResult value) {
+        if (suiteExecutionResultBuilder_ == null) {
+          if (((bitField0_ & 0x00010000) == 0x00010000) &&
+              suiteExecutionResult_ != main.Messages.SuiteExecutionResult.getDefaultInstance()) {
+            suiteExecutionResult_ =
+              main.Messages.SuiteExecutionResult.newBuilder(suiteExecutionResult_).mergeFrom(value).buildPartial();
+          } else {
+            suiteExecutionResult_ = value;
+          }
+          onChanged();
+        } else {
+          suiteExecutionResultBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00010000;
+        return this;
+      }
+      /**
+       * <code>optional .main.SuiteExecutionResult suiteExecutionResult = 17;</code>
+       */
+      public Builder clearSuiteExecutionResult() {
+        if (suiteExecutionResultBuilder_ == null) {
+          suiteExecutionResult_ = main.Messages.SuiteExecutionResult.getDefaultInstance();
+          onChanged();
+        } else {
+          suiteExecutionResultBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00010000);
+        return this;
+      }
+      /**
+       * <code>optional .main.SuiteExecutionResult suiteExecutionResult = 17;</code>
+       */
+      public main.Messages.SuiteExecutionResult.Builder getSuiteExecutionResultBuilder() {
+        bitField0_ |= 0x00010000;
+        onChanged();
+        return getSuiteExecutionResultFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .main.SuiteExecutionResult suiteExecutionResult = 17;</code>
+       */
+      public main.Messages.SuiteExecutionResultOrBuilder getSuiteExecutionResultOrBuilder() {
+        if (suiteExecutionResultBuilder_ != null) {
+          return suiteExecutionResultBuilder_.getMessageOrBuilder();
+        } else {
+          return suiteExecutionResult_;
+        }
+      }
+      /**
+       * <code>optional .main.SuiteExecutionResult suiteExecutionResult = 17;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          main.Messages.SuiteExecutionResult, main.Messages.SuiteExecutionResult.Builder, main.Messages.SuiteExecutionResultOrBuilder> 
+          getSuiteExecutionResultFieldBuilder() {
+        if (suiteExecutionResultBuilder_ == null) {
+          suiteExecutionResultBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              main.Messages.SuiteExecutionResult, main.Messages.SuiteExecutionResult.Builder, main.Messages.SuiteExecutionResultOrBuilder>(
+                  suiteExecutionResult_,
+                  getParentForChildren(),
+                  isClean());
+          suiteExecutionResult_ = null;
+        }
+        return suiteExecutionResultBuilder_;
+      }
+
+      // optional .main.KillProcessRequest killProcessRequest = 18;
       private main.Messages.KillProcessRequest killProcessRequest_ = main.Messages.KillProcessRequest.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           main.Messages.KillProcessRequest, main.Messages.KillProcessRequest.Builder, main.Messages.KillProcessRequestOrBuilder> killProcessRequestBuilder_;
       /**
-       * <code>optional .main.KillProcessRequest killProcessRequest = 17;</code>
+       * <code>optional .main.KillProcessRequest killProcessRequest = 18;</code>
        */
       public boolean hasKillProcessRequest() {
-        return ((bitField0_ & 0x00010000) == 0x00010000);
+        return ((bitField0_ & 0x00020000) == 0x00020000);
       }
       /**
-       * <code>optional .main.KillProcessRequest killProcessRequest = 17;</code>
+       * <code>optional .main.KillProcessRequest killProcessRequest = 18;</code>
        */
       public main.Messages.KillProcessRequest getKillProcessRequest() {
         if (killProcessRequestBuilder_ == null) {
@@ -18006,7 +16907,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>optional .main.KillProcessRequest killProcessRequest = 17;</code>
+       * <code>optional .main.KillProcessRequest killProcessRequest = 18;</code>
        */
       public Builder setKillProcessRequest(main.Messages.KillProcessRequest value) {
         if (killProcessRequestBuilder_ == null) {
@@ -18018,11 +16919,11 @@ public final class Messages {
         } else {
           killProcessRequestBuilder_.setMessage(value);
         }
-        bitField0_ |= 0x00010000;
+        bitField0_ |= 0x00020000;
         return this;
       }
       /**
-       * <code>optional .main.KillProcessRequest killProcessRequest = 17;</code>
+       * <code>optional .main.KillProcessRequest killProcessRequest = 18;</code>
        */
       public Builder setKillProcessRequest(
           main.Messages.KillProcessRequest.Builder builderForValue) {
@@ -18032,15 +16933,15 @@ public final class Messages {
         } else {
           killProcessRequestBuilder_.setMessage(builderForValue.build());
         }
-        bitField0_ |= 0x00010000;
+        bitField0_ |= 0x00020000;
         return this;
       }
       /**
-       * <code>optional .main.KillProcessRequest killProcessRequest = 17;</code>
+       * <code>optional .main.KillProcessRequest killProcessRequest = 18;</code>
        */
       public Builder mergeKillProcessRequest(main.Messages.KillProcessRequest value) {
         if (killProcessRequestBuilder_ == null) {
-          if (((bitField0_ & 0x00010000) == 0x00010000) &&
+          if (((bitField0_ & 0x00020000) == 0x00020000) &&
               killProcessRequest_ != main.Messages.KillProcessRequest.getDefaultInstance()) {
             killProcessRequest_ =
               main.Messages.KillProcessRequest.newBuilder(killProcessRequest_).mergeFrom(value).buildPartial();
@@ -18051,11 +16952,11 @@ public final class Messages {
         } else {
           killProcessRequestBuilder_.mergeFrom(value);
         }
-        bitField0_ |= 0x00010000;
+        bitField0_ |= 0x00020000;
         return this;
       }
       /**
-       * <code>optional .main.KillProcessRequest killProcessRequest = 17;</code>
+       * <code>optional .main.KillProcessRequest killProcessRequest = 18;</code>
        */
       public Builder clearKillProcessRequest() {
         if (killProcessRequestBuilder_ == null) {
@@ -18064,19 +16965,19 @@ public final class Messages {
         } else {
           killProcessRequestBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00010000);
+        bitField0_ = (bitField0_ & ~0x00020000);
         return this;
       }
       /**
-       * <code>optional .main.KillProcessRequest killProcessRequest = 17;</code>
+       * <code>optional .main.KillProcessRequest killProcessRequest = 18;</code>
        */
       public main.Messages.KillProcessRequest.Builder getKillProcessRequestBuilder() {
-        bitField0_ |= 0x00010000;
+        bitField0_ |= 0x00020000;
         onChanged();
         return getKillProcessRequestFieldBuilder().getBuilder();
       }
       /**
-       * <code>optional .main.KillProcessRequest killProcessRequest = 17;</code>
+       * <code>optional .main.KillProcessRequest killProcessRequest = 18;</code>
        */
       public main.Messages.KillProcessRequestOrBuilder getKillProcessRequestOrBuilder() {
         if (killProcessRequestBuilder_ != null) {
@@ -18086,7 +16987,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>optional .main.KillProcessRequest killProcessRequest = 17;</code>
+       * <code>optional .main.KillProcessRequest killProcessRequest = 18;</code>
        */
       private com.google.protobuf.SingleFieldBuilder<
           main.Messages.KillProcessRequest, main.Messages.KillProcessRequest.Builder, main.Messages.KillProcessRequestOrBuilder> 
@@ -18189,21 +17090,6 @@ public final class Messages {
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_main_ExecuteStepRequest_fieldAccessorTable;
   private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_main_ProtoTable_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_main_ProtoTable_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_main_TableRow_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_main_TableRow_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_main_Argument_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_main_Argument_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
     internal_static_main_StepValidateRequest_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
@@ -18218,6 +17104,11 @@ public final class Messages {
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_main_ExecutionEndingRequest_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor
+    internal_static_main_SuiteExecutionResult_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_main_SuiteExecutionResult_fieldAccessorTable;
   private static com.google.protobuf.Descriptors.Descriptor
     internal_static_main_StepNamesRequest_descriptor;
   private static
@@ -18242,85 +17133,86 @@ public final class Messages {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\024gauge/messages.proto\022\004main\"y\n\017Executio" +
-      "nStatus\022\016\n\006passed\030\001 \002(\010\022\030\n\020recoverableEr" +
-      "ror\030\002 \001(\010\022\024\n\014errorMessage\030\003 \001(\t\022\022\n\nstack" +
-      "Trace\030\004 \001(\t\022\022\n\nscreenShot\030\005 \001(\014\"\024\n\022KillP" +
-      "rocessRequest\"I\n\027ExecutionStatusResponse" +
-      "\022.\n\017executionStatus\030\001 \002(\0132\025.main.Executi" +
-      "onStatus\"M\n\030ExecutionStartingRequest\0221\n\024" +
-      "currentExecutionInfo\030\001 \001(\0132\023.main.Execut" +
-      "ionInfo\"Q\n\034SpecExecutionStartingRequest\022" +
-      "1\n\024currentExecutionInfo\030\001 \001(\0132\023.main.Exe",
-      "cutionInfo\"O\n\032SpecExecutionEndingRequest" +
-      "\0221\n\024currentExecutionInfo\030\001 \001(\0132\023.main.Ex" +
-      "ecutionInfo\"U\n ScenarioExecutionStarting" +
-      "Request\0221\n\024currentExecutionInfo\030\001 \001(\0132\023." +
-      "main.ExecutionInfo\"S\n\036ScenarioExecutionE" +
+      "\n\024gauge/messages.proto\022\004main\032\020gauge/spec" +
+      ".proto\"y\n\017ExecutionStatus\022\016\n\006passed\030\001 \002(" +
+      "\010\022\030\n\020recoverableError\030\002 \001(\010\022\024\n\014errorMess" +
+      "age\030\003 \001(\t\022\022\n\nstackTrace\030\004 \001(\t\022\022\n\nscreenS" +
+      "hot\030\005 \001(\014\"\024\n\022KillProcessRequest\"I\n\027Execu" +
+      "tionStatusResponse\022.\n\017executionStatus\030\001 " +
+      "\002(\0132\025.main.ExecutionStatus\"M\n\030ExecutionS" +
+      "tartingRequest\0221\n\024currentExecutionInfo\030\001" +
+      " \001(\0132\023.main.ExecutionInfo\"Q\n\034SpecExecuti" +
+      "onStartingRequest\0221\n\024currentExecutionInf",
+      "o\030\001 \001(\0132\023.main.ExecutionInfo\"O\n\032SpecExec" +
+      "utionEndingRequest\0221\n\024currentExecutionIn" +
+      "fo\030\001 \001(\0132\023.main.ExecutionInfo\"U\n Scenari" +
+      "oExecutionStartingRequest\0221\n\024currentExec" +
+      "utionInfo\030\001 \001(\0132\023.main.ExecutionInfo\"S\n\036" +
+      "ScenarioExecutionEndingRequest\0221\n\024curren" +
+      "tExecutionInfo\030\001 \001(\0132\023.main.ExecutionInf" +
+      "o\"Q\n\034StepExecutionStartingRequest\0221\n\024cur" +
+      "rentExecutionInfo\030\001 \001(\0132\023.main.Execution" +
+      "Info\"O\n\032StepExecutionEndingRequest\0221\n\024cu",
+      "rrentExecutionInfo\030\001 \001(\0132\023.main.Executio" +
+      "nInfo\"\232\001\n\rExecutionInfo\022#\n\013currentSpec\030\001" +
+      " \001(\0132\016.main.SpecInfo\022+\n\017currentScenario\030" +
+      "\002 \001(\0132\022.main.ScenarioInfo\022#\n\013currentStep" +
+      "\030\003 \001(\0132\016.main.StepInfo\022\022\n\nstacktrace\030\004 \001" +
+      "(\t\"J\n\010SpecInfo\022\014\n\004name\030\001 \002(\t\022\020\n\010fileName" +
+      "\030\002 \002(\t\022\020\n\010isFailed\030\003 \002(\010\022\014\n\004tags\030\004 \003(\t\"<" +
+      "\n\014ScenarioInfo\022\014\n\004name\030\001 \002(\t\022\020\n\010isFailed" +
+      "\030\002 \002(\010\022\014\n\004tags\030\003 \003(\t\"D\n\010StepInfo\022&\n\004step" +
+      "\030\001 \002(\0132\030.main.ExecuteStepRequest\022\020\n\010isFa",
+      "iled\030\002 \002(\010\"{\n\022ExecuteStepRequest\022\026\n\016actu" +
+      "alStepText\030\001 \002(\t\022\026\n\016parsedStepText\030\002 \002(\t" +
+      "\022\027\n\017scenarioFailing\030\003 \001(\010\022\034\n\004args\030\004 \003(\0132" +
+      "\016.main.Argument\"B\n\023StepValidateRequest\022\020" +
+      "\n\010stepText\030\001 \002(\t\022\031\n\021numberOfArguments\030\002 " +
+      "\002(\005\"=\n\024StepValidateResponse\022\017\n\007isValid\030\001" +
+      " \002(\010\022\024\n\014errorMessage\030\002 \001(\t\"K\n\026ExecutionE" +
       "ndingRequest\0221\n\024currentExecutionInfo\030\001 \001" +
-      "(\0132\023.main.ExecutionInfo\"Q\n\034StepExecution" +
-      "StartingRequest\0221\n\024currentExecutionInfo\030" +
-      "\001 \001(\0132\023.main.ExecutionInfo\"O\n\032StepExecut" +
-      "ionEndingRequest\0221\n\024currentExecutionInfo",
-      "\030\001 \001(\0132\023.main.ExecutionInfo\"\232\001\n\rExecutio" +
-      "nInfo\022#\n\013currentSpec\030\001 \001(\0132\016.main.SpecIn" +
-      "fo\022+\n\017currentScenario\030\002 \001(\0132\022.main.Scena" +
-      "rioInfo\022#\n\013currentStep\030\003 \001(\0132\016.main.Step" +
-      "Info\022\022\n\nstacktrace\030\004 \001(\t\"J\n\010SpecInfo\022\014\n\004" +
-      "name\030\001 \002(\t\022\020\n\010fileName\030\002 \002(\t\022\020\n\010isFailed" +
-      "\030\003 \002(\010\022\014\n\004tags\030\004 \003(\t\"<\n\014ScenarioInfo\022\014\n\004" +
-      "name\030\001 \002(\t\022\020\n\010isFailed\030\002 \002(\010\022\014\n\004tags\030\003 \003" +
-      "(\t\"D\n\010StepInfo\022&\n\004step\030\001 \002(\0132\030.main.Exec" +
-      "uteStepRequest\022\020\n\010isFailed\030\002 \002(\010\"{\n\022Exec",
-      "uteStepRequest\022\026\n\016actualStepText\030\001 \002(\t\022\026" +
-      "\n\016parsedStepText\030\002 \002(\t\022\027\n\017scenarioFailin" +
-      "g\030\003 \001(\010\022\034\n\004args\030\004 \003(\0132\016.main.Argument\"*\n" +
-      "\nProtoTable\022\034\n\004rows\030\001 \003(\0132\016.main.TableRo" +
-      "w\"\031\n\010TableRow\022\r\n\005cells\030\001 \003(\t\"H\n\010Argument" +
-      "\022\014\n\004type\030\001 \002(\t\022\r\n\005value\030\002 \001(\t\022\037\n\005table\030\003" +
-      " \001(\0132\020.main.ProtoTable\"B\n\023StepValidateRe" +
-      "quest\022\020\n\010stepText\030\001 \002(\t\022\031\n\021numberOfArgum" +
-      "ents\030\002 \002(\005\"=\n\024StepValidateResponse\022\017\n\007is" +
-      "Valid\030\001 \002(\010\022\024\n\014errorMessage\030\002 \001(\t\"K\n\026Exe",
-      "cutionEndingRequest\0221\n\024currentExecutionI" +
-      "nfo\030\001 \001(\0132\023.main.ExecutionInfo\"\022\n\020StepNa" +
-      "mesRequest\"\"\n\021StepNamesResponse\022\r\n\005steps" +
-      "\030\001 \003(\t\"\226\013\n\007Message\022.\n\013messageType\030\001 \002(\0162" +
-      "\031.main.Message.MessageType\022\021\n\tmessageId\030" +
-      "\002 \002(\003\022@\n\030executionStartingRequest\030\003 \001(\0132" +
-      "\036.main.ExecutionStartingRequest\022H\n\034specE" +
-      "xecutionStartingRequest\030\004 \001(\0132\".main.Spe" +
-      "cExecutionStartingRequest\022D\n\032specExecuti" +
-      "onEndingRequest\030\005 \001(\0132 .main.SpecExecuti",
-      "onEndingRequest\022P\n scenarioExecutionStar" +
-      "tingRequest\030\006 \001(\0132&.main.ScenarioExecuti" +
-      "onStartingRequest\022L\n\036scenarioExecutionEn" +
-      "dingRequest\030\007 \001(\0132$.main.ScenarioExecuti" +
-      "onEndingRequest\022H\n\034stepExecutionStarting" +
-      "Request\030\010 \001(\0132\".main.StepExecutionStarti" +
-      "ngRequest\022D\n\032stepExecutionEndingRequest\030" +
-      "\t \001(\0132 .main.StepExecutionEndingRequest\022" +
-      "4\n\022executeStepRequest\030\n \001(\0132\030.main.Execu" +
-      "teStepRequest\022<\n\026executionEndingRequest\030",
-      "\013 \001(\0132\034.main.ExecutionEndingRequest\0226\n\023s" +
-      "tepValidateRequest\030\014 \001(\0132\031.main.StepVali" +
-      "dateRequest\0228\n\024stepValidateResponse\030\r \001(" +
-      "\0132\032.main.StepValidateResponse\022>\n\027executi" +
-      "onStatusResponse\030\016 \001(\0132\035.main.ExecutionS" +
-      "tatusResponse\0220\n\020stepNamesRequest\030\017 \001(\0132" +
-      "\026.main.StepNamesRequest\0222\n\021stepNamesResp" +
-      "onse\030\020 \001(\0132\027.main.StepNamesResponse\0224\n\022k" +
-      "illProcessRequest\030\021 \001(\0132\030.main.KillProce" +
-      "ssRequest\"\203\003\n\013MessageType\022\025\n\021ExecutionSt",
-      "arting\020\000\022\031\n\025SpecExecutionStarting\020\001\022\027\n\023S" +
-      "pecExecutionEnding\020\002\022\035\n\031ScenarioExecutio" +
-      "nStarting\020\003\022\033\n\027ScenarioExecutionEnding\020\004" +
-      "\022\031\n\025StepExecutionStarting\020\005\022\027\n\023StepExecu" +
-      "tionEnding\020\006\022\017\n\013ExecuteStep\020\007\022\023\n\017Executi" +
-      "onEnding\020\010\022\027\n\023StepValidateRequest\020\t\022\030\n\024S" +
-      "tepValidateResponse\020\n\022\033\n\027ExecutionStatus" +
-      "Response\020\013\022\024\n\020StepNamesRequest\020\014\022\025\n\021Step" +
-      "NamesResponse\020\r\022\026\n\022KillProcessRequest\020\016"
+      "(\0132\023.main.ExecutionInfo\"6\n\024SuiteExecutio" +
+      "nResult\022\036\n\005specs\030\001 \003(\0132\017.main.ProtoSpec\"",
+      "\022\n\020StepNamesRequest\"\"\n\021StepNamesResponse" +
+      "\022\r\n\005steps\030\001 \003(\t\"\352\013\n\007Message\022.\n\013messageTy" +
+      "pe\030\001 \002(\0162\031.main.Message.MessageType\022\021\n\tm" +
+      "essageId\030\002 \002(\003\022@\n\030executionStartingReque" +
+      "st\030\003 \001(\0132\036.main.ExecutionStartingRequest" +
+      "\022H\n\034specExecutionStartingRequest\030\004 \001(\0132\"" +
+      ".main.SpecExecutionStartingRequest\022D\n\032sp" +
+      "ecExecutionEndingRequest\030\005 \001(\0132 .main.Sp" +
+      "ecExecutionEndingRequest\022P\n scenarioExec" +
+      "utionStartingRequest\030\006 \001(\0132&.main.Scenar",
+      "ioExecutionStartingRequest\022L\n\036scenarioEx" +
+      "ecutionEndingRequest\030\007 \001(\0132$.main.Scenar" +
+      "ioExecutionEndingRequest\022H\n\034stepExecutio" +
+      "nStartingRequest\030\010 \001(\0132\".main.StepExecut" +
+      "ionStartingRequest\022D\n\032stepExecutionEndin" +
+      "gRequest\030\t \001(\0132 .main.StepExecutionEndin" +
+      "gRequest\0224\n\022executeStepRequest\030\n \001(\0132\030.m" +
+      "ain.ExecuteStepRequest\022<\n\026executionEndin" +
+      "gRequest\030\013 \001(\0132\034.main.ExecutionEndingReq" +
+      "uest\0226\n\023stepValidateRequest\030\014 \001(\0132\031.main",
+      ".StepValidateRequest\0228\n\024stepValidateResp" +
+      "onse\030\r \001(\0132\032.main.StepValidateResponse\022>" +
+      "\n\027executionStatusResponse\030\016 \001(\0132\035.main.E" +
+      "xecutionStatusResponse\0220\n\020stepNamesReque" +
+      "st\030\017 \001(\0132\026.main.StepNamesRequest\0222\n\021step" +
+      "NamesResponse\030\020 \001(\0132\027.main.StepNamesResp" +
+      "onse\0228\n\024suiteExecutionResult\030\021 \001(\0132\032.mai" +
+      "n.SuiteExecutionResult\0224\n\022killProcessReq" +
+      "uest\030\022 \001(\0132\030.main.KillProcessRequest\"\235\003\n" +
+      "\013MessageType\022\025\n\021ExecutionStarting\020\000\022\031\n\025S",
+      "pecExecutionStarting\020\001\022\027\n\023SpecExecutionE" +
+      "nding\020\002\022\035\n\031ScenarioExecutionStarting\020\003\022\033" +
+      "\n\027ScenarioExecutionEnding\020\004\022\031\n\025StepExecu" +
+      "tionStarting\020\005\022\027\n\023StepExecutionEnding\020\006\022" +
+      "\017\n\013ExecuteStep\020\007\022\023\n\017ExecutionEnding\020\010\022\027\n" +
+      "\023StepValidateRequest\020\t\022\030\n\024StepValidateRe" +
+      "sponse\020\n\022\033\n\027ExecutionStatusResponse\020\013\022\024\n" +
+      "\020StepNamesRequest\020\014\022\025\n\021StepNamesResponse" +
+      "\020\r\022\026\n\022KillProcessRequest\020\016\022\030\n\024SuiteExecu" +
+      "tionResult\020\017"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -18417,66 +17309,55 @@ public final class Messages {
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_main_ExecuteStepRequest_descriptor,
               new java.lang.String[] { "ActualStepText", "ParsedStepText", "ScenarioFailing", "Args", });
-          internal_static_main_ProtoTable_descriptor =
-            getDescriptor().getMessageTypes().get(15);
-          internal_static_main_ProtoTable_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_main_ProtoTable_descriptor,
-              new java.lang.String[] { "Rows", });
-          internal_static_main_TableRow_descriptor =
-            getDescriptor().getMessageTypes().get(16);
-          internal_static_main_TableRow_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_main_TableRow_descriptor,
-              new java.lang.String[] { "Cells", });
-          internal_static_main_Argument_descriptor =
-            getDescriptor().getMessageTypes().get(17);
-          internal_static_main_Argument_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_main_Argument_descriptor,
-              new java.lang.String[] { "Type", "Value", "Table", });
           internal_static_main_StepValidateRequest_descriptor =
-            getDescriptor().getMessageTypes().get(18);
+            getDescriptor().getMessageTypes().get(15);
           internal_static_main_StepValidateRequest_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_main_StepValidateRequest_descriptor,
               new java.lang.String[] { "StepText", "NumberOfArguments", });
           internal_static_main_StepValidateResponse_descriptor =
-            getDescriptor().getMessageTypes().get(19);
+            getDescriptor().getMessageTypes().get(16);
           internal_static_main_StepValidateResponse_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_main_StepValidateResponse_descriptor,
               new java.lang.String[] { "IsValid", "ErrorMessage", });
           internal_static_main_ExecutionEndingRequest_descriptor =
-            getDescriptor().getMessageTypes().get(20);
+            getDescriptor().getMessageTypes().get(17);
           internal_static_main_ExecutionEndingRequest_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_main_ExecutionEndingRequest_descriptor,
               new java.lang.String[] { "CurrentExecutionInfo", });
+          internal_static_main_SuiteExecutionResult_descriptor =
+            getDescriptor().getMessageTypes().get(18);
+          internal_static_main_SuiteExecutionResult_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_main_SuiteExecutionResult_descriptor,
+              new java.lang.String[] { "Specs", });
           internal_static_main_StepNamesRequest_descriptor =
-            getDescriptor().getMessageTypes().get(21);
+            getDescriptor().getMessageTypes().get(19);
           internal_static_main_StepNamesRequest_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_main_StepNamesRequest_descriptor,
               new java.lang.String[] { });
           internal_static_main_StepNamesResponse_descriptor =
-            getDescriptor().getMessageTypes().get(22);
+            getDescriptor().getMessageTypes().get(20);
           internal_static_main_StepNamesResponse_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_main_StepNamesResponse_descriptor,
               new java.lang.String[] { "Steps", });
           internal_static_main_Message_descriptor =
-            getDescriptor().getMessageTypes().get(23);
+            getDescriptor().getMessageTypes().get(21);
           internal_static_main_Message_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_main_Message_descriptor,
-              new java.lang.String[] { "MessageType", "MessageId", "ExecutionStartingRequest", "SpecExecutionStartingRequest", "SpecExecutionEndingRequest", "ScenarioExecutionStartingRequest", "ScenarioExecutionEndingRequest", "StepExecutionStartingRequest", "StepExecutionEndingRequest", "ExecuteStepRequest", "ExecutionEndingRequest", "StepValidateRequest", "StepValidateResponse", "ExecutionStatusResponse", "StepNamesRequest", "StepNamesResponse", "KillProcessRequest", });
+              new java.lang.String[] { "MessageType", "MessageId", "ExecutionStartingRequest", "SpecExecutionStartingRequest", "SpecExecutionEndingRequest", "ScenarioExecutionStartingRequest", "ScenarioExecutionEndingRequest", "StepExecutionStartingRequest", "StepExecutionEndingRequest", "ExecuteStepRequest", "ExecutionEndingRequest", "StepValidateRequest", "StepValidateResponse", "ExecutionStatusResponse", "StepNamesRequest", "StepNamesResponse", "SuiteExecutionResult", "KillProcessRequest", });
           return null;
         }
       };
     com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
+          main.Spec.getDescriptor(),
         }, assigner);
   }
 

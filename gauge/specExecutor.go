@@ -350,6 +350,7 @@ func (executor *specExecutor) executeStep(step *step, argLookup *argLookup) *ste
 			printStatus(stepExecutionStatus)
 			stepExecStatus.addExecutionStatus(stepExecutionStatus)
 		}
+		populateStepExecutionResult(step, stepRequest, stepExecutionStatus)
 	} else {
 		executor.currentExecutionInfo.setStepFailure()
 		printStatus(beforeHookStatus)
@@ -379,6 +380,11 @@ func (executor *specExecutor) executeAfterStepHook() *ExecutionStatus {
 		StepExecutionEndingRequest: &StepExecutionEndingRequest{CurrentExecutionInfo: executor.currentExecutionInfo}}
 	executor.pluginHandler.notifyPlugins(message)
 	return executeAndGetStatus(executor.connection, message)
+}
+
+func populateStepExecutionResult(step *step, stepRequest *ExecuteStepRequest, result *ExecutionStatus) {
+	status := &stepExecutionResult{isPassed: result.GetPassed(), stackTrace: result.GetStackTrace(), argument: stepRequest.GetArgs()}
+	step.executionResults = append(step.executionResults, status)
 }
 
 func (executor *specExecutor) createStepRequest(step *step, argLookup *argLookup) *ExecuteStepRequest {
@@ -420,8 +426,8 @@ func (executor *specExecutor) getCurrentDataTableValueFor(columnName string) str
 
 func (executor *specExecutor) createStepTable(table *table, lookup *argLookup) *ProtoTable {
 	protoTable := new(ProtoTable)
-	tableRows := make([]*TableRow, 0)
-	tableRows = append(tableRows, &TableRow{Cells: table.headers})
+	protoTable.Headers = &ProtoTableRow{Cells: table.headers}
+	tableRows := make([]*ProtoTableRow, 0)
 	for i := 0; i < len(table.columns[0]); i++ {
 		row := make([]string, 0)
 		for _, header := range table.headers {
@@ -439,7 +445,7 @@ func (executor *specExecutor) createStepTable(table *table, lookup *argLookup) *
 			}
 			row = append(row, value)
 		}
-		tableRows = append(tableRows, &TableRow{Cells: row})
+		tableRows = append(tableRows, &ProtoTableRow{Cells: row})
 	}
 	protoTable.Rows = tableRows
 	return protoTable

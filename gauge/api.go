@@ -245,7 +245,17 @@ func convertToProtoConcept(concept *step) *ProtoItem {
 }
 
 func convertToProtoStep(step *step) *ProtoStep {
-	return &ProtoStep{Text: proto.String(step.lineText), Parameters: convertToProtoParameters(step.args)}
+	result := getProtoStepResult(step.executionResults)
+	return &ProtoStep{Text: proto.String(step.lineText), Parameters: convertToProtoParameters(step.args), Result: result}
+}
+
+func getProtoStepResult(executionResults []*stepExecutionResult) []*ProtoStepExecutionResult {
+	protoResults := make([]*ProtoStepExecutionResult, len(executionResults))
+	for _, result := range executionResults {
+		protoResult := &ProtoStepExecutionResult{IsPassed: proto.Bool(result.isPassed), StackTrace: proto.String(result.stackTrace), Argument: result.argument}
+		protoResults = append(protoResults, protoResult)
+	}
+	return protoResults
 }
 
 func convertToProtoSteps(steps []*step) []*ProtoStep {
@@ -288,8 +298,8 @@ func convertToProtoParameter(arg *stepArg) *Parameter {
 	return nil
 }
 
-func convertToProtoTableParam(table *table) *ProtoTableParam {
-	protoTableParam := &ProtoTableParam{Rows: make([]*ProtoTableRow, 0)}
+func convertToProtoTableParam(table *table) *ProtoTable {
+	protoTableParam := &ProtoTable{Rows: make([]*ProtoTableRow, 0)}
 	protoTableParam.Headers = &ProtoTableRow{Cells: table.headers}
 	for _, row := range table.getRows() {
 		protoTableParam.Rows = append(protoTableParam.Rows, &ProtoTableRow{Cells: row})
