@@ -133,7 +133,7 @@ func copyGaugePackagesToGoPath() {
 	}
 }
 
-func compilePackages() {
+func setGoPath() {
 	absBuildDir, err := filepath.Abs(BUILD_DIR)
 	if err != nil {
 		panic(err)
@@ -143,7 +143,10 @@ func compilePackages() {
 	if err != nil {
 		panic(err)
 	}
+}
 
+func compilePackages() {
+	setGoPath()
 	args := []string{"install", "-v"}
 	for _, p := range gaugeExecutables {
 		args = append(args, p)
@@ -154,7 +157,7 @@ func compilePackages() {
 	cmd.Stderr = os.Stderr
 	cmd.Dir = BUILD_DIR
 	log.Printf("Execute %v\n", cmd.Args)
-	err = cmd.Run()
+	err := cmd.Run()
 	if err != nil {
 		panic(err)
 	}
@@ -173,6 +176,7 @@ func compileJavaClasses() {
 }
 
 func runTests(packageName string) {
+	setGoPath()
 	cmd := exec.Command("go", "test", packageName)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
@@ -204,20 +208,43 @@ func copyBinaries() {
 	log.Printf("Binaries are available at: %s\n", absBin)
 }
 
-func installGaugeFiles() {
-	installBin := filepath.Join(*installPrefix, "bin")
-	err := mirrorFile(filepath.Join("bin/gauge"), filepath.Join(installBin, "gauge"))
-	if err != nil {
-		panic(err)
+// key will be the source file and value will be the target
+func installFiles(files map[string]string) {
+	for src, dst := range files {
+		base := filepath.Base(src)
+		installDst := filepath.Join(*installPrefix, dst)
+		log.Printf("Install %s -> %s\n", src, installDst)
+		stat, err := os.Stat(src)
+		if err != nil {
+			panic(err)
+		}
+		if stat.IsDir() {
+			err = mirrorDir(src, installDst)
+		} else {
+			err = mirrorFile(src, filepath.Join(installDst, base))
+		}
+		if err != nil {
+			panic(err)
+		}
 	}
 }
 
+func installGaugeFiles() {
+	files := make(map[string]string)
+	files[filepath.Join("bin", "gauge")] = "bin"
+	files[filepath.Join("skel", "hello_world.spec")] = filepath.Join("share", "gauge", "skel")
+	files[filepath.Join("skel", "default.properties")] = filepath.Join("share", "gauge", "skel", "env")
+	installFiles(files)
+}
+
 func installGaugeJavaFiles() {
-	installBin := filepath.Join(*installPrefix, "bin")
-	err := mirrorFile(filepath.Join("bin/gauge-java"), installBin)
-	if err != nil {
-		panic(err)
-	}
+	files := make(map[string]string)
+	files[filepath.Join("bin", "gauge-java")] = "bin"
+	files[filepath.Join("gauge-java", "java.json")] = filepath.Join("share", "gauge", "languages")
+	files[filepath.Join("gauge-java", "skel", "StepImplementation.java")] = filepath.Join("share", "gauge", "skel", "java")
+	files[filepath.Join("gauge-java", "libs")] = filepath.Join("lib", "gauge", "java", "libs")
+	files[filepath.Join("gauge-java", "build", "jar")] = filepath.Join("lib", "gauge", "java")
+	installFiles(files)
 }
 
 var test = flag.Bool("test", false, "Run the test cases")
@@ -226,6 +253,10 @@ var installPrefix = flag.String("prefix", "", "Specifies the prefix where files 
 
 func main() {
 	flag.Parse()
+	createGoPathForBuild()
+	copyDepsToGoPath()
+	copyGaugePackagesToGoPath()
+
 	if *test {
 		runTests("gauge")
 	} else if *install {
@@ -235,9 +266,6 @@ func main() {
 		installGaugeFiles()
 		installGaugeJavaFiles()
 	} else {
-		createGoPathForBuild()
-		copyDepsToGoPath()
-		copyGaugePackagesToGoPath()
 		compilePackages()
 		compileJavaClasses()
 		copyBinaries()
