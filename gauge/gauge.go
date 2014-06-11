@@ -300,8 +300,8 @@ func main() {
 
 		conceptsDictionary, conceptParseResult := createConceptsDictionary(false)
 		handleParseResult(conceptParseResult)
-		allSpecs := make(map[string]*specification)
 
+		allSpecs := make(map[string]*specification)
 		for _, arg := range flag.Args() {
 			specSource := arg
 			parsedSpecs, specParseResults := findSpecs(specSource, conceptsDictionary)
@@ -328,8 +328,8 @@ func main() {
 
 		pluginHandler, warnings := startPluginsForExecution(manifest, apiChannel)
 		handleWarningMessages(warnings)
-		allSpecsArray := converMapToArray(allSpecs)
-		execution := newExecution(manifest, allSpecsArray, runnerConnection, pluginHandler)
+		specsToExecute := convertMapToArray(allSpecs)
+		execution := newExecution(manifest, specsToExecute, runnerConnection, pluginHandler)
 		validationErrors := execution.validate(conceptsDictionary)
 		if len(validationErrors) > 0 {
 			fmt.Println("Validation failed. The following steps have errors")
@@ -568,12 +568,12 @@ func handleWarningMessages(warnings []string) {
 	}
 }
 
-func converMapToArray(allSpecs map[string]*specification) []*specification {
-	allSpecsArray := make([]*specification, 0)
+func convertMapToArray(allSpecs map[string]*specification) []*specification {
+	var specs []*specification
 	for _, value := range allSpecs {
-		allSpecsArray = append(allSpecsArray, value)
+		specs = append(specs, value)
 	}
-	return allSpecsArray
+	return specs
 }
 
 func printVersion() {
