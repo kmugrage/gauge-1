@@ -1,40 +1,41 @@
 package main;
 
 message ProtoSpec {
-    repeated ProtoItem items = 1;
+    required string specHeading = 1;
+    repeated ProtoItem items = 2;
+    required bool isTableDriven = 3;
 }
 
 message ProtoItem {
     enum ItemType {
-        Heading = 1;
-        Step = 2;
-        Concept = 4;
-        Scenario = 5;
-        Comment = 6;
-        Table = 7;
-        Tags = 8;
+        Step = 1;
+        Concept = 2;
+        Scenario = 3;
+        TableDrivenScenario = 4;
+        Comment = 5;
+        Table = 6;
+        Tags = 7;
     }
     required ItemType itemType = 1;
-    optional ProtoHeading heading = 2;
-    optional ProtoStep step = 3;
-    optional ProtoConcept concept = 4;
-    optional ProtoScenario scenario = 5;
+    optional ProtoStep step = 2;
+    optional ProtoConcept concept = 3;
+    optional ProtoScenario scenario = 4;
+    optional ProtoTableDrivenScenario tableDrivenScenario = 5;
     optional ProtoComment comment = 6;
     optional ProtoTable table = 7;
     optional ProtoTags tags = 8;
 }
 
-message ProtoHeading {
-    enum HeadingType {
-        Spec = 1;
-        Scenario = 2;
-    }
-    required HeadingType headingType = 1;
-    required string text = 2;
-}
 
 message ProtoScenario {
-    repeated ProtoItem scenarioItems = 1;
+    required string scenarioHeading = 1;
+    repeated ProtoItem scenarioItems = 2;
+    optional ProtoHookFailure preHookFailure = 3;
+    optional ProtoHookFailure postHookFailure = 4;
+}
+
+message ProtoTableDrivenScenario {
+    repeated ProtoScenario scenarios = 1;
 }
 
 message ProtoStep {
@@ -42,6 +43,8 @@ message ProtoStep {
     repeated Parameter parameters = 2;
     repeated Fragment fragments = 3;
     repeated ProtoStepExecutionResult result = 4;
+    optional ProtoHookFailure preHookFailure = 5;
+    optional ProtoHookFailure postHookFailure = 6;
 }
 
 message ProtoConcept {
@@ -98,4 +101,14 @@ message ProtoStepExecutionResult {
     required bool isPassed = 1;
     optional string stackTrace = 2;
     repeated Argument argument = 3;
+}
+
+message SpecExecStatus {
+    repeated ProtoItem item = 1;
+    optional ProtoHookFailure preHookFailure = 2;
+    optional ProtoHookFailure postHookFailure = 3;
+}
+
+message ProtoHookFailure {
+    required string stackTrace = 1;
 }

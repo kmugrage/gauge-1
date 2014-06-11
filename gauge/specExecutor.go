@@ -14,12 +14,14 @@ type specExecutor struct {
 	conceptDictionary    *conceptDictionary
 	pluginHandler        *pluginHandler
 	currentExecutionInfo *ExecutionInfo
+	suiteResult          *suiteResult
 }
 
-func (specExecutor *specExecutor) initialize(specificationToExecute *specification, connection net.Conn, pluginHandler *pluginHandler) {
+func (specExecutor *specExecutor) initialize(specificationToExecute *specification, connection net.Conn, pluginHandler *pluginHandler, suiteResult *suiteResult) {
 	specExecutor.specification = specificationToExecute
 	specExecutor.connection = connection
 	specExecutor.pluginHandler = pluginHandler
+	specExecutor.suiteResult = suiteResult
 }
 
 type specExecutionStatus struct {
@@ -76,10 +78,12 @@ func (e *specExecutor) executeAfterSpecHook() *ExecutionStatus {
 }
 
 func (executor *specExecutor) execute() *specExecutionStatus {
+	executor.suiteResult.newSpecStart()
 	specInfo := &SpecInfo{Name: proto.String(executor.specification.heading.value),
 		FileName: proto.String(executor.specification.fileName),
 		IsFailed: proto.Bool(false), Tags: getTagValue(executor.specification.tags)}
 	executor.currentExecutionInfo = &ExecutionInfo{CurrentSpec: specInfo}
+
 	getCurrentConsole().writeSpecHeading(executor.specification)
 
 	specExecutionStatus := &specExecutionStatus{specification: executor.specification, scenariosExecutionStatuses: make(map[int][]*scenarioExecutionStatus)}
@@ -91,6 +95,7 @@ func (executor *specExecutor) execute() *specExecutionStatus {
 			scenariosExecutionStatuses := executor.executeScenarios()
 			specExecutionStatus.scenariosExecutionStatuses[0] = scenariosExecutionStatuses
 		} else {
+			executor.suiteResult.startTableDrivenScenarios()
 			for executor.dataTableIndex = 0; executor.dataTableIndex < dataTableRowCount; executor.dataTableIndex++ {
 				scenariosExecutionStatuses := executor.executeScenarios()
 				specExecutionStatus.scenariosExecutionStatuses[executor.dataTableIndex] = scenariosExecutionStatuses
@@ -214,6 +219,7 @@ func (executor *specExecutor) executeAfterScenarioHook() *ExecutionStatus {
 }
 
 func (executor *specExecutor) executeScenarios() []*scenarioExecutionStatus {
+	executor.suiteResult.newScenarioStart()
 	var scenarioExecutionStatuses []*scenarioExecutionStatus
 	for _, scenario := range executor.specification.scenarios {
 		status := executor.executeScenario(scenario)

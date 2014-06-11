@@ -11,8 +11,8 @@ It is generated from these files:
 It has these top-level messages:
 	ProtoSpec
 	ProtoItem
-	ProtoHeading
 	ProtoScenario
+	ProtoTableDrivenScenario
 	ProtoStep
 	ProtoConcept
 	ProtoTags
@@ -23,6 +23,8 @@ It has these top-level messages:
 	ProtoTable
 	ProtoTableRow
 	ProtoStepExecutionResult
+	SpecExecStatus
+	ProtoHookFailure
 */
 package main
 
@@ -38,32 +40,32 @@ var _ = math.Inf
 type ProtoItem_ItemType int32
 
 const (
-	ProtoItem_Heading  ProtoItem_ItemType = 1
-	ProtoItem_Step     ProtoItem_ItemType = 2
-	ProtoItem_Concept  ProtoItem_ItemType = 4
-	ProtoItem_Scenario ProtoItem_ItemType = 5
-	ProtoItem_Comment  ProtoItem_ItemType = 6
-	ProtoItem_Table    ProtoItem_ItemType = 7
-	ProtoItem_Tags     ProtoItem_ItemType = 8
+	ProtoItem_Step                ProtoItem_ItemType = 1
+	ProtoItem_Concept             ProtoItem_ItemType = 2
+	ProtoItem_Scenario            ProtoItem_ItemType = 3
+	ProtoItem_TableDrivenScenario ProtoItem_ItemType = 4
+	ProtoItem_Comment             ProtoItem_ItemType = 5
+	ProtoItem_Table               ProtoItem_ItemType = 6
+	ProtoItem_Tags                ProtoItem_ItemType = 7
 )
 
 var ProtoItem_ItemType_name = map[int32]string{
-	1: "Heading",
-	2: "Step",
-	4: "Concept",
-	5: "Scenario",
-	6: "Comment",
-	7: "Table",
-	8: "Tags",
+	1: "Step",
+	2: "Concept",
+	3: "Scenario",
+	4: "TableDrivenScenario",
+	5: "Comment",
+	6: "Table",
+	7: "Tags",
 }
 var ProtoItem_ItemType_value = map[string]int32{
-	"Heading":  1,
-	"Step":     2,
-	"Concept":  4,
-	"Scenario": 5,
-	"Comment":  6,
-	"Table":    7,
-	"Tags":     8,
+	"Step":                1,
+	"Concept":             2,
+	"Scenario":            3,
+	"TableDrivenScenario": 4,
+	"Comment":             5,
+	"Table":               6,
+	"Tags":                7,
 }
 
 func (x ProtoItem_ItemType) Enum() *ProtoItem_ItemType {
@@ -80,39 +82,6 @@ func (x *ProtoItem_ItemType) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*x = ProtoItem_ItemType(value)
-	return nil
-}
-
-type ProtoHeading_HeadingType int32
-
-const (
-	ProtoHeading_Spec     ProtoHeading_HeadingType = 1
-	ProtoHeading_Scenario ProtoHeading_HeadingType = 2
-)
-
-var ProtoHeading_HeadingType_name = map[int32]string{
-	1: "Spec",
-	2: "Scenario",
-}
-var ProtoHeading_HeadingType_value = map[string]int32{
-	"Spec":     1,
-	"Scenario": 2,
-}
-
-func (x ProtoHeading_HeadingType) Enum() *ProtoHeading_HeadingType {
-	p := new(ProtoHeading_HeadingType)
-	*p = x
-	return p
-}
-func (x ProtoHeading_HeadingType) String() string {
-	return proto.EnumName(ProtoHeading_HeadingType_name, int32(x))
-}
-func (x *ProtoHeading_HeadingType) UnmarshalJSON(data []byte) error {
-	value, err := proto.UnmarshalJSONEnum(ProtoHeading_HeadingType_value, data, "ProtoHeading_HeadingType")
-	if err != nil {
-		return err
-	}
-	*x = ProtoHeading_HeadingType(value)
 	return nil
 }
 
@@ -189,13 +158,22 @@ func (x *Parameter_ParameterType) UnmarshalJSON(data []byte) error {
 }
 
 type ProtoSpec struct {
-	Items            []*ProtoItem `protobuf:"bytes,1,rep,name=items" json:"items,omitempty"`
+	SpecHeading      *string      `protobuf:"bytes,1,req,name=specHeading" json:"specHeading,omitempty"`
+	Items            []*ProtoItem `protobuf:"bytes,2,rep,name=items" json:"items,omitempty"`
+	IsTableDriven    *bool        `protobuf:"varint,3,req,name=isTableDriven" json:"isTableDriven,omitempty"`
 	XXX_unrecognized []byte       `json:"-"`
 }
 
 func (m *ProtoSpec) Reset()         { *m = ProtoSpec{} }
 func (m *ProtoSpec) String() string { return proto.CompactTextString(m) }
 func (*ProtoSpec) ProtoMessage()    {}
+
+func (m *ProtoSpec) GetSpecHeading() string {
+	if m != nil && m.SpecHeading != nil {
+		return *m.SpecHeading
+	}
+	return ""
+}
 
 func (m *ProtoSpec) GetItems() []*ProtoItem {
 	if m != nil {
@@ -204,16 +182,23 @@ func (m *ProtoSpec) GetItems() []*ProtoItem {
 	return nil
 }
 
+func (m *ProtoSpec) GetIsTableDriven() bool {
+	if m != nil && m.IsTableDriven != nil {
+		return *m.IsTableDriven
+	}
+	return false
+}
+
 type ProtoItem struct {
-	ItemType         *ProtoItem_ItemType `protobuf:"varint,1,req,name=itemType,enum=main.ProtoItem_ItemType" json:"itemType,omitempty"`
-	Heading          *ProtoHeading       `protobuf:"bytes,2,opt,name=heading" json:"heading,omitempty"`
-	Step             *ProtoStep          `protobuf:"bytes,3,opt,name=step" json:"step,omitempty"`
-	Concept          *ProtoConcept       `protobuf:"bytes,4,opt,name=concept" json:"concept,omitempty"`
-	Scenario         *ProtoScenario      `protobuf:"bytes,5,opt,name=scenario" json:"scenario,omitempty"`
-	Comment          *ProtoComment       `protobuf:"bytes,6,opt,name=comment" json:"comment,omitempty"`
-	Table            *ProtoTable         `protobuf:"bytes,7,opt,name=table" json:"table,omitempty"`
-	Tags             *ProtoTags          `protobuf:"bytes,8,opt,name=tags" json:"tags,omitempty"`
-	XXX_unrecognized []byte              `json:"-"`
+	ItemType            *ProtoItem_ItemType       `protobuf:"varint,1,req,name=itemType,enum=main.ProtoItem_ItemType" json:"itemType,omitempty"`
+	Step                *ProtoStep                `protobuf:"bytes,2,opt,name=step" json:"step,omitempty"`
+	Concept             *ProtoConcept             `protobuf:"bytes,3,opt,name=concept" json:"concept,omitempty"`
+	Scenario            *ProtoScenario            `protobuf:"bytes,4,opt,name=scenario" json:"scenario,omitempty"`
+	TableDrivenScenario *ProtoTableDrivenScenario `protobuf:"bytes,5,opt,name=tableDrivenScenario" json:"tableDrivenScenario,omitempty"`
+	Comment             *ProtoComment             `protobuf:"bytes,6,opt,name=comment" json:"comment,omitempty"`
+	Table               *ProtoTable               `protobuf:"bytes,7,opt,name=table" json:"table,omitempty"`
+	Tags                *ProtoTags                `protobuf:"bytes,8,opt,name=tags" json:"tags,omitempty"`
+	XXX_unrecognized    []byte                    `json:"-"`
 }
 
 func (m *ProtoItem) Reset()         { *m = ProtoItem{} }
@@ -224,14 +209,7 @@ func (m *ProtoItem) GetItemType() ProtoItem_ItemType {
 	if m != nil && m.ItemType != nil {
 		return *m.ItemType
 	}
-	return ProtoItem_Heading
-}
-
-func (m *ProtoItem) GetHeading() *ProtoHeading {
-	if m != nil {
-		return m.Heading
-	}
-	return nil
+	return ProtoItem_Step
 }
 
 func (m *ProtoItem) GetStep() *ProtoStep {
@@ -251,6 +229,13 @@ func (m *ProtoItem) GetConcept() *ProtoConcept {
 func (m *ProtoItem) GetScenario() *ProtoScenario {
 	if m != nil {
 		return m.Scenario
+	}
+	return nil
+}
+
+func (m *ProtoItem) GetTableDrivenScenario() *ProtoTableDrivenScenario {
+	if m != nil {
+		return m.TableDrivenScenario
 	}
 	return nil
 }
@@ -276,42 +261,58 @@ func (m *ProtoItem) GetTags() *ProtoTags {
 	return nil
 }
 
-type ProtoHeading struct {
-	HeadingType      *ProtoHeading_HeadingType `protobuf:"varint,1,req,name=headingType,enum=main.ProtoHeading_HeadingType" json:"headingType,omitempty"`
-	Text             *string                   `protobuf:"bytes,2,req,name=text" json:"text,omitempty"`
-	XXX_unrecognized []byte                    `json:"-"`
-}
-
-func (m *ProtoHeading) Reset()         { *m = ProtoHeading{} }
-func (m *ProtoHeading) String() string { return proto.CompactTextString(m) }
-func (*ProtoHeading) ProtoMessage()    {}
-
-func (m *ProtoHeading) GetHeadingType() ProtoHeading_HeadingType {
-	if m != nil && m.HeadingType != nil {
-		return *m.HeadingType
-	}
-	return ProtoHeading_Spec
-}
-
-func (m *ProtoHeading) GetText() string {
-	if m != nil && m.Text != nil {
-		return *m.Text
-	}
-	return ""
-}
-
 type ProtoScenario struct {
-	ScenarioItems    []*ProtoItem `protobuf:"bytes,1,rep,name=scenarioItems" json:"scenarioItems,omitempty"`
-	XXX_unrecognized []byte       `json:"-"`
+	ScenarioHeading  *string           `protobuf:"bytes,1,req,name=scenarioHeading" json:"scenarioHeading,omitempty"`
+	ScenarioItems    []*ProtoItem      `protobuf:"bytes,2,rep,name=scenarioItems" json:"scenarioItems,omitempty"`
+	PreHookFailure   *ProtoHookFailure `protobuf:"bytes,3,opt,name=preHookFailure" json:"preHookFailure,omitempty"`
+	PostHookFailure  *ProtoHookFailure `protobuf:"bytes,4,opt,name=postHookFailure" json:"postHookFailure,omitempty"`
+	XXX_unrecognized []byte            `json:"-"`
 }
 
 func (m *ProtoScenario) Reset()         { *m = ProtoScenario{} }
 func (m *ProtoScenario) String() string { return proto.CompactTextString(m) }
 func (*ProtoScenario) ProtoMessage()    {}
 
+func (m *ProtoScenario) GetScenarioHeading() string {
+	if m != nil && m.ScenarioHeading != nil {
+		return *m.ScenarioHeading
+	}
+	return ""
+}
+
 func (m *ProtoScenario) GetScenarioItems() []*ProtoItem {
 	if m != nil {
 		return m.ScenarioItems
+	}
+	return nil
+}
+
+func (m *ProtoScenario) GetPreHookFailure() *ProtoHookFailure {
+	if m != nil {
+		return m.PreHookFailure
+	}
+	return nil
+}
+
+func (m *ProtoScenario) GetPostHookFailure() *ProtoHookFailure {
+	if m != nil {
+		return m.PostHookFailure
+	}
+	return nil
+}
+
+type ProtoTableDrivenScenario struct {
+	Scenarios        []*ProtoScenario `protobuf:"bytes,1,rep,name=scenarios" json:"scenarios,omitempty"`
+	XXX_unrecognized []byte           `json:"-"`
+}
+
+func (m *ProtoTableDrivenScenario) Reset()         { *m = ProtoTableDrivenScenario{} }
+func (m *ProtoTableDrivenScenario) String() string { return proto.CompactTextString(m) }
+func (*ProtoTableDrivenScenario) ProtoMessage()    {}
+
+func (m *ProtoTableDrivenScenario) GetScenarios() []*ProtoScenario {
+	if m != nil {
+		return m.Scenarios
 	}
 	return nil
 }
@@ -321,6 +322,8 @@ type ProtoStep struct {
 	Parameters       []*Parameter                `protobuf:"bytes,2,rep,name=parameters" json:"parameters,omitempty"`
 	Fragments        []*Fragment                 `protobuf:"bytes,3,rep,name=fragments" json:"fragments,omitempty"`
 	Result           []*ProtoStepExecutionResult `protobuf:"bytes,4,rep,name=result" json:"result,omitempty"`
+	PreHookFailure   *ProtoHookFailure           `protobuf:"bytes,5,opt,name=preHookFailure" json:"preHookFailure,omitempty"`
+	PostHookFailure  *ProtoHookFailure           `protobuf:"bytes,6,opt,name=postHookFailure" json:"postHookFailure,omitempty"`
 	XXX_unrecognized []byte                      `json:"-"`
 }
 
@@ -352,6 +355,20 @@ func (m *ProtoStep) GetFragments() []*Fragment {
 func (m *ProtoStep) GetResult() []*ProtoStepExecutionResult {
 	if m != nil {
 		return m.Result
+	}
+	return nil
+}
+
+func (m *ProtoStep) GetPreHookFailure() *ProtoHookFailure {
+	if m != nil {
+		return m.PreHookFailure
+	}
+	return nil
+}
+
+func (m *ProtoStep) GetPostHookFailure() *ProtoHookFailure {
+	if m != nil {
+		return m.PostHookFailure
 	}
 	return nil
 }
@@ -580,9 +597,56 @@ func (m *ProtoStepExecutionResult) GetArgument() []*Argument {
 	return nil
 }
 
+type SpecExecStatus struct {
+	Item             []*ProtoItem      `protobuf:"bytes,1,rep,name=item" json:"item,omitempty"`
+	PreHookFailure   *ProtoHookFailure `protobuf:"bytes,2,opt,name=preHookFailure" json:"preHookFailure,omitempty"`
+	PostHookFailure  *ProtoHookFailure `protobuf:"bytes,3,opt,name=postHookFailure" json:"postHookFailure,omitempty"`
+	XXX_unrecognized []byte            `json:"-"`
+}
+
+func (m *SpecExecStatus) Reset()         { *m = SpecExecStatus{} }
+func (m *SpecExecStatus) String() string { return proto.CompactTextString(m) }
+func (*SpecExecStatus) ProtoMessage()    {}
+
+func (m *SpecExecStatus) GetItem() []*ProtoItem {
+	if m != nil {
+		return m.Item
+	}
+	return nil
+}
+
+func (m *SpecExecStatus) GetPreHookFailure() *ProtoHookFailure {
+	if m != nil {
+		return m.PreHookFailure
+	}
+	return nil
+}
+
+func (m *SpecExecStatus) GetPostHookFailure() *ProtoHookFailure {
+	if m != nil {
+		return m.PostHookFailure
+	}
+	return nil
+}
+
+type ProtoHookFailure struct {
+	StackTrace       *string `protobuf:"bytes,1,req,name=stackTrace" json:"stackTrace,omitempty"`
+	XXX_unrecognized []byte  `json:"-"`
+}
+
+func (m *ProtoHookFailure) Reset()         { *m = ProtoHookFailure{} }
+func (m *ProtoHookFailure) String() string { return proto.CompactTextString(m) }
+func (*ProtoHookFailure) ProtoMessage()    {}
+
+func (m *ProtoHookFailure) GetStackTrace() string {
+	if m != nil && m.StackTrace != nil {
+		return *m.StackTrace
+	}
+	return ""
+}
+
 func init() {
 	proto.RegisterEnum("main.ProtoItem_ItemType", ProtoItem_ItemType_name, ProtoItem_ItemType_value)
-	proto.RegisterEnum("main.ProtoHeading_HeadingType", ProtoHeading_HeadingType_name, ProtoHeading_HeadingType_value)
 	proto.RegisterEnum("main.Fragment_FragmentType", Fragment_FragmentType_name, Fragment_FragmentType_value)
 	proto.RegisterEnum("main.Parameter_ParameterType", Parameter_ParameterType_name, Parameter_ParameterType_value)
 }

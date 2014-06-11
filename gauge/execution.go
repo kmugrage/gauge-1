@@ -112,9 +112,10 @@ func (exe *execution) validate(conceptDictionary *conceptDictionary) executionVa
 func (exe *execution) start() *testExecutionStatus {
 	testExecutionStatus := &testExecutionStatus{specifications: exe.specifications}
 	beforeSuiteHookExecStatus := exe.startExecution()
+	suiteResult := newSuiteResult()
 	if beforeSuiteHookExecStatus.GetPassed() {
 		for _, specificationToExecute := range exe.specifications {
-			executor := newSpecExecutor(specificationToExecute, exe.connection, exe.pluginHandler)
+			executor := newSpecExecutor(specificationToExecute, exe.connection, exe.pluginHandler, suiteResult)
 			specExecutionStatus := executor.execute()
 			testExecutionStatus.specExecutionStatuses = append(testExecutionStatus.specExecutionStatuses, specExecutionStatus)
 		}
@@ -127,8 +128,8 @@ func (exe *execution) start() *testExecutionStatus {
 	return testExecutionStatus
 }
 
-func newSpecExecutor(specToExecute *specification, connection net.Conn, pluginHandler *pluginHandler) *specExecutor {
+func newSpecExecutor(specToExecute *specification, connection net.Conn, pluginHandler *pluginHandler, suiteResult *suiteResult) *specExecutor {
 	specExecutor := new(specExecutor)
-	specExecutor.initialize(specToExecute, connection, pluginHandler)
+	specExecutor.initialize(specToExecute, connection, pluginHandler, suiteResult)
 	return specExecutor
 }

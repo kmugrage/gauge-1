@@ -195,8 +195,6 @@ func convertToProtoSpec(spec *specification) *ProtoSpec {
 
 func convertToProtoItem(item item) *ProtoItem {
 	switch item.kind() {
-	case headingKind:
-		return convertToProtoHeadingItem(item.(*heading))
 	case scenarioKind:
 		return convertToProtoScenarioItem(item.(*scenario))
 	case stepKind:
@@ -209,17 +207,6 @@ func convertToProtoItem(item item) *ProtoItem {
 		return convertToProtoTableItem(item.(*table))
 	}
 	return nil
-}
-
-func convertToProtoHeadingItem(heading *heading) *ProtoItem {
-	var protoHeadingType ProtoHeading_HeadingType
-	headingType := heading.headingType
-	if headingType == specHeading {
-		protoHeadingType = ProtoHeading_Spec
-	} else {
-		protoHeadingType = ProtoHeading_Scenario
-	}
-	return &ProtoItem{ItemType: ProtoItem_Heading.Enum(), Heading: &ProtoHeading{HeadingType: protoHeadingType.Enum(), Text: proto.String(heading.value)}}
 }
 
 func convertToProtoStepItem(step *step) *ProtoItem {
