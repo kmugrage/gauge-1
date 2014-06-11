@@ -291,7 +291,7 @@ func main() {
 			fmt.Println(err.Error())
 			os.Exit(1)
 		}
-	} else {
+	}else {
 		if len(flag.Args()) == 0 {
 			printUsage()
 		}
@@ -328,8 +328,10 @@ func main() {
 
 		pluginHandler, warnings := startPluginsForExecution(manifest, apiChannel)
 		handleWarningMessages(warnings)
-		specsToExecute := convertMapToArray(allSpecs)
-		execution := newExecution(manifest, specsToExecute, runnerConnection, pluginHandler)
+
+		allSpecsArray := convertMapToArray(allSpecs)
+		execution := newExecution(manifest, allSpecsArray, runnerConnection, pluginHandler)
+
 		validationErrors := execution.validate(conceptsDictionary)
 		if len(validationErrors) > 0 {
 			fmt.Println("Validation failed. The following steps have errors")
@@ -525,10 +527,39 @@ func getSpecFiles(specSource string) []string {
 	return nil
 }
 
+func getScenarioIndexes(scenarioIndexes string) []int {
+	indexesInString := strings.Split(scenarioIndexes, ",")
+	indexesInInt := make([]int, 0)
+	for _, index := range indexesInString {
+		num, err := strconv.Atoi(index)
+		if err != nil || num < 0{
+			fmt.Println("invalid scenario index: ", index)
+			os.Exit(1)
+		}
+		indexesInInt = append(indexesInInt, num)
+	}
+	return indexesInInt
+}
+
+func getSpecSourceAndScenarioIndexes(specSource string) (string, []int) {
+	if !strings.Contains(specSource, ":") {
+		return specSource, nil
+	}
+	specDetails := strings.Split(specSource, ":")
+	if len(specDetails) == 2 {
+		indexes := getScenarioIndexes(specDetails[1])
+		return specDetails[0], indexes
+	}
+	fmt.Println("invalid arguments %s", specSource)
+	os.Exit(1)
+	return "", nil
+}
+
 func findSpecs(specSource string, conceptDictionary *conceptDictionary) (map[string]*specification, []*parseResult) {
-	specFiles := getSpecFiles(specSource)
+	specFilesSource, scenarioIndexes := getSpecSourceAndScenarioIndexes(specSource)
+	specFiles := getSpecFiles(specFilesSource)
 	if specFiles == nil {
-		fmt.Printf("Spec file or directory does not exist: %s", specSource)
+		fmt.Printf("Spec file or directory does not exist: ", specFilesSource)
 		os.Exit(1)
 	}
 	parseResults := make([]*parseResult, 0)
@@ -547,8 +578,18 @@ func findSpecs(specSource string, conceptDictionary *conceptDictionary) (map[str
 			parseResults = append(parseResults, parseResult)
 		}
 		spec.fileName = specFile
+		if scenarioIndexes != nil {
+			var scenarios []*scenario
+			for _, index := range scenarioIndexes {
+				if(index >= len(spec.scenarios)){
+					fmt.Println("invalid scenario index: ", index)
+					os.Exit(1)
+				}
+				scenarios = append(scenarios, spec.scenarios[index])
+			}
+			spec.scenarios = scenarios
+		}
 		specs[spec.fileName] = spec
-
 	}
 	return specs, parseResults
 }
