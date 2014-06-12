@@ -1,12 +1,12 @@
 package main
 
 import (
+	"common"
 	"flag"
 	"fmt"
-	"github.com/getgauge/common"
 	"os"
-	"path"
 	"os/exec"
+	"path"
 )
 
 const (
@@ -40,7 +40,6 @@ func showMessage(action, filename string) {
 func createStepImplementationsDirectory() {
 	createDirectory(path.Join("step_implementations"))
 }
-
 
 func createDirectory(filePath string) {
 	showMessage("create", filePath)
@@ -119,7 +118,6 @@ func runCommand(cmdName string, arg string) {
 	}
 }
 
-
 func main() {
 	flag.Parse()
 	if *start {
@@ -134,6 +132,3 @@ func main() {
 		printUsage()
 	}
 }
-
-
-
