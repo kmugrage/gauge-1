@@ -1,5 +1,9 @@
 package main
 
+import (
+	"code.google.com/p/goprotobuf/proto"
+)
+
 type suiteResult struct {
 	protoSpecResult      []*ProtoSpec
 	preSuite             ProtoHookFailure
@@ -8,10 +12,10 @@ type suiteResult struct {
 	currentScenarioIndex int
 }
 
-func newSuiteResult() (*suiteResult) {
+func newSuiteResult() *suiteResult {
 	result := new(suiteResult)
 	result.protoSpecResult = make([]*ProtoSpec, 0)
-	result.currentSpecIndex = -1;
+	result.currentSpecIndex = -1
 	return result
 }
 
@@ -19,7 +23,7 @@ func (suiteResult *suiteResult) startTableDrivenScenarios() {
 	suiteResult.getCurrentSpec().IsTableDriven = proto.Bool(true)
 }
 
-func (suiteResult *suiteResult) getCurrentSpec() (*ProtoSpec) {
+func (suiteResult *suiteResult) getCurrentSpec() *ProtoSpec {
 	return suiteResult.protoSpecResult[suiteResult.currentSpecIndex]
 }
 
@@ -31,6 +35,6 @@ func (suiteResult *suiteResult) newSpecStart() {
 
 func (suiteResult *suiteResult) newScenarioStart() {
 	suiteResult.currentScenarioIndex++
-	suiteResult.getCurrentSpec().Items = append(suiteResult.getCurrentSpec().Items, new(ProtoScenario))
+	suiteResult.getCurrentSpec().Items = append(suiteResult.getCurrentSpec().Items, new(ProtoItem))
 
 }
