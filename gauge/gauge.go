@@ -233,7 +233,6 @@ func handleParseResult(results ...*parseResult) {
 
 func main() {
 	flag.Parse()
-
 	if *daemonize {
 		loadGaugeEnvironment()
 		port, err := getPortFromEnvironmentVariable(apiPortEnvVariableName)
@@ -295,14 +294,22 @@ func main() {
 		}
 
 		loadGaugeEnvironment()
-		specSource := flag.Arg(0)
 
 		conceptsDictionary, conceptParseResult := createConceptsDictionary(false)
 		handleParseResult(conceptParseResult)
 
-		specs, specParseResults := findSpecs(specSource, conceptsDictionary)
-		handleParseResult(specParseResults...)
-
+		allSpecs := make(map[string]*specification)
+		for _, arg := range flag.Args() {
+			specSource := arg
+			parsedSpecs, specParseResults := findSpecs(specSource, conceptsDictionary)
+			handleParseResult(specParseResults...)
+			for fileName, parsedSpec := range parsedSpecs {
+				_, exists := allSpecs[fileName]
+				if !exists {
+					allSpecs[fileName] = parsedSpec
+				}
+			}
+		}
 		manifest := getProjectManifest()
 
 		err := startAPIService(0)
@@ -319,8 +326,8 @@ func main() {
 
 		pluginHandler, warnings := startPluginsForExecution(manifest)
 		handleWarningMessages(warnings)
-
-		execution := newExecution(manifest, specs, runnerConnection, pluginHandler)
+		specsToExecute := convertMapToArray(allSpecs)
+		execution := newExecution(manifest, specsToExecute, runnerConnection, pluginHandler)
 		validationErrors := execution.validate(conceptsDictionary)
 		if len(validationErrors) > 0 {
 			fmt.Println("Validation failed. The following steps have errors")
@@ -503,20 +510,27 @@ func addConcepts(conceptFile string, conceptDictionary *conceptDictionary) *pars
 	return err
 }
 
-func findSpecs(specSource string, conceptDictionary *conceptDictionary) ([]*specification, []*parseResult) {
+func getSpecFiles(specSource string) []string {
 	specFiles := make([]string, 0)
-	parseResults := make([]*parseResult, 0)
 	if common.DirExists(specSource) {
 		specFiles = append(specFiles, findSpecsFilesIn(specSource)...)
+		return specFiles
 	} else if common.FileExists(specSource) && isValidSpecExtension(specSource) {
 		specFile, _ := filepath.Abs(specSource)
 		specFiles = append(specFiles, specFile)
-	} else {
+		return specFiles
+	}
+	return nil
+}
+
+func findSpecs(specSource string, conceptDictionary *conceptDictionary) (map[string]*specification, []*parseResult) {
+	specFiles := getSpecFiles(specSource)
+	if specFiles == nil {
 		fmt.Printf("Spec file or directory does not exist: %s", specSource)
 		os.Exit(1)
 	}
-
-	specs := make([]*specification, 0)
+	parseResults := make([]*parseResult, 0)
+	specs := make(map[string]*specification)
 	for _, specFile := range specFiles {
 		specFileContent, err := common.ReadFileContents(specFile)
 		if err != nil {
@@ -531,7 +545,8 @@ func findSpecs(specSource string, conceptDictionary *conceptDictionary) ([]*spec
 			parseResults = append(parseResults, parseResult)
 		}
 		spec.fileName = specFile
-		specs = append(specs, spec)
+		specs[spec.fileName] = spec
+
 	}
 	return specs, parseResults
 }
@@ -549,6 +564,14 @@ func handleWarningMessages(warnings []string) {
 	for _, warning := range warnings {
 		fmt.Println(fmt.Sprintf("[Warning] %s", warning))
 	}
+}
+
+func convertMapToArray(allSpecs map[string]*specification) []*specification {
+	var specs []*specification
+	for _, value := range allSpecs {
+		specs = append(specs, value)
+	}
+	return specs
 }
 
 func printVersion() {

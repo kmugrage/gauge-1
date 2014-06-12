@@ -1,13 +1,17 @@
 package main
 
 import (
+	"bytes"
+	"crypto/sha1"
 	"flag"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"log"
 	"os"
 	"os/exec"
 	"path/filepath"
+	"runtime"
 )
 
 const (
@@ -21,6 +25,25 @@ var BUILD_DIR_PKG = filepath.Join(BUILD_DIR, "pkg")
 
 var gaugePackages = []string{"common"}
 var gaugeExecutables = []string{"gauge", "gauge-java"}
+
+func hashDir(dirPath string) string {
+	var b bytes.Buffer
+	filepath.Walk(dirPath, func(path string, info os.FileInfo, err error) error {
+		if !info.IsDir() {
+			contents, err := ioutil.ReadFile(path)
+			if err != nil {
+				panic(err)
+			}
+			h := sha1.New()
+			h.Write(contents)
+			b.WriteString(fmt.Sprintf("%x", h.Sum(nil)))
+		}
+		return nil
+	})
+	h := sha1.New()
+	h.Write(b.Bytes())
+	return fmt.Sprintf("%x", h.Sum(nil))
+}
 
 func isExecMode(mode os.FileMode) bool {
 	return (mode & 0111) != 0
@@ -186,7 +209,6 @@ func runTests(packageName string) {
 	if err != nil {
 		panic(err)
 	}
-
 }
 
 func copyBinaries() {
@@ -229,9 +251,30 @@ func installFiles(files map[string]string) {
 	}
 }
 
+func saveHash(h, dir string) {
+	hashFile := filepath.Join(BUILD_DIR, "."+dir)
+	err := ioutil.WriteFile(hashFile, []byte(h), 0644)
+	if err != nil {
+		log.Println(err.Error())
+	}
+}
+
+func hasChanges(h, dir string) bool {
+	hashFile := filepath.Join(BUILD_DIR, "."+dir)
+	contents, err := ioutil.ReadFile(hashFile)
+	if err != nil {
+		return true
+	}
+	return string(contents) != h
+}
+
 func installGaugeFiles() {
 	files := make(map[string]string)
-	files[filepath.Join("bin", "gauge")] = "bin"
+	if runtime.GOOS == "windows" {
+		files[filepath.Join("bin", "gauge.exe")] = "bin"
+	} else {
+		files[filepath.Join("bin", "gauge")] = "bin"
+	}
 	files[filepath.Join("skel", "hello_world.spec")] = filepath.Join("share", "gauge", "skel")
 	files[filepath.Join("skel", "default.properties")] = filepath.Join("share", "gauge", "skel", "env")
 	installFiles(files)
@@ -239,17 +282,55 @@ func installGaugeFiles() {
 
 func installGaugeJavaFiles() {
 	files := make(map[string]string)
-	files[filepath.Join("bin", "gauge-java")] = "bin"
+	if runtime.GOOS == "windows" {
+		files[filepath.Join("bin", "gauge-java.exe")] = "bin"
+	} else {
+		files[filepath.Join("bin", "gauge-java")] = "bin"
+	}
 	files[filepath.Join("gauge-java", "java.json")] = filepath.Join("share", "gauge", "languages")
 	files[filepath.Join("gauge-java", "skel", "StepImplementation.java")] = filepath.Join("share", "gauge", "skel", "java")
+	files[filepath.Join("gauge-java", "skel", "java.properties")] = filepath.Join("share", "gauge", "skel", "env")
 	files[filepath.Join("gauge-java", "libs")] = filepath.Join("lib", "gauge", "java", "libs")
 	files[filepath.Join("gauge-java", "build", "jar")] = filepath.Join("lib", "gauge", "java")
 	installFiles(files)
 }
 
+// Executes the specified target
+// It also keeps a hash of all the contents in the target directory and avoid recompilation if contents are not changed
+func executeTarget(target string) {
+	opts, ok := targets[target]
+	if !ok {
+		log.Fatalf("Unknown target: %s\n", target)
+	}
+
+	if opts.lookForChanges {
+		if hasChanges(hashDir(target), target) {
+			opts.targetFunc()
+			saveHash(hashDir(target), target)
+		}
+	} else {
+		opts.targetFunc()
+	}
+}
+
+type compileFunc func()
+
 var test = flag.Bool("test", false, "Run the test cases")
 var install = flag.Bool("install", false, "Install to the specified prefix")
 var installPrefix = flag.String("prefix", "", "Specifies the prefix where files will be installed")
+var compileTarget = flag.String("target", "", "Specifies the target to be executed")
+
+type targetOpts struct {
+	lookForChanges bool
+	targetFunc     compileFunc
+}
+
+// Defines all the compile targets
+// Each target name is the directory name
+var targets = map[string]*targetOpts{
+	"gauge":      &targetOpts{lookForChanges: true, targetFunc: compilePackages},
+	"gauge-java": &targetOpts{lookForChanges: true, targetFunc: compileJavaClasses},
+}
 
 func main() {
 	flag.Parse()
@@ -261,13 +342,26 @@ func main() {
 		runTests("gauge")
 	} else if *install {
 		if *installPrefix == "" {
-			*installPrefix = "/usr/local"
+			if runtime.GOOS == "windows" {
+				*installPrefix = os.Getenv("PROGRAMFILES")
+				if *installPrefix == "" {
+					panic(fmt.Errorf("Failed to find programfiles"))
+				}
+				*installPrefix = filepath.Join(*installPrefix, "gauge")
+			} else {
+				*installPrefix = "/usr/local"
+			}
 		}
 		installGaugeFiles()
 		installGaugeJavaFiles()
 	} else {
-		compilePackages()
-		compileJavaClasses()
+		if *compileTarget == "" {
+			for target, _ := range targets {
+				executeTarget(target)
+			}
+		} else {
+			executeTarget(*compileTarget)
+		}
 		copyBinaries()
 	}
 }
