@@ -189,6 +189,14 @@ func compileGaugeJava() {
 
 func compileGaugeRuby() {
 	compileGoPackage("gauge-ruby")
+	execName := "gauge-ruby"
+	if runtime.GOOS == "windows" {
+		execName = "gauge-ruby.exe"
+	}
+	err := mirrorFile(filepath.Join(BUILD_DIR_BIN, execName), filepath.Join("gauge-ruby", "bin", execName))
+	if err != nil {
+		panic(err)
+	}
 }
 
 func runTests(packageName string) {
@@ -282,15 +290,14 @@ func installGaugeJavaFiles() {
 
 func installGaugeRubyFiles() {
 	files := make(map[string]string)
-	if runtime.GOOS == "windows" {
-		files[filepath.Join("bin", "gauge-ruby.exe")] = "bin"
-	} else {
-		files[filepath.Join("bin", "gauge-ruby")] = "bin"
-	}
 	files[filepath.Join("gauge-ruby", "ruby.json")] = filepath.Join("share", "gauge", "languages")
 	files[filepath.Join("gauge-ruby", "skel", "step_implementation.rb")] = filepath.Join("share", "gauge", "skel", "ruby")
 	files[filepath.Join("gauge-ruby", "skel", "ruby.properties")] = filepath.Join("share", "gauge", "skel", "env")
 	installFiles(files)
+
+	// packaging ruby gems
+	runProcess("gem", "gauge-ruby", "build", "gauge-ruby.gemspec")
+	runProcess("gem", "gauge-ruby", "install", "gauge-ruby-0.0.1.gem")
 }
 
 // Executes the specified target

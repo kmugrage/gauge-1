@@ -99,8 +99,8 @@ func printUsage() {
 	os.Exit(2)
 }
 
-func runCommand(cmdName string, arg string) {
-	cmd := exec.Command(cmdName, arg)
+func runCommand(cmdName string, arg ...string) {
+	cmd := exec.Command(cmdName, arg...)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	//TODO: move to logs
@@ -122,7 +122,7 @@ func main() {
 	flag.Parse()
 	if *start {
 		os.Chdir(getProjectRoot())
-		runCommand(ruby_directory, path.Join(getInstallationPath(), lib_dir, gauge_runtime_ruby_file))
+		runCommand("ruby", "-e", "require 'gauge-runtime'")
 	} else if *initialize {
 		funcs := []initializerFunc{createStepImplementationsDirectory, createStepImplementationFile, createRubyPropertiesFile}
 		for _, f := range funcs {

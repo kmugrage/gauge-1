@@ -26,3 +26,4 @@ tags
 .bundle
 tmp
 bin/
+gauge-ruby/*.gem
