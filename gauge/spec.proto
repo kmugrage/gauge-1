@@ -111,4 +111,6 @@ message SpecExecStatus {
 
 message ProtoHookFailure {
     required string stackTrace = 1;
+    required string errorMessage = 2;
+    optional bytes screenShot = 3;
 }

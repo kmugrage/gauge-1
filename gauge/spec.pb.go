@@ -631,6 +631,8 @@ func (m *SpecExecStatus) GetPostHookFailure() *ProtoHookFailure {
 
 type ProtoHookFailure struct {
 	StackTrace       *string `protobuf:"bytes,1,req,name=stackTrace" json:"stackTrace,omitempty"`
+	ErrorMessage     *string `protobuf:"bytes,2,req,name=errorMessage" json:"errorMessage,omitempty"`
+	ScreenShot       []byte  `protobuf:"bytes,3,opt,name=screenShot" json:"screenShot,omitempty"`
 	XXX_unrecognized []byte  `json:"-"`
 }
 
@@ -643,6 +645,20 @@ func (m *ProtoHookFailure) GetStackTrace() string {
 		return *m.StackTrace
 	}
 	return ""
+}
+
+func (m *ProtoHookFailure) GetErrorMessage() string {
+	if m != nil && m.ErrorMessage != nil {
+		return *m.ErrorMessage
+	}
+	return ""
+}
+
+func (m *ProtoHookFailure) GetScreenShot() []byte {
+	if m != nil {
+		return m.ScreenShot
+	}
+	return nil
 }
 
 func init() {

@@ -14,14 +14,13 @@ type specExecutor struct {
 	conceptDictionary    *conceptDictionary
 	pluginHandler        *pluginHandler
 	currentExecutionInfo *ExecutionInfo
-	suiteResult          *suiteResult
+	specResult           *specResult
 }
 
-func (specExecutor *specExecutor) initialize(specificationToExecute *specification, connection net.Conn, pluginHandler *pluginHandler, suiteResult *suiteResult) {
+func (specExecutor *specExecutor) initialize(specificationToExecute *specification, connection net.Conn, pluginHandler *pluginHandler) {
 	specExecutor.specification = specificationToExecute
 	specExecutor.connection = connection
 	specExecutor.pluginHandler = pluginHandler
-	specExecutor.suiteResult = suiteResult
 }
 
 type specExecutionStatus struct {
@@ -77,38 +76,44 @@ func (e *specExecutor) executeAfterSpecHook() *ExecutionStatus {
 	return executeAndGetStatus(e.connection, message)
 }
 
-func (executor *specExecutor) execute() *specExecutionStatus {
-	executor.suiteResult.newSpecStart()
-	specInfo := &SpecInfo{Name: proto.String(executor.specification.heading.value),
-		FileName: proto.String(executor.specification.fileName),
-		IsFailed: proto.Bool(false), Tags: getTagValue(executor.specification.tags)}
-	executor.currentExecutionInfo = &ExecutionInfo{CurrentSpec: specInfo}
+func (specExecutor *specExecutor) execute() *specResult {
+	specInfo := &SpecInfo{Name: proto.String(specExecutor.specification.heading.value),
+		FileName: proto.String(specExecutor.specification.fileName),
+		IsFailed: proto.Bool(false), Tags: getTagValue(specExecutor.specification.tags)}
+	specExecutor.currentExecutionInfo = &ExecutionInfo{CurrentSpec: specInfo}
 
-	getCurrentConsole().writeSpecHeading(executor.specification)
+	getCurrentConsole().writeSpecHeading(specExecutor.specification)
 
-	specExecutionStatus := &specExecutionStatus{specification: executor.specification, scenariosExecutionStatuses: make(map[int][]*scenarioExecutionStatus)}
-	beforeSpecHookStatus := executor.executeBeforeSpecHook()
+	specExecutor.specResult = &specResult{}
+
+	beforeSpecHookStatus := specExecutor.executeBeforeSpecHook()
 	if beforeSpecHookStatus.GetPassed() {
-		getCurrentConsole().writeSteps(executor.specification.contexts)
-		dataTableRowCount := executor.specification.dataTable.getRowCount()
+		getCurrentConsole().writeSteps(specExecutor.specification.contexts)
+		dataTableRowCount := specExecutor.specification.dataTable.getRowCount()
 		if dataTableRowCount == 0 {
-			scenariosExecutionStatuses := executor.executeScenarios()
-			specExecutionStatus.scenariosExecutionStatuses[0] = scenariosExecutionStatuses
+			scenariosExecutionStatus := specExecutor.executeScenarios()
+			specExecutor.specResult.addScenarioResult(scenariosExecutionStatus)
 		} else {
-			executor.suiteResult.startTableDrivenScenarios()
-			for executor.dataTableIndex = 0; executor.dataTableIndex < dataTableRowCount; executor.dataTableIndex++ {
-				scenariosExecutionStatuses := executor.executeScenarios()
-				specExecutionStatus.scenariosExecutionStatuses[executor.dataTableIndex] = scenariosExecutionStatuses
-			}
+			specExecutor.executeTableDrivenScenario()
+
 		}
 	} else {
-		executor.currentExecutionInfo.setSpecFailure()
+		addPreHook(specExecutor.specResult, beforeSpecHookStatus)
+		specExecutor.currentExecutionInfo.setSpecFailure()
 	}
 
-	afterSpecHookStatus := executor.executeAfterSpecHook()
-	specExecutionStatus.hooksExecutionStatuses = append(specExecutionStatus.hooksExecutionStatuses, beforeSpecHookStatus, afterSpecHookStatus)
+	afterSpecHookStatus := specExecutor.executeAfterSpecHook()
+	addPostHook(specExecutor.specResult, afterSpecHookStatus)
 
-	return specExecutionStatus
+	return specExecutor.specResult
+}
+
+func (specExecutor *specExecutor) executeTableDrivenScenario() {
+	dataTableRowCount := specExecutor.specification.dataTable.getRowCount()
+	for specExecutor.dataTableIndex = 0; specExecutor.dataTableIndex < dataTableRowCount; specExecutor.dataTableIndex++ {
+		scenariosExecutionStatuses := specExecutor.executeScenarios()
+		specExecutor.specResult.addTableDrivenScenarioResult(scenariosExecutionStatuses)
+	}
 }
 
 func getTagValue(tags *tags) []string {

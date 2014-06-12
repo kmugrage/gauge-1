@@ -9,6 +9,7 @@ type execution struct {
 	specifications       []*specification
 	pluginHandler        *pluginHandler
 	currentExecutionInfo *ExecutionInfo
+	suiteResult             *suiteResult
 }
 
 type executionInfo struct {
@@ -36,7 +37,7 @@ func (e *execution) endExecution() *ExecutionStatus {
 	return executeAndGetStatus(e.connection, message)
 }
 
-func (e *execution) notifyExecutionResult(testExecutionStatus *testExecutionStatus) {
+func (e *execution) notifyExecutionResult() {
 	protoSpecs := make([]*ProtoSpec, 0)
 	for _, spec := range testExecutionStatus.specifications {
 		protoSpec := convertToProtoSpec(spec)
@@ -109,27 +110,28 @@ func (exe *execution) validate(conceptDictionary *conceptDictionary) executionVa
 	}
 }
 
-func (exe *execution) start() *testExecutionStatus {
-	testExecutionStatus := &testExecutionStatus{specifications: exe.specifications}
+func (exe *execution) start() (*suiteResult) {
 	beforeSuiteHookExecStatus := exe.startExecution()
-	suiteResult := newSuiteResult()
+	exe.suiteResult = newSuiteResult()
 	if beforeSuiteHookExecStatus.GetPassed() {
 		for _, specificationToExecute := range exe.specifications {
-			executor := newSpecExecutor(specificationToExecute, exe.connection, exe.pluginHandler, suiteResult)
-			specExecutionStatus := executor.execute()
-			testExecutionStatus.specExecutionStatuses = append(testExecutionStatus.specExecutionStatuses, specExecutionStatus)
+			executor := newSpecExecutor(specificationToExecute, exe.connection, exe.pluginHandler)
+			protoSpecResult := executor.execute()
+			exe.suiteResult.addSpecResult(protoSpecResult)
 		}
+	} else {
+		addPreHook(exe.suiteResult, beforeSuiteHookExecStatus)
 	}
 
-	afterSuiteHookExecStatus := exe.endExecution()
-	testExecutionStatus.hooksExecutionStatuses = append(testExecutionStatus.hooksExecutionStatuses, beforeSuiteHookExecStatus, afterSuiteHookExecStatus)
-	exe.notifyExecutionResult(testExecutionStatus)
+	addPostHook(exe.suiteResult, exe.endExecution())
+
+	exe.notifyExecutionResult()
 	exe.notifyExecutionStop()
-	return testExecutionStatus
+	return exe.suiteResult
 }
 
-func newSpecExecutor(specToExecute *specification, connection net.Conn, pluginHandler *pluginHandler, suiteResult *suiteResult) *specExecutor {
+func newSpecExecutor(specToExecute *specification, connection net.Conn, pluginHandler *pluginHandler) *specExecutor {
 	specExecutor := new(specExecutor)
-	specExecutor.initialize(specToExecute, connection, pluginHandler, suiteResult)
+	specExecutor.initialize(specToExecute, connection, pluginHandler)
 	return specExecutor
 }
