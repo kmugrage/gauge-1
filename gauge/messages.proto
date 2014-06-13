@@ -1,21 +1,13 @@
 package main;
 import "gauge/spec.proto";
 
-message ExecutionStatus {
-	required bool passed = 1;
-	optional bool recoverableError = 2;
-	optional string errorMessage = 3;
-	optional string stackTrace = 4;
-	optional bytes screenShot = 5;
-}
-
 message KillProcessRequest {
 }
 
 // Sends to any request which needs a execution status as response
 // usually step execution, hooks etc will return this
 message ExecutionStatusResponse {
-	required ExecutionStatus executionStatus = 1;
+	required ProtoExecutionResult executionStatus = 1;
 }
 
 message ExecutionStartingRequest {

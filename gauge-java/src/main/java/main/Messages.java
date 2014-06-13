@@ -8,887 +8,6 @@ public final class Messages {
   public static void registerAllExtensions(
       com.google.protobuf.ExtensionRegistry registry) {
   }
-  public interface ExecutionStatusOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
-
-    // required bool passed = 1;
-    /**
-     * <code>required bool passed = 1;</code>
-     */
-    boolean hasPassed();
-    /**
-     * <code>required bool passed = 1;</code>
-     */
-    boolean getPassed();
-
-    // optional bool recoverableError = 2;
-    /**
-     * <code>optional bool recoverableError = 2;</code>
-     */
-    boolean hasRecoverableError();
-    /**
-     * <code>optional bool recoverableError = 2;</code>
-     */
-    boolean getRecoverableError();
-
-    // optional string errorMessage = 3;
-    /**
-     * <code>optional string errorMessage = 3;</code>
-     */
-    boolean hasErrorMessage();
-    /**
-     * <code>optional string errorMessage = 3;</code>
-     */
-    java.lang.String getErrorMessage();
-    /**
-     * <code>optional string errorMessage = 3;</code>
-     */
-    com.google.protobuf.ByteString
-        getErrorMessageBytes();
-
-    // optional string stackTrace = 4;
-    /**
-     * <code>optional string stackTrace = 4;</code>
-     */
-    boolean hasStackTrace();
-    /**
-     * <code>optional string stackTrace = 4;</code>
-     */
-    java.lang.String getStackTrace();
-    /**
-     * <code>optional string stackTrace = 4;</code>
-     */
-    com.google.protobuf.ByteString
-        getStackTraceBytes();
-
-    // optional bytes screenShot = 5;
-    /**
-     * <code>optional bytes screenShot = 5;</code>
-     */
-    boolean hasScreenShot();
-    /**
-     * <code>optional bytes screenShot = 5;</code>
-     */
-    com.google.protobuf.ByteString getScreenShot();
-  }
-  /**
-   * Protobuf type {@code main.ExecutionStatus}
-   */
-  public static final class ExecutionStatus extends
-      com.google.protobuf.GeneratedMessage
-      implements ExecutionStatusOrBuilder {
-    // Use ExecutionStatus.newBuilder() to construct.
-    private ExecutionStatus(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
-      super(builder);
-      this.unknownFields = builder.getUnknownFields();
-    }
-    private ExecutionStatus(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
-
-    private static final ExecutionStatus defaultInstance;
-    public static ExecutionStatus getDefaultInstance() {
-      return defaultInstance;
-    }
-
-    public ExecutionStatus getDefaultInstanceForType() {
-      return defaultInstance;
-    }
-
-    private final com.google.protobuf.UnknownFieldSet unknownFields;
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-        getUnknownFields() {
-      return this.unknownFields;
-    }
-    private ExecutionStatus(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      initFields();
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-            case 8: {
-              bitField0_ |= 0x00000001;
-              passed_ = input.readBool();
-              break;
-            }
-            case 16: {
-              bitField0_ |= 0x00000002;
-              recoverableError_ = input.readBool();
-              break;
-            }
-            case 26: {
-              bitField0_ |= 0x00000004;
-              errorMessage_ = input.readBytes();
-              break;
-            }
-            case 34: {
-              bitField0_ |= 0x00000008;
-              stackTrace_ = input.readBytes();
-              break;
-            }
-            case 42: {
-              bitField0_ |= 0x00000010;
-              screenShot_ = input.readBytes();
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e.getMessage()).setUnfinishedMessage(this);
-      } finally {
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return main.Messages.internal_static_main_ExecutionStatus_descriptor;
-    }
-
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return main.Messages.internal_static_main_ExecutionStatus_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              main.Messages.ExecutionStatus.class, main.Messages.ExecutionStatus.Builder.class);
-    }
-
-    public static com.google.protobuf.Parser<ExecutionStatus> PARSER =
-        new com.google.protobuf.AbstractParser<ExecutionStatus>() {
-      public ExecutionStatus parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new ExecutionStatus(input, extensionRegistry);
-      }
-    };
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<ExecutionStatus> getParserForType() {
-      return PARSER;
-    }
-
-    private int bitField0_;
-    // required bool passed = 1;
-    public static final int PASSED_FIELD_NUMBER = 1;
-    private boolean passed_;
-    /**
-     * <code>required bool passed = 1;</code>
-     */
-    public boolean hasPassed() {
-      return ((bitField0_ & 0x00000001) == 0x00000001);
-    }
-    /**
-     * <code>required bool passed = 1;</code>
-     */
-    public boolean getPassed() {
-      return passed_;
-    }
-
-    // optional bool recoverableError = 2;
-    public static final int RECOVERABLEERROR_FIELD_NUMBER = 2;
-    private boolean recoverableError_;
-    /**
-     * <code>optional bool recoverableError = 2;</code>
-     */
-    public boolean hasRecoverableError() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
-    }
-    /**
-     * <code>optional bool recoverableError = 2;</code>
-     */
-    public boolean getRecoverableError() {
-      return recoverableError_;
-    }
-
-    // optional string errorMessage = 3;
-    public static final int ERRORMESSAGE_FIELD_NUMBER = 3;
-    private java.lang.Object errorMessage_;
-    /**
-     * <code>optional string errorMessage = 3;</code>
-     */
-    public boolean hasErrorMessage() {
-      return ((bitField0_ & 0x00000004) == 0x00000004);
-    }
-    /**
-     * <code>optional string errorMessage = 3;</code>
-     */
-    public java.lang.String getErrorMessage() {
-      java.lang.Object ref = errorMessage_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          errorMessage_ = s;
-        }
-        return s;
-      }
-    }
-    /**
-     * <code>optional string errorMessage = 3;</code>
-     */
-    public com.google.protobuf.ByteString
-        getErrorMessageBytes() {
-      java.lang.Object ref = errorMessage_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        errorMessage_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    // optional string stackTrace = 4;
-    public static final int STACKTRACE_FIELD_NUMBER = 4;
-    private java.lang.Object stackTrace_;
-    /**
-     * <code>optional string stackTrace = 4;</code>
-     */
-    public boolean hasStackTrace() {
-      return ((bitField0_ & 0x00000008) == 0x00000008);
-    }
-    /**
-     * <code>optional string stackTrace = 4;</code>
-     */
-    public java.lang.String getStackTrace() {
-      java.lang.Object ref = stackTrace_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          stackTrace_ = s;
-        }
-        return s;
-      }
-    }
-    /**
-     * <code>optional string stackTrace = 4;</code>
-     */
-    public com.google.protobuf.ByteString
-        getStackTraceBytes() {
-      java.lang.Object ref = stackTrace_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        stackTrace_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    // optional bytes screenShot = 5;
-    public static final int SCREENSHOT_FIELD_NUMBER = 5;
-    private com.google.protobuf.ByteString screenShot_;
-    /**
-     * <code>optional bytes screenShot = 5;</code>
-     */
-    public boolean hasScreenShot() {
-      return ((bitField0_ & 0x00000010) == 0x00000010);
-    }
-    /**
-     * <code>optional bytes screenShot = 5;</code>
-     */
-    public com.google.protobuf.ByteString getScreenShot() {
-      return screenShot_;
-    }
-
-    private void initFields() {
-      passed_ = false;
-      recoverableError_ = false;
-      errorMessage_ = "";
-      stackTrace_ = "";
-      screenShot_ = com.google.protobuf.ByteString.EMPTY;
-    }
-    private byte memoizedIsInitialized = -1;
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
-
-      if (!hasPassed()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      memoizedIsInitialized = 1;
-      return true;
-    }
-
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      getSerializedSize();
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeBool(1, passed_);
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeBool(2, recoverableError_);
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeBytes(3, getErrorMessageBytes());
-      }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        output.writeBytes(4, getStackTraceBytes());
-      }
-      if (((bitField0_ & 0x00000010) == 0x00000010)) {
-        output.writeBytes(5, screenShot_);
-      }
-      getUnknownFields().writeTo(output);
-    }
-
-    private int memoizedSerializedSize = -1;
-    public int getSerializedSize() {
-      int size = memoizedSerializedSize;
-      if (size != -1) return size;
-
-      size = 0;
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBoolSize(1, passed_);
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBoolSize(2, recoverableError_);
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(3, getErrorMessageBytes());
-      }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(4, getStackTraceBytes());
-      }
-      if (((bitField0_ & 0x00000010) == 0x00000010)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(5, screenShot_);
-      }
-      size += getUnknownFields().getSerializedSize();
-      memoizedSerializedSize = size;
-      return size;
-    }
-
-    private static final long serialVersionUID = 0L;
-    @java.lang.Override
-    protected java.lang.Object writeReplace()
-        throws java.io.ObjectStreamException {
-      return super.writeReplace();
-    }
-
-    public static main.Messages.ExecutionStatus parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static main.Messages.ExecutionStatus parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static main.Messages.ExecutionStatus parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static main.Messages.ExecutionStatus parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static main.Messages.ExecutionStatus parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static main.Messages.ExecutionStatus parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-    public static main.Messages.ExecutionStatus parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input);
-    }
-    public static main.Messages.ExecutionStatus parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input, extensionRegistry);
-    }
-    public static main.Messages.ExecutionStatus parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static main.Messages.ExecutionStatus parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(main.Messages.ExecutionStatus prototype) {
-      return newBuilder().mergeFrom(prototype);
-    }
-    public Builder toBuilder() { return newBuilder(this); }
-
-    @java.lang.Override
-    protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
-    /**
-     * Protobuf type {@code main.ExecutionStatus}
-     */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements main.Messages.ExecutionStatusOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return main.Messages.internal_static_main_ExecutionStatus_descriptor;
-      }
-
-      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return main.Messages.internal_static_main_ExecutionStatus_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                main.Messages.ExecutionStatus.class, main.Messages.ExecutionStatus.Builder.class);
-      }
-
-      // Construct using main.Messages.ExecutionStatus.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
-
-      private Builder(
-          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-        super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
-        }
-      }
-      private static Builder create() {
-        return new Builder();
-      }
-
-      public Builder clear() {
-        super.clear();
-        passed_ = false;
-        bitField0_ = (bitField0_ & ~0x00000001);
-        recoverableError_ = false;
-        bitField0_ = (bitField0_ & ~0x00000002);
-        errorMessage_ = "";
-        bitField0_ = (bitField0_ & ~0x00000004);
-        stackTrace_ = "";
-        bitField0_ = (bitField0_ & ~0x00000008);
-        screenShot_ = com.google.protobuf.ByteString.EMPTY;
-        bitField0_ = (bitField0_ & ~0x00000010);
-        return this;
-      }
-
-      public Builder clone() {
-        return create().mergeFrom(buildPartial());
-      }
-
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return main.Messages.internal_static_main_ExecutionStatus_descriptor;
-      }
-
-      public main.Messages.ExecutionStatus getDefaultInstanceForType() {
-        return main.Messages.ExecutionStatus.getDefaultInstance();
-      }
-
-      public main.Messages.ExecutionStatus build() {
-        main.Messages.ExecutionStatus result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return result;
-      }
-
-      public main.Messages.ExecutionStatus buildPartial() {
-        main.Messages.ExecutionStatus result = new main.Messages.ExecutionStatus(this);
-        int from_bitField0_ = bitField0_;
-        int to_bitField0_ = 0;
-        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
-          to_bitField0_ |= 0x00000001;
-        }
-        result.passed_ = passed_;
-        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
-          to_bitField0_ |= 0x00000002;
-        }
-        result.recoverableError_ = recoverableError_;
-        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
-          to_bitField0_ |= 0x00000004;
-        }
-        result.errorMessage_ = errorMessage_;
-        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
-          to_bitField0_ |= 0x00000008;
-        }
-        result.stackTrace_ = stackTrace_;
-        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
-          to_bitField0_ |= 0x00000010;
-        }
-        result.screenShot_ = screenShot_;
-        result.bitField0_ = to_bitField0_;
-        onBuilt();
-        return result;
-      }
-
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof main.Messages.ExecutionStatus) {
-          return mergeFrom((main.Messages.ExecutionStatus)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-
-      public Builder mergeFrom(main.Messages.ExecutionStatus other) {
-        if (other == main.Messages.ExecutionStatus.getDefaultInstance()) return this;
-        if (other.hasPassed()) {
-          setPassed(other.getPassed());
-        }
-        if (other.hasRecoverableError()) {
-          setRecoverableError(other.getRecoverableError());
-        }
-        if (other.hasErrorMessage()) {
-          bitField0_ |= 0x00000004;
-          errorMessage_ = other.errorMessage_;
-          onChanged();
-        }
-        if (other.hasStackTrace()) {
-          bitField0_ |= 0x00000008;
-          stackTrace_ = other.stackTrace_;
-          onChanged();
-        }
-        if (other.hasScreenShot()) {
-          setScreenShot(other.getScreenShot());
-        }
-        this.mergeUnknownFields(other.getUnknownFields());
-        return this;
-      }
-
-      public final boolean isInitialized() {
-        if (!hasPassed()) {
-          
-          return false;
-        }
-        return true;
-      }
-
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        main.Messages.ExecutionStatus parsedMessage = null;
-        try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (main.Messages.ExecutionStatus) e.getUnfinishedMessage();
-          throw e;
-        } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
-        return this;
-      }
-      private int bitField0_;
-
-      // required bool passed = 1;
-      private boolean passed_ ;
-      /**
-       * <code>required bool passed = 1;</code>
-       */
-      public boolean hasPassed() {
-        return ((bitField0_ & 0x00000001) == 0x00000001);
-      }
-      /**
-       * <code>required bool passed = 1;</code>
-       */
-      public boolean getPassed() {
-        return passed_;
-      }
-      /**
-       * <code>required bool passed = 1;</code>
-       */
-      public Builder setPassed(boolean value) {
-        bitField0_ |= 0x00000001;
-        passed_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required bool passed = 1;</code>
-       */
-      public Builder clearPassed() {
-        bitField0_ = (bitField0_ & ~0x00000001);
-        passed_ = false;
-        onChanged();
-        return this;
-      }
-
-      // optional bool recoverableError = 2;
-      private boolean recoverableError_ ;
-      /**
-       * <code>optional bool recoverableError = 2;</code>
-       */
-      public boolean hasRecoverableError() {
-        return ((bitField0_ & 0x00000002) == 0x00000002);
-      }
-      /**
-       * <code>optional bool recoverableError = 2;</code>
-       */
-      public boolean getRecoverableError() {
-        return recoverableError_;
-      }
-      /**
-       * <code>optional bool recoverableError = 2;</code>
-       */
-      public Builder setRecoverableError(boolean value) {
-        bitField0_ |= 0x00000002;
-        recoverableError_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional bool recoverableError = 2;</code>
-       */
-      public Builder clearRecoverableError() {
-        bitField0_ = (bitField0_ & ~0x00000002);
-        recoverableError_ = false;
-        onChanged();
-        return this;
-      }
-
-      // optional string errorMessage = 3;
-      private java.lang.Object errorMessage_ = "";
-      /**
-       * <code>optional string errorMessage = 3;</code>
-       */
-      public boolean hasErrorMessage() {
-        return ((bitField0_ & 0x00000004) == 0x00000004);
-      }
-      /**
-       * <code>optional string errorMessage = 3;</code>
-       */
-      public java.lang.String getErrorMessage() {
-        java.lang.Object ref = errorMessage_;
-        if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          errorMessage_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
-      }
-      /**
-       * <code>optional string errorMessage = 3;</code>
-       */
-      public com.google.protobuf.ByteString
-          getErrorMessageBytes() {
-        java.lang.Object ref = errorMessage_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          errorMessage_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>optional string errorMessage = 3;</code>
-       */
-      public Builder setErrorMessage(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000004;
-        errorMessage_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string errorMessage = 3;</code>
-       */
-      public Builder clearErrorMessage() {
-        bitField0_ = (bitField0_ & ~0x00000004);
-        errorMessage_ = getDefaultInstance().getErrorMessage();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string errorMessage = 3;</code>
-       */
-      public Builder setErrorMessageBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000004;
-        errorMessage_ = value;
-        onChanged();
-        return this;
-      }
-
-      // optional string stackTrace = 4;
-      private java.lang.Object stackTrace_ = "";
-      /**
-       * <code>optional string stackTrace = 4;</code>
-       */
-      public boolean hasStackTrace() {
-        return ((bitField0_ & 0x00000008) == 0x00000008);
-      }
-      /**
-       * <code>optional string stackTrace = 4;</code>
-       */
-      public java.lang.String getStackTrace() {
-        java.lang.Object ref = stackTrace_;
-        if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          stackTrace_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
-      }
-      /**
-       * <code>optional string stackTrace = 4;</code>
-       */
-      public com.google.protobuf.ByteString
-          getStackTraceBytes() {
-        java.lang.Object ref = stackTrace_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          stackTrace_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>optional string stackTrace = 4;</code>
-       */
-      public Builder setStackTrace(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000008;
-        stackTrace_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string stackTrace = 4;</code>
-       */
-      public Builder clearStackTrace() {
-        bitField0_ = (bitField0_ & ~0x00000008);
-        stackTrace_ = getDefaultInstance().getStackTrace();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string stackTrace = 4;</code>
-       */
-      public Builder setStackTraceBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000008;
-        stackTrace_ = value;
-        onChanged();
-        return this;
-      }
-
-      // optional bytes screenShot = 5;
-      private com.google.protobuf.ByteString screenShot_ = com.google.protobuf.ByteString.EMPTY;
-      /**
-       * <code>optional bytes screenShot = 5;</code>
-       */
-      public boolean hasScreenShot() {
-        return ((bitField0_ & 0x00000010) == 0x00000010);
-      }
-      /**
-       * <code>optional bytes screenShot = 5;</code>
-       */
-      public com.google.protobuf.ByteString getScreenShot() {
-        return screenShot_;
-      }
-      /**
-       * <code>optional bytes screenShot = 5;</code>
-       */
-      public Builder setScreenShot(com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000010;
-        screenShot_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional bytes screenShot = 5;</code>
-       */
-      public Builder clearScreenShot() {
-        bitField0_ = (bitField0_ & ~0x00000010);
-        screenShot_ = getDefaultInstance().getScreenShot();
-        onChanged();
-        return this;
-      }
-
-      // @@protoc_insertion_point(builder_scope:main.ExecutionStatus)
-    }
-
-    static {
-      defaultInstance = new ExecutionStatus(true);
-      defaultInstance.initFields();
-    }
-
-    // @@protoc_insertion_point(class_scope:main.ExecutionStatus)
-  }
-
   public interface KillProcessRequestOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
   }
@@ -1201,19 +320,19 @@ public final class Messages {
   public interface ExecutionStatusResponseOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
 
-    // required .main.ExecutionStatus executionStatus = 1;
+    // required .main.ProtoExecutionResult executionStatus = 1;
     /**
-     * <code>required .main.ExecutionStatus executionStatus = 1;</code>
+     * <code>required .main.ProtoExecutionResult executionStatus = 1;</code>
      */
     boolean hasExecutionStatus();
     /**
-     * <code>required .main.ExecutionStatus executionStatus = 1;</code>
+     * <code>required .main.ProtoExecutionResult executionStatus = 1;</code>
      */
-    main.Messages.ExecutionStatus getExecutionStatus();
+    main.Spec.ProtoExecutionResult getExecutionStatus();
     /**
-     * <code>required .main.ExecutionStatus executionStatus = 1;</code>
+     * <code>required .main.ProtoExecutionResult executionStatus = 1;</code>
      */
-    main.Messages.ExecutionStatusOrBuilder getExecutionStatusOrBuilder();
+    main.Spec.ProtoExecutionResultOrBuilder getExecutionStatusOrBuilder();
   }
   /**
    * Protobuf type {@code main.ExecutionStatusResponse}
@@ -1272,11 +391,11 @@ public final class Messages {
               break;
             }
             case 10: {
-              main.Messages.ExecutionStatus.Builder subBuilder = null;
+              main.Spec.ProtoExecutionResult.Builder subBuilder = null;
               if (((bitField0_ & 0x00000001) == 0x00000001)) {
                 subBuilder = executionStatus_.toBuilder();
               }
-              executionStatus_ = input.readMessage(main.Messages.ExecutionStatus.PARSER, extensionRegistry);
+              executionStatus_ = input.readMessage(main.Spec.ProtoExecutionResult.PARSER, extensionRegistry);
               if (subBuilder != null) {
                 subBuilder.mergeFrom(executionStatus_);
                 executionStatus_ = subBuilder.buildPartial();
@@ -1324,30 +443,30 @@ public final class Messages {
     }
 
     private int bitField0_;
-    // required .main.ExecutionStatus executionStatus = 1;
+    // required .main.ProtoExecutionResult executionStatus = 1;
     public static final int EXECUTIONSTATUS_FIELD_NUMBER = 1;
-    private main.Messages.ExecutionStatus executionStatus_;
+    private main.Spec.ProtoExecutionResult executionStatus_;
     /**
-     * <code>required .main.ExecutionStatus executionStatus = 1;</code>
+     * <code>required .main.ProtoExecutionResult executionStatus = 1;</code>
      */
     public boolean hasExecutionStatus() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
     /**
-     * <code>required .main.ExecutionStatus executionStatus = 1;</code>
+     * <code>required .main.ProtoExecutionResult executionStatus = 1;</code>
      */
-    public main.Messages.ExecutionStatus getExecutionStatus() {
+    public main.Spec.ProtoExecutionResult getExecutionStatus() {
       return executionStatus_;
     }
     /**
-     * <code>required .main.ExecutionStatus executionStatus = 1;</code>
+     * <code>required .main.ProtoExecutionResult executionStatus = 1;</code>
      */
-    public main.Messages.ExecutionStatusOrBuilder getExecutionStatusOrBuilder() {
+    public main.Spec.ProtoExecutionResultOrBuilder getExecutionStatusOrBuilder() {
       return executionStatus_;
     }
 
     private void initFields() {
-      executionStatus_ = main.Messages.ExecutionStatus.getDefaultInstance();
+      executionStatus_ = main.Spec.ProtoExecutionResult.getDefaultInstance();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -1508,7 +627,7 @@ public final class Messages {
       public Builder clear() {
         super.clear();
         if (executionStatusBuilder_ == null) {
-          executionStatus_ = main.Messages.ExecutionStatus.getDefaultInstance();
+          executionStatus_ = main.Spec.ProtoExecutionResult.getDefaultInstance();
         } else {
           executionStatusBuilder_.clear();
         }
@@ -1603,20 +722,20 @@ public final class Messages {
       }
       private int bitField0_;
 
-      // required .main.ExecutionStatus executionStatus = 1;
-      private main.Messages.ExecutionStatus executionStatus_ = main.Messages.ExecutionStatus.getDefaultInstance();
+      // required .main.ProtoExecutionResult executionStatus = 1;
+      private main.Spec.ProtoExecutionResult executionStatus_ = main.Spec.ProtoExecutionResult.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
-          main.Messages.ExecutionStatus, main.Messages.ExecutionStatus.Builder, main.Messages.ExecutionStatusOrBuilder> executionStatusBuilder_;
+          main.Spec.ProtoExecutionResult, main.Spec.ProtoExecutionResult.Builder, main.Spec.ProtoExecutionResultOrBuilder> executionStatusBuilder_;
       /**
-       * <code>required .main.ExecutionStatus executionStatus = 1;</code>
+       * <code>required .main.ProtoExecutionResult executionStatus = 1;</code>
        */
       public boolean hasExecutionStatus() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       /**
-       * <code>required .main.ExecutionStatus executionStatus = 1;</code>
+       * <code>required .main.ProtoExecutionResult executionStatus = 1;</code>
        */
-      public main.Messages.ExecutionStatus getExecutionStatus() {
+      public main.Spec.ProtoExecutionResult getExecutionStatus() {
         if (executionStatusBuilder_ == null) {
           return executionStatus_;
         } else {
@@ -1624,9 +743,9 @@ public final class Messages {
         }
       }
       /**
-       * <code>required .main.ExecutionStatus executionStatus = 1;</code>
+       * <code>required .main.ProtoExecutionResult executionStatus = 1;</code>
        */
-      public Builder setExecutionStatus(main.Messages.ExecutionStatus value) {
+      public Builder setExecutionStatus(main.Spec.ProtoExecutionResult value) {
         if (executionStatusBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -1640,10 +759,10 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>required .main.ExecutionStatus executionStatus = 1;</code>
+       * <code>required .main.ProtoExecutionResult executionStatus = 1;</code>
        */
       public Builder setExecutionStatus(
-          main.Messages.ExecutionStatus.Builder builderForValue) {
+          main.Spec.ProtoExecutionResult.Builder builderForValue) {
         if (executionStatusBuilder_ == null) {
           executionStatus_ = builderForValue.build();
           onChanged();
@@ -1654,14 +773,14 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>required .main.ExecutionStatus executionStatus = 1;</code>
+       * <code>required .main.ProtoExecutionResult executionStatus = 1;</code>
        */
-      public Builder mergeExecutionStatus(main.Messages.ExecutionStatus value) {
+      public Builder mergeExecutionStatus(main.Spec.ProtoExecutionResult value) {
         if (executionStatusBuilder_ == null) {
           if (((bitField0_ & 0x00000001) == 0x00000001) &&
-              executionStatus_ != main.Messages.ExecutionStatus.getDefaultInstance()) {
+              executionStatus_ != main.Spec.ProtoExecutionResult.getDefaultInstance()) {
             executionStatus_ =
-              main.Messages.ExecutionStatus.newBuilder(executionStatus_).mergeFrom(value).buildPartial();
+              main.Spec.ProtoExecutionResult.newBuilder(executionStatus_).mergeFrom(value).buildPartial();
           } else {
             executionStatus_ = value;
           }
@@ -1673,11 +792,11 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>required .main.ExecutionStatus executionStatus = 1;</code>
+       * <code>required .main.ProtoExecutionResult executionStatus = 1;</code>
        */
       public Builder clearExecutionStatus() {
         if (executionStatusBuilder_ == null) {
-          executionStatus_ = main.Messages.ExecutionStatus.getDefaultInstance();
+          executionStatus_ = main.Spec.ProtoExecutionResult.getDefaultInstance();
           onChanged();
         } else {
           executionStatusBuilder_.clear();
@@ -1686,17 +805,17 @@ public final class Messages {
         return this;
       }
       /**
-       * <code>required .main.ExecutionStatus executionStatus = 1;</code>
+       * <code>required .main.ProtoExecutionResult executionStatus = 1;</code>
        */
-      public main.Messages.ExecutionStatus.Builder getExecutionStatusBuilder() {
+      public main.Spec.ProtoExecutionResult.Builder getExecutionStatusBuilder() {
         bitField0_ |= 0x00000001;
         onChanged();
         return getExecutionStatusFieldBuilder().getBuilder();
       }
       /**
-       * <code>required .main.ExecutionStatus executionStatus = 1;</code>
+       * <code>required .main.ProtoExecutionResult executionStatus = 1;</code>
        */
-      public main.Messages.ExecutionStatusOrBuilder getExecutionStatusOrBuilder() {
+      public main.Spec.ProtoExecutionResultOrBuilder getExecutionStatusOrBuilder() {
         if (executionStatusBuilder_ != null) {
           return executionStatusBuilder_.getMessageOrBuilder();
         } else {
@@ -1704,14 +823,14 @@ public final class Messages {
         }
       }
       /**
-       * <code>required .main.ExecutionStatus executionStatus = 1;</code>
+       * <code>required .main.ProtoExecutionResult executionStatus = 1;</code>
        */
       private com.google.protobuf.SingleFieldBuilder<
-          main.Messages.ExecutionStatus, main.Messages.ExecutionStatus.Builder, main.Messages.ExecutionStatusOrBuilder> 
+          main.Spec.ProtoExecutionResult, main.Spec.ProtoExecutionResult.Builder, main.Spec.ProtoExecutionResultOrBuilder> 
           getExecutionStatusFieldBuilder() {
         if (executionStatusBuilder_ == null) {
           executionStatusBuilder_ = new com.google.protobuf.SingleFieldBuilder<
-              main.Messages.ExecutionStatus, main.Messages.ExecutionStatus.Builder, main.Messages.ExecutionStatusOrBuilder>(
+              main.Spec.ProtoExecutionResult, main.Spec.ProtoExecutionResult.Builder, main.Spec.ProtoExecutionResultOrBuilder>(
                   executionStatus_,
                   getParentForChildren(),
                   isClean());
@@ -17015,11 +16134,6 @@ public final class Messages {
   }
 
   private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_main_ExecutionStatus_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_main_ExecutionStatus_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
     internal_static_main_KillProcessRequest_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
@@ -17134,219 +16248,210 @@ public final class Messages {
   static {
     java.lang.String[] descriptorData = {
       "\n\024gauge/messages.proto\022\004main\032\020gauge/spec" +
-      ".proto\"y\n\017ExecutionStatus\022\016\n\006passed\030\001 \002(" +
-      "\010\022\030\n\020recoverableError\030\002 \001(\010\022\024\n\014errorMess" +
-      "age\030\003 \001(\t\022\022\n\nstackTrace\030\004 \001(\t\022\022\n\nscreenS" +
-      "hot\030\005 \001(\014\"\024\n\022KillProcessRequest\"I\n\027Execu" +
-      "tionStatusResponse\022.\n\017executionStatus\030\001 " +
-      "\002(\0132\025.main.ExecutionStatus\"M\n\030ExecutionS" +
-      "tartingRequest\0221\n\024currentExecutionInfo\030\001" +
-      " \001(\0132\023.main.ExecutionInfo\"Q\n\034SpecExecuti" +
-      "onStartingRequest\0221\n\024currentExecutionInf",
-      "o\030\001 \001(\0132\023.main.ExecutionInfo\"O\n\032SpecExec" +
-      "utionEndingRequest\0221\n\024currentExecutionIn" +
-      "fo\030\001 \001(\0132\023.main.ExecutionInfo\"U\n Scenari" +
-      "oExecutionStartingRequest\0221\n\024currentExec" +
-      "utionInfo\030\001 \001(\0132\023.main.ExecutionInfo\"S\n\036" +
-      "ScenarioExecutionEndingRequest\0221\n\024curren" +
-      "tExecutionInfo\030\001 \001(\0132\023.main.ExecutionInf" +
-      "o\"Q\n\034StepExecutionStartingRequest\0221\n\024cur" +
-      "rentExecutionInfo\030\001 \001(\0132\023.main.Execution" +
-      "Info\"O\n\032StepExecutionEndingRequest\0221\n\024cu",
-      "rrentExecutionInfo\030\001 \001(\0132\023.main.Executio" +
-      "nInfo\"\232\001\n\rExecutionInfo\022#\n\013currentSpec\030\001" +
-      " \001(\0132\016.main.SpecInfo\022+\n\017currentScenario\030" +
-      "\002 \001(\0132\022.main.ScenarioInfo\022#\n\013currentStep" +
-      "\030\003 \001(\0132\016.main.StepInfo\022\022\n\nstacktrace\030\004 \001" +
-      "(\t\"J\n\010SpecInfo\022\014\n\004name\030\001 \002(\t\022\020\n\010fileName" +
-      "\030\002 \002(\t\022\020\n\010isFailed\030\003 \002(\010\022\014\n\004tags\030\004 \003(\t\"<" +
-      "\n\014ScenarioInfo\022\014\n\004name\030\001 \002(\t\022\020\n\010isFailed" +
-      "\030\002 \002(\010\022\014\n\004tags\030\003 \003(\t\"D\n\010StepInfo\022&\n\004step" +
-      "\030\001 \002(\0132\030.main.ExecuteStepRequest\022\020\n\010isFa",
-      "iled\030\002 \002(\010\"{\n\022ExecuteStepRequest\022\026\n\016actu" +
-      "alStepText\030\001 \002(\t\022\026\n\016parsedStepText\030\002 \002(\t" +
-      "\022\027\n\017scenarioFailing\030\003 \001(\010\022\034\n\004args\030\004 \003(\0132" +
-      "\016.main.Argument\"B\n\023StepValidateRequest\022\020" +
-      "\n\010stepText\030\001 \002(\t\022\031\n\021numberOfArguments\030\002 " +
-      "\002(\005\"=\n\024StepValidateResponse\022\017\n\007isValid\030\001" +
-      " \002(\010\022\024\n\014errorMessage\030\002 \001(\t\"K\n\026ExecutionE" +
-      "ndingRequest\0221\n\024currentExecutionInfo\030\001 \001" +
-      "(\0132\023.main.ExecutionInfo\"6\n\024SuiteExecutio" +
-      "nResult\022\036\n\005specs\030\001 \003(\0132\017.main.ProtoSpec\"",
-      "\022\n\020StepNamesRequest\"\"\n\021StepNamesResponse" +
-      "\022\r\n\005steps\030\001 \003(\t\"\352\013\n\007Message\022.\n\013messageTy" +
-      "pe\030\001 \002(\0162\031.main.Message.MessageType\022\021\n\tm" +
-      "essageId\030\002 \002(\003\022@\n\030executionStartingReque" +
-      "st\030\003 \001(\0132\036.main.ExecutionStartingRequest" +
-      "\022H\n\034specExecutionStartingRequest\030\004 \001(\0132\"" +
-      ".main.SpecExecutionStartingRequest\022D\n\032sp" +
-      "ecExecutionEndingRequest\030\005 \001(\0132 .main.Sp" +
-      "ecExecutionEndingRequest\022P\n scenarioExec" +
-      "utionStartingRequest\030\006 \001(\0132&.main.Scenar",
-      "ioExecutionStartingRequest\022L\n\036scenarioEx" +
-      "ecutionEndingRequest\030\007 \001(\0132$.main.Scenar" +
-      "ioExecutionEndingRequest\022H\n\034stepExecutio" +
-      "nStartingRequest\030\010 \001(\0132\".main.StepExecut" +
-      "ionStartingRequest\022D\n\032stepExecutionEndin" +
-      "gRequest\030\t \001(\0132 .main.StepExecutionEndin" +
-      "gRequest\0224\n\022executeStepRequest\030\n \001(\0132\030.m" +
-      "ain.ExecuteStepRequest\022<\n\026executionEndin" +
-      "gRequest\030\013 \001(\0132\034.main.ExecutionEndingReq" +
-      "uest\0226\n\023stepValidateRequest\030\014 \001(\0132\031.main",
-      ".StepValidateRequest\0228\n\024stepValidateResp" +
-      "onse\030\r \001(\0132\032.main.StepValidateResponse\022>" +
-      "\n\027executionStatusResponse\030\016 \001(\0132\035.main.E" +
-      "xecutionStatusResponse\0220\n\020stepNamesReque" +
-      "st\030\017 \001(\0132\026.main.StepNamesRequest\0222\n\021step" +
-      "NamesResponse\030\020 \001(\0132\027.main.StepNamesResp" +
-      "onse\0228\n\024suiteExecutionResult\030\021 \001(\0132\032.mai" +
-      "n.SuiteExecutionResult\0224\n\022killProcessReq" +
-      "uest\030\022 \001(\0132\030.main.KillProcessRequest\"\235\003\n" +
-      "\013MessageType\022\025\n\021ExecutionStarting\020\000\022\031\n\025S",
-      "pecExecutionStarting\020\001\022\027\n\023SpecExecutionE" +
-      "nding\020\002\022\035\n\031ScenarioExecutionStarting\020\003\022\033" +
-      "\n\027ScenarioExecutionEnding\020\004\022\031\n\025StepExecu" +
-      "tionStarting\020\005\022\027\n\023StepExecutionEnding\020\006\022" +
-      "\017\n\013ExecuteStep\020\007\022\023\n\017ExecutionEnding\020\010\022\027\n" +
-      "\023StepValidateRequest\020\t\022\030\n\024StepValidateRe" +
-      "sponse\020\n\022\033\n\027ExecutionStatusResponse\020\013\022\024\n" +
-      "\020StepNamesRequest\020\014\022\025\n\021StepNamesResponse" +
-      "\020\r\022\026\n\022KillProcessRequest\020\016\022\030\n\024SuiteExecu" +
-      "tionResult\020\017"
+      ".proto\"\024\n\022KillProcessRequest\"N\n\027Executio" +
+      "nStatusResponse\0223\n\017executionStatus\030\001 \002(\013" +
+      "2\032.main.ProtoExecutionResult\"M\n\030Executio" +
+      "nStartingRequest\0221\n\024currentExecutionInfo" +
+      "\030\001 \001(\0132\023.main.ExecutionInfo\"Q\n\034SpecExecu" +
+      "tionStartingRequest\0221\n\024currentExecutionI" +
+      "nfo\030\001 \001(\0132\023.main.ExecutionInfo\"O\n\032SpecEx" +
+      "ecutionEndingRequest\0221\n\024currentExecution" +
+      "Info\030\001 \001(\0132\023.main.ExecutionInfo\"U\n Scena",
+      "rioExecutionStartingRequest\0221\n\024currentEx" +
+      "ecutionInfo\030\001 \001(\0132\023.main.ExecutionInfo\"S" +
+      "\n\036ScenarioExecutionEndingRequest\0221\n\024curr" +
+      "entExecutionInfo\030\001 \001(\0132\023.main.ExecutionI" +
+      "nfo\"Q\n\034StepExecutionStartingRequest\0221\n\024c" +
+      "urrentExecutionInfo\030\001 \001(\0132\023.main.Executi" +
+      "onInfo\"O\n\032StepExecutionEndingRequest\0221\n\024" +
+      "currentExecutionInfo\030\001 \001(\0132\023.main.Execut" +
+      "ionInfo\"\232\001\n\rExecutionInfo\022#\n\013currentSpec" +
+      "\030\001 \001(\0132\016.main.SpecInfo\022+\n\017currentScenari",
+      "o\030\002 \001(\0132\022.main.ScenarioInfo\022#\n\013currentSt" +
+      "ep\030\003 \001(\0132\016.main.StepInfo\022\022\n\nstacktrace\030\004" +
+      " \001(\t\"J\n\010SpecInfo\022\014\n\004name\030\001 \002(\t\022\020\n\010fileNa" +
+      "me\030\002 \002(\t\022\020\n\010isFailed\030\003 \002(\010\022\014\n\004tags\030\004 \003(\t" +
+      "\"<\n\014ScenarioInfo\022\014\n\004name\030\001 \002(\t\022\020\n\010isFail" +
+      "ed\030\002 \002(\010\022\014\n\004tags\030\003 \003(\t\"D\n\010StepInfo\022&\n\004st" +
+      "ep\030\001 \002(\0132\030.main.ExecuteStepRequest\022\020\n\010is" +
+      "Failed\030\002 \002(\010\"{\n\022ExecuteStepRequest\022\026\n\016ac" +
+      "tualStepText\030\001 \002(\t\022\026\n\016parsedStepText\030\002 \002" +
+      "(\t\022\027\n\017scenarioFailing\030\003 \001(\010\022\034\n\004args\030\004 \003(",
+      "\0132\016.main.Argument\"B\n\023StepValidateRequest" +
+      "\022\020\n\010stepText\030\001 \002(\t\022\031\n\021numberOfArguments\030" +
+      "\002 \002(\005\"=\n\024StepValidateResponse\022\017\n\007isValid" +
+      "\030\001 \002(\010\022\024\n\014errorMessage\030\002 \001(\t\"K\n\026Executio" +
+      "nEndingRequest\0221\n\024currentExecutionInfo\030\001" +
+      " \001(\0132\023.main.ExecutionInfo\"6\n\024SuiteExecut" +
+      "ionResult\022\036\n\005specs\030\001 \003(\0132\017.main.ProtoSpe" +
+      "c\"\022\n\020StepNamesRequest\"\"\n\021StepNamesRespon" +
+      "se\022\r\n\005steps\030\001 \003(\t\"\352\013\n\007Message\022.\n\013message" +
+      "Type\030\001 \002(\0162\031.main.Message.MessageType\022\021\n",
+      "\tmessageId\030\002 \002(\003\022@\n\030executionStartingReq" +
+      "uest\030\003 \001(\0132\036.main.ExecutionStartingReque" +
+      "st\022H\n\034specExecutionStartingRequest\030\004 \001(\013" +
+      "2\".main.SpecExecutionStartingRequest\022D\n\032" +
+      "specExecutionEndingRequest\030\005 \001(\0132 .main." +
+      "SpecExecutionEndingRequest\022P\n scenarioEx" +
+      "ecutionStartingRequest\030\006 \001(\0132&.main.Scen" +
+      "arioExecutionStartingRequest\022L\n\036scenario" +
+      "ExecutionEndingRequest\030\007 \001(\0132$.main.Scen" +
+      "arioExecutionEndingRequest\022H\n\034stepExecut",
+      "ionStartingRequest\030\010 \001(\0132\".main.StepExec" +
+      "utionStartingRequest\022D\n\032stepExecutionEnd" +
+      "ingRequest\030\t \001(\0132 .main.StepExecutionEnd" +
+      "ingRequest\0224\n\022executeStepRequest\030\n \001(\0132\030" +
+      ".main.ExecuteStepRequest\022<\n\026executionEnd" +
+      "ingRequest\030\013 \001(\0132\034.main.ExecutionEndingR" +
+      "equest\0226\n\023stepValidateRequest\030\014 \001(\0132\031.ma" +
+      "in.StepValidateRequest\0228\n\024stepValidateRe" +
+      "sponse\030\r \001(\0132\032.main.StepValidateResponse" +
+      "\022>\n\027executionStatusResponse\030\016 \001(\0132\035.main",
+      ".ExecutionStatusResponse\0220\n\020stepNamesReq" +
+      "uest\030\017 \001(\0132\026.main.StepNamesRequest\0222\n\021st" +
+      "epNamesResponse\030\020 \001(\0132\027.main.StepNamesRe" +
+      "sponse\0228\n\024suiteExecutionResult\030\021 \001(\0132\032.m" +
+      "ain.SuiteExecutionResult\0224\n\022killProcessR" +
+      "equest\030\022 \001(\0132\030.main.KillProcessRequest\"\235" +
+      "\003\n\013MessageType\022\025\n\021ExecutionStarting\020\000\022\031\n" +
+      "\025SpecExecutionStarting\020\001\022\027\n\023SpecExecutio" +
+      "nEnding\020\002\022\035\n\031ScenarioExecutionStarting\020\003" +
+      "\022\033\n\027ScenarioExecutionEnding\020\004\022\031\n\025StepExe",
+      "cutionStarting\020\005\022\027\n\023StepExecutionEnding\020" +
+      "\006\022\017\n\013ExecuteStep\020\007\022\023\n\017ExecutionEnding\020\010\022" +
+      "\027\n\023StepValidateRequest\020\t\022\030\n\024StepValidate" +
+      "Response\020\n\022\033\n\027ExecutionStatusResponse\020\013\022" +
+      "\024\n\020StepNamesRequest\020\014\022\025\n\021StepNamesRespon" +
+      "se\020\r\022\026\n\022KillProcessRequest\020\016\022\030\n\024SuiteExe" +
+      "cutionResult\020\017"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
         public com.google.protobuf.ExtensionRegistry assignDescriptors(
             com.google.protobuf.Descriptors.FileDescriptor root) {
           descriptor = root;
-          internal_static_main_ExecutionStatus_descriptor =
-            getDescriptor().getMessageTypes().get(0);
-          internal_static_main_ExecutionStatus_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_main_ExecutionStatus_descriptor,
-              new java.lang.String[] { "Passed", "RecoverableError", "ErrorMessage", "StackTrace", "ScreenShot", });
           internal_static_main_KillProcessRequest_descriptor =
-            getDescriptor().getMessageTypes().get(1);
+            getDescriptor().getMessageTypes().get(0);
           internal_static_main_KillProcessRequest_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_main_KillProcessRequest_descriptor,
               new java.lang.String[] { });
           internal_static_main_ExecutionStatusResponse_descriptor =
-            getDescriptor().getMessageTypes().get(2);
+            getDescriptor().getMessageTypes().get(1);
           internal_static_main_ExecutionStatusResponse_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_main_ExecutionStatusResponse_descriptor,
               new java.lang.String[] { "ExecutionStatus", });
           internal_static_main_ExecutionStartingRequest_descriptor =
-            getDescriptor().getMessageTypes().get(3);
+            getDescriptor().getMessageTypes().get(2);
           internal_static_main_ExecutionStartingRequest_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_main_ExecutionStartingRequest_descriptor,
               new java.lang.String[] { "CurrentExecutionInfo", });
           internal_static_main_SpecExecutionStartingRequest_descriptor =
-            getDescriptor().getMessageTypes().get(4);
+            getDescriptor().getMessageTypes().get(3);
           internal_static_main_SpecExecutionStartingRequest_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_main_SpecExecutionStartingRequest_descriptor,
               new java.lang.String[] { "CurrentExecutionInfo", });
           internal_static_main_SpecExecutionEndingRequest_descriptor =
-            getDescriptor().getMessageTypes().get(5);
+            getDescriptor().getMessageTypes().get(4);
           internal_static_main_SpecExecutionEndingRequest_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_main_SpecExecutionEndingRequest_descriptor,
               new java.lang.String[] { "CurrentExecutionInfo", });
           internal_static_main_ScenarioExecutionStartingRequest_descriptor =
-            getDescriptor().getMessageTypes().get(6);
+            getDescriptor().getMessageTypes().get(5);
           internal_static_main_ScenarioExecutionStartingRequest_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_main_ScenarioExecutionStartingRequest_descriptor,
               new java.lang.String[] { "CurrentExecutionInfo", });
           internal_static_main_ScenarioExecutionEndingRequest_descriptor =
-            getDescriptor().getMessageTypes().get(7);
+            getDescriptor().getMessageTypes().get(6);
           internal_static_main_ScenarioExecutionEndingRequest_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_main_ScenarioExecutionEndingRequest_descriptor,
               new java.lang.String[] { "CurrentExecutionInfo", });
           internal_static_main_StepExecutionStartingRequest_descriptor =
-            getDescriptor().getMessageTypes().get(8);
+            getDescriptor().getMessageTypes().get(7);
           internal_static_main_StepExecutionStartingRequest_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_main_StepExecutionStartingRequest_descriptor,
               new java.lang.String[] { "CurrentExecutionInfo", });
           internal_static_main_StepExecutionEndingRequest_descriptor =
-            getDescriptor().getMessageTypes().get(9);
+            getDescriptor().getMessageTypes().get(8);
           internal_static_main_StepExecutionEndingRequest_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_main_StepExecutionEndingRequest_descriptor,
               new java.lang.String[] { "CurrentExecutionInfo", });
           internal_static_main_ExecutionInfo_descriptor =
-            getDescriptor().getMessageTypes().get(10);
+            getDescriptor().getMessageTypes().get(9);
           internal_static_main_ExecutionInfo_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_main_ExecutionInfo_descriptor,
               new java.lang.String[] { "CurrentSpec", "CurrentScenario", "CurrentStep", "Stacktrace", });
           internal_static_main_SpecInfo_descriptor =
-            getDescriptor().getMessageTypes().get(11);
+            getDescriptor().getMessageTypes().get(10);
           internal_static_main_SpecInfo_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_main_SpecInfo_descriptor,
               new java.lang.String[] { "Name", "FileName", "IsFailed", "Tags", });
           internal_static_main_ScenarioInfo_descriptor =
-            getDescriptor().getMessageTypes().get(12);
+            getDescriptor().getMessageTypes().get(11);
           internal_static_main_ScenarioInfo_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_main_ScenarioInfo_descriptor,
               new java.lang.String[] { "Name", "IsFailed", "Tags", });
           internal_static_main_StepInfo_descriptor =
-            getDescriptor().getMessageTypes().get(13);
+            getDescriptor().getMessageTypes().get(12);
           internal_static_main_StepInfo_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_main_StepInfo_descriptor,
               new java.lang.String[] { "Step", "IsFailed", });
           internal_static_main_ExecuteStepRequest_descriptor =
-            getDescriptor().getMessageTypes().get(14);
+            getDescriptor().getMessageTypes().get(13);
           internal_static_main_ExecuteStepRequest_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_main_ExecuteStepRequest_descriptor,
               new java.lang.String[] { "ActualStepText", "ParsedStepText", "ScenarioFailing", "Args", });
           internal_static_main_StepValidateRequest_descriptor =
-            getDescriptor().getMessageTypes().get(15);
+            getDescriptor().getMessageTypes().get(14);
           internal_static_main_StepValidateRequest_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_main_StepValidateRequest_descriptor,
               new java.lang.String[] { "StepText", "NumberOfArguments", });
           internal_static_main_StepValidateResponse_descriptor =
-            getDescriptor().getMessageTypes().get(16);
+            getDescriptor().getMessageTypes().get(15);
           internal_static_main_StepValidateResponse_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_main_StepValidateResponse_descriptor,
               new java.lang.String[] { "IsValid", "ErrorMessage", });
           internal_static_main_ExecutionEndingRequest_descriptor =
-            getDescriptor().getMessageTypes().get(17);
+            getDescriptor().getMessageTypes().get(16);
           internal_static_main_ExecutionEndingRequest_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_main_ExecutionEndingRequest_descriptor,
               new java.lang.String[] { "CurrentExecutionInfo", });
           internal_static_main_SuiteExecutionResult_descriptor =
-            getDescriptor().getMessageTypes().get(18);
+            getDescriptor().getMessageTypes().get(17);
           internal_static_main_SuiteExecutionResult_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_main_SuiteExecutionResult_descriptor,
               new java.lang.String[] { "Specs", });
           internal_static_main_StepNamesRequest_descriptor =
-            getDescriptor().getMessageTypes().get(19);
+            getDescriptor().getMessageTypes().get(18);
           internal_static_main_StepNamesRequest_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_main_StepNamesRequest_descriptor,
               new java.lang.String[] { });
           internal_static_main_StepNamesResponse_descriptor =
-            getDescriptor().getMessageTypes().get(20);
+            getDescriptor().getMessageTypes().get(19);
           internal_static_main_StepNamesResponse_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_main_StepNamesResponse_descriptor,
               new java.lang.String[] { "Steps", });
           internal_static_main_Message_descriptor =
-            getDescriptor().getMessageTypes().get(21);
+            getDescriptor().getMessageTypes().get(20);
           internal_static_main_Message_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_main_Message_descriptor,

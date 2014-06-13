@@ -9,7 +9,6 @@ It is generated from these files:
 	gauge/messages.proto
 
 It has these top-level messages:
-	ExecutionStatus
 	KillProcessRequest
 	ExecutionStatusResponse
 	ExecutionStartingRequest
@@ -118,54 +117,6 @@ func (x *Message_MessageType) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-type ExecutionStatus struct {
-	Passed           *bool   `protobuf:"varint,1,req,name=passed" json:"passed,omitempty"`
-	RecoverableError *bool   `protobuf:"varint,2,opt,name=recoverableError" json:"recoverableError,omitempty"`
-	ErrorMessage     *string `protobuf:"bytes,3,opt,name=errorMessage" json:"errorMessage,omitempty"`
-	StackTrace       *string `protobuf:"bytes,4,opt,name=stackTrace" json:"stackTrace,omitempty"`
-	ScreenShot       []byte  `protobuf:"bytes,5,opt,name=screenShot" json:"screenShot,omitempty"`
-	XXX_unrecognized []byte  `json:"-"`
-}
-
-func (m *ExecutionStatus) Reset()         { *m = ExecutionStatus{} }
-func (m *ExecutionStatus) String() string { return proto.CompactTextString(m) }
-func (*ExecutionStatus) ProtoMessage()    {}
-
-func (m *ExecutionStatus) GetPassed() bool {
-	if m != nil && m.Passed != nil {
-		return *m.Passed
-	}
-	return false
-}
-
-func (m *ExecutionStatus) GetRecoverableError() bool {
-	if m != nil && m.RecoverableError != nil {
-		return *m.RecoverableError
-	}
-	return false
-}
-
-func (m *ExecutionStatus) GetErrorMessage() string {
-	if m != nil && m.ErrorMessage != nil {
-		return *m.ErrorMessage
-	}
-	return ""
-}
-
-func (m *ExecutionStatus) GetStackTrace() string {
-	if m != nil && m.StackTrace != nil {
-		return *m.StackTrace
-	}
-	return ""
-}
-
-func (m *ExecutionStatus) GetScreenShot() []byte {
-	if m != nil {
-		return m.ScreenShot
-	}
-	return nil
-}
-
 type KillProcessRequest struct {
 	XXX_unrecognized []byte `json:"-"`
 }
@@ -177,15 +128,15 @@ func (*KillProcessRequest) ProtoMessage()    {}
 // Sends to any request which needs a execution status as response
 // usually step execution, hooks etc will return this
 type ExecutionStatusResponse struct {
-	ExecutionStatus  *ExecutionStatus `protobuf:"bytes,1,req,name=executionStatus" json:"executionStatus,omitempty"`
-	XXX_unrecognized []byte           `json:"-"`
+	ExecutionStatus  *ProtoExecutionResult `protobuf:"bytes,1,req,name=executionStatus" json:"executionStatus,omitempty"`
+	XXX_unrecognized []byte                `json:"-"`
 }
 
 func (m *ExecutionStatusResponse) Reset()         { *m = ExecutionStatusResponse{} }
 func (m *ExecutionStatusResponse) String() string { return proto.CompactTextString(m) }
 func (*ExecutionStatusResponse) ProtoMessage()    {}
 
-func (m *ExecutionStatusResponse) GetExecutionStatus() *ExecutionStatus {
+func (m *ExecutionStatusResponse) GetExecutionStatus() *ProtoExecutionResult {
 	if m != nil {
 		return m.ExecutionStatus
 	}

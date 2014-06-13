@@ -5,17 +5,23 @@ import (
 )
 
 type suiteResult struct {
-	specResults           []*specResult
+	specResults          []*specResult
 	preSuite             *ProtoHookFailure
 	postSuite            *ProtoHookFailure
-	currentSpecIndex      int
-	currentScenarioIndex  int
+	currentSpecIndex     int
+	currentScenarioIndex int
 }
 
 type specResult struct {
-	preSuite             *ProtoHookFailure
-	protoSpecResult      *ProtoSpec
-	postSuite            *ProtoHookFailure
+	preSpec         *ProtoHookFailure
+	protoSpecResult *ProtoSpec
+	postSpec        *ProtoHookFailure
+}
+
+type scenarioResult struct {
+	preScenario         *ProtoHookFailure
+	protoScenarioResult *ProtoScenario
+	postScenario        *ProtoHookFailure
 }
 
 type result interface {
@@ -32,11 +38,27 @@ func (suiteResult *suiteResult) getPostHook() **ProtoHookFailure {
 }
 
 func (specResult *specResult) getPreHook() **ProtoHookFailure {
-	return &specResult.preSuite
+	return &specResult.preSpec
 }
 
 func (specResult *specResult) getPostHook() **ProtoHookFailure {
-	return &specResult.preSuite
+	return &specResult.postSpec
+}
+
+func (scenarioResult *scenarioResult) getPreHook() **ProtoHookFailure {
+	return &scenarioResult.preScenario
+}
+
+func (scenarioResult *scenarioResult) getPostHook() **ProtoHookFailure {
+	return &scenarioResult.postScenario
+}
+
+func (specResult *specResult) addSpecItems(spec *specification) {
+	for _, item := range spec.items {
+		if item.kind() != scenarioKind {
+			specResult.protoSpecResult.Items = append(specResult.protoSpecResult.Items, convertToProtoItem(item))
+		}
+	}
 }
 
 func newSuiteResult() *suiteResult {
@@ -48,31 +70,23 @@ func newSuiteResult() *suiteResult {
 
 func addPreHook(result result, execStatus *ExecutionStatus) {
 	if !execStatus.GetPassed() {
-		*(result.getPreHook()) = &ProtoHookFailure{StackTrace:execStatus.StackTrace, ErrorMessage:execStatus.ErrorMessage, ScreenShot:execStatus.ScreenShot}
+		*(result.getPreHook()) = getProtoHookFailure(execStatus)
 	}
 }
 
 func addPostHook(result result, execStatus *ExecutionStatus) {
 	if !execStatus.GetPassed() {
-		*(result.getPostHook()) = &ProtoHookFailure{StackTrace:execStatus.StackTrace, ErrorMessage:execStatus.ErrorMessage, ScreenShot:execStatus.ScreenShot}
+		*(result.getPostHook()) = getProtoHookFailure(execStatus)
 	}
 }
 
 func (suiteResult *suiteResult) addSpecResult(specResult *specResult) {
 	suiteResult.specResults = append(suiteResult.specResults, specResult)
-	suiteResult.currentSpecIndex ++
+	suiteResult.currentSpecIndex++
 }
 
-func (suiteResult *suiteResult) addPreHook(execStatus *ExecutionStatus) {
-	if !execStatus.GetPassed() {
-		suiteResult.preSuite = &ProtoHookFailure{StackTrace:execStatus.StackTrace, ErrorMessage:execStatus.ErrorMessage, ScreenShot:execStatus.ScreenShot}
-	}
-}
-
-func (suiteResult *suiteResult) addPostHook(execStatus *ExecutionStatus) {
-	if !execStatus.GetPassed() {
-		suiteResult.postSuite = &ProtoHookFailure{StackTrace:execStatus.StackTrace, ErrorMessage:execStatus.ErrorMessage, ScreenShot:execStatus.ScreenShot}
-	}
+func getProtoHookFailure(execStatus *ExecutionStatus) *ProtoHookFailure {
+	return &ProtoHookFailure{StackTrace: execStatus.StackTrace, ErrorMessage: execStatus.ErrorMessage, ScreenShot: execStatus.ScreenShot}
 }
 
 func (suiteResult *suiteResult) startTableDrivenScenarios() {

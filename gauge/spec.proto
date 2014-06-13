@@ -39,12 +39,10 @@ message ProtoTableDrivenScenario {
 }
 
 message ProtoStep {
-    required string text = 1;
-    repeated Parameter parameters = 2;
+    required string actualText = 1;
+    required string parsedText = 2;
     repeated Fragment fragments = 3;
-    repeated ProtoStepExecutionResult result = 4;
-    optional ProtoHookFailure preHookFailure = 5;
-    optional ProtoHookFailure postHookFailure = 6;
+    optional ProtoStepExecutionResult stepExecutionResult = 4;
 }
 
 message ProtoConcept {
@@ -98,10 +96,19 @@ message ProtoTableRow {
 }
 
 message ProtoStepExecutionResult {
-    required bool isPassed = 1;
-    optional string stackTrace = 2;
-    repeated Argument argument = 3;
+    required ProtoExecutionResult executionResult = 1;
+    optional ProtoHookFailure preHookFailure = 2;
+    optional ProtoHookFailure postHookFailure = 3;
 }
+
+message ProtoExecutionResult {
+    required bool passed = 1;
+    optional bool recoverableError = 2;
+    optional string errorMessage = 3;
+    optional string stackTrace = 4;
+    optional bytes screenShot = 5;
+}
+
 
 message SpecExecStatus {
     repeated ProtoItem item = 1;

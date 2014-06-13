@@ -42,15 +42,14 @@ type argLookup struct {
 }
 
 type step struct {
-	lineNo           int
-	value            string
-	lineText         string
-	args             []*stepArg
-	isConcept        bool
-	lookup           argLookup
-	conceptSteps     []*step
-	executionResults []*stepExecutionResult
-	fragments        []*Fragment
+	lineNo       int
+	value        string
+	lineText     string
+	args         []*stepArg
+	isConcept    bool
+	lookup       argLookup
+	conceptSteps []*step
+	fragments    []*Fragment
 }
 
 type stepExecutionResult struct {

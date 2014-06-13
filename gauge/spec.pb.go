@@ -23,6 +23,7 @@ It has these top-level messages:
 	ProtoTable
 	ProtoTableRow
 	ProtoStepExecutionResult
+	ProtoExecutionResult
 	SpecExecStatus
 	ProtoHookFailure
 */
@@ -318,31 +319,29 @@ func (m *ProtoTableDrivenScenario) GetScenarios() []*ProtoScenario {
 }
 
 type ProtoStep struct {
-	Text             *string                     `protobuf:"bytes,1,req,name=text" json:"text,omitempty"`
-	Parameters       []*Parameter                `protobuf:"bytes,2,rep,name=parameters" json:"parameters,omitempty"`
-	Fragments        []*Fragment                 `protobuf:"bytes,3,rep,name=fragments" json:"fragments,omitempty"`
-	Result           []*ProtoStepExecutionResult `protobuf:"bytes,4,rep,name=result" json:"result,omitempty"`
-	PreHookFailure   *ProtoHookFailure           `protobuf:"bytes,5,opt,name=preHookFailure" json:"preHookFailure,omitempty"`
-	PostHookFailure  *ProtoHookFailure           `protobuf:"bytes,6,opt,name=postHookFailure" json:"postHookFailure,omitempty"`
-	XXX_unrecognized []byte                      `json:"-"`
+	ActualText          *string                   `protobuf:"bytes,1,req,name=actualText" json:"actualText,omitempty"`
+	ParsedText          *string                   `protobuf:"bytes,2,req,name=parsedText" json:"parsedText,omitempty"`
+	Fragments           []*Fragment               `protobuf:"bytes,3,rep,name=fragments" json:"fragments,omitempty"`
+	StepExecutionResult *ProtoStepExecutionResult `protobuf:"bytes,4,opt,name=stepExecutionResult" json:"stepExecutionResult,omitempty"`
+	XXX_unrecognized    []byte                    `json:"-"`
 }
 
 func (m *ProtoStep) Reset()         { *m = ProtoStep{} }
 func (m *ProtoStep) String() string { return proto.CompactTextString(m) }
 func (*ProtoStep) ProtoMessage()    {}
 
-func (m *ProtoStep) GetText() string {
-	if m != nil && m.Text != nil {
-		return *m.Text
+func (m *ProtoStep) GetActualText() string {
+	if m != nil && m.ActualText != nil {
+		return *m.ActualText
 	}
 	return ""
 }
 
-func (m *ProtoStep) GetParameters() []*Parameter {
-	if m != nil {
-		return m.Parameters
+func (m *ProtoStep) GetParsedText() string {
+	if m != nil && m.ParsedText != nil {
+		return *m.ParsedText
 	}
-	return nil
+	return ""
 }
 
 func (m *ProtoStep) GetFragments() []*Fragment {
@@ -352,23 +351,9 @@ func (m *ProtoStep) GetFragments() []*Fragment {
 	return nil
 }
 
-func (m *ProtoStep) GetResult() []*ProtoStepExecutionResult {
+func (m *ProtoStep) GetStepExecutionResult() *ProtoStepExecutionResult {
 	if m != nil {
-		return m.Result
-	}
-	return nil
-}
-
-func (m *ProtoStep) GetPreHookFailure() *ProtoHookFailure {
-	if m != nil {
-		return m.PreHookFailure
-	}
-	return nil
-}
-
-func (m *ProtoStep) GetPostHookFailure() *ProtoHookFailure {
-	if m != nil {
-		return m.PostHookFailure
+		return m.StepExecutionResult
 	}
 	return nil
 }
@@ -566,33 +551,81 @@ func (m *ProtoTableRow) GetCells() []string {
 }
 
 type ProtoStepExecutionResult struct {
-	IsPassed         *bool       `protobuf:"varint,1,req,name=isPassed" json:"isPassed,omitempty"`
-	StackTrace       *string     `protobuf:"bytes,2,opt,name=stackTrace" json:"stackTrace,omitempty"`
-	Argument         []*Argument `protobuf:"bytes,3,rep,name=argument" json:"argument,omitempty"`
-	XXX_unrecognized []byte      `json:"-"`
+	ExecutionResult  *ProtoExecutionResult `protobuf:"bytes,1,req,name=executionResult" json:"executionResult,omitempty"`
+	PreHookFailure   *ProtoHookFailure     `protobuf:"bytes,2,opt,name=preHookFailure" json:"preHookFailure,omitempty"`
+	PostHookFailure  *ProtoHookFailure     `protobuf:"bytes,3,opt,name=postHookFailure" json:"postHookFailure,omitempty"`
+	XXX_unrecognized []byte                `json:"-"`
 }
 
 func (m *ProtoStepExecutionResult) Reset()         { *m = ProtoStepExecutionResult{} }
 func (m *ProtoStepExecutionResult) String() string { return proto.CompactTextString(m) }
 func (*ProtoStepExecutionResult) ProtoMessage()    {}
 
-func (m *ProtoStepExecutionResult) GetIsPassed() bool {
-	if m != nil && m.IsPassed != nil {
-		return *m.IsPassed
+func (m *ProtoStepExecutionResult) GetExecutionResult() *ProtoExecutionResult {
+	if m != nil {
+		return m.ExecutionResult
+	}
+	return nil
+}
+
+func (m *ProtoStepExecutionResult) GetPreHookFailure() *ProtoHookFailure {
+	if m != nil {
+		return m.PreHookFailure
+	}
+	return nil
+}
+
+func (m *ProtoStepExecutionResult) GetPostHookFailure() *ProtoHookFailure {
+	if m != nil {
+		return m.PostHookFailure
+	}
+	return nil
+}
+
+type ProtoExecutionResult struct {
+	Passed           *bool   `protobuf:"varint,1,req,name=passed" json:"passed,omitempty"`
+	RecoverableError *bool   `protobuf:"varint,2,opt,name=recoverableError" json:"recoverableError,omitempty"`
+	ErrorMessage     *string `protobuf:"bytes,3,opt,name=errorMessage" json:"errorMessage,omitempty"`
+	StackTrace       *string `protobuf:"bytes,4,opt,name=stackTrace" json:"stackTrace,omitempty"`
+	ScreenShot       []byte  `protobuf:"bytes,5,opt,name=screenShot" json:"screenShot,omitempty"`
+	XXX_unrecognized []byte  `json:"-"`
+}
+
+func (m *ProtoExecutionResult) Reset()         { *m = ProtoExecutionResult{} }
+func (m *ProtoExecutionResult) String() string { return proto.CompactTextString(m) }
+func (*ProtoExecutionResult) ProtoMessage()    {}
+
+func (m *ProtoExecutionResult) GetPassed() bool {
+	if m != nil && m.Passed != nil {
+		return *m.Passed
 	}
 	return false
 }
 
-func (m *ProtoStepExecutionResult) GetStackTrace() string {
+func (m *ProtoExecutionResult) GetRecoverableError() bool {
+	if m != nil && m.RecoverableError != nil {
+		return *m.RecoverableError
+	}
+	return false
+}
+
+func (m *ProtoExecutionResult) GetErrorMessage() string {
+	if m != nil && m.ErrorMessage != nil {
+		return *m.ErrorMessage
+	}
+	return ""
+}
+
+func (m *ProtoExecutionResult) GetStackTrace() string {
 	if m != nil && m.StackTrace != nil {
 		return *m.StackTrace
 	}
 	return ""
 }
 
-func (m *ProtoStepExecutionResult) GetArgument() []*Argument {
+func (m *ProtoExecutionResult) GetScreenShot() []byte {
 	if m != nil {
-		return m.Argument
+		return m.ScreenShot
 	}
 	return nil
 }

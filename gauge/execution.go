@@ -9,7 +9,7 @@ type execution struct {
 	specifications       []*specification
 	pluginHandler        *pluginHandler
 	currentExecutionInfo *ExecutionInfo
-	suiteResult             *suiteResult
+	suiteResult          *suiteResult
 }
 
 type executionInfo struct {
@@ -110,7 +110,7 @@ func (exe *execution) validate(conceptDictionary *conceptDictionary) executionVa
 	}
 }
 
-func (exe *execution) start() (*suiteResult) {
+func (exe *execution) start() *suiteResult {
 	beforeSuiteHookExecStatus := exe.startExecution()
 	exe.suiteResult = newSuiteResult()
 	if beforeSuiteHookExecStatus.GetPassed() {
