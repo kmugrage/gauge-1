@@ -91,6 +91,7 @@ func (writer *consoleWriter) writeStep(step *step) {
 	writer.linesAfterLastStep = 0
 }
 
+//todo: pass protostep instead
 func (writer *consoleWriter) writeStepFinished(step *step, isPassed bool) {
 	stepText := formatStep(step)
 	linesInStepText := strings.Count(stepText, "\n")

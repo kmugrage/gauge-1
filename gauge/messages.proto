@@ -7,7 +7,7 @@ message KillProcessRequest {
 // Sends to any request which needs a execution status as response
 // usually step execution, hooks etc will return this
 message ExecutionStatusResponse {
-	required ProtoExecutionResult executionStatus = 1;
+	required ProtoExecutionResult executionResult = 1;
 }
 
 message ExecutionStartingRequest {

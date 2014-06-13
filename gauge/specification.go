@@ -52,12 +52,6 @@ type step struct {
 	fragments    []*Fragment
 }
 
-type stepExecutionResult struct {
-	isPassed   bool
-	stackTrace string
-	argument   []*Argument
-}
-
 func createStepFromStepRequest(stepReq *ExecuteStepRequest) *step {
 	var args []*stepArg
 	for _, arg := range stepReq.GetArgs() {

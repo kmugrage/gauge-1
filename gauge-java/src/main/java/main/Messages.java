@@ -320,19 +320,19 @@ public final class Messages {
   public interface ExecutionStatusResponseOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
 
-    // required .main.ProtoExecutionResult executionStatus = 1;
+    // required .main.ProtoExecutionResult executionResult = 1;
     /**
-     * <code>required .main.ProtoExecutionResult executionStatus = 1;</code>
+     * <code>required .main.ProtoExecutionResult executionResult = 1;</code>
      */
-    boolean hasExecutionStatus();
+    boolean hasExecutionResult();
     /**
-     * <code>required .main.ProtoExecutionResult executionStatus = 1;</code>
+     * <code>required .main.ProtoExecutionResult executionResult = 1;</code>
      */
-    main.Spec.ProtoExecutionResult getExecutionStatus();
+    main.Spec.ProtoExecutionResult getExecutionResult();
     /**
-     * <code>required .main.ProtoExecutionResult executionStatus = 1;</code>
+     * <code>required .main.ProtoExecutionResult executionResult = 1;</code>
      */
-    main.Spec.ProtoExecutionResultOrBuilder getExecutionStatusOrBuilder();
+    main.Spec.ProtoExecutionResultOrBuilder getExecutionResultOrBuilder();
   }
   /**
    * Protobuf type {@code main.ExecutionStatusResponse}
@@ -393,12 +393,12 @@ public final class Messages {
             case 10: {
               main.Spec.ProtoExecutionResult.Builder subBuilder = null;
               if (((bitField0_ & 0x00000001) == 0x00000001)) {
-                subBuilder = executionStatus_.toBuilder();
+                subBuilder = executionResult_.toBuilder();
               }
-              executionStatus_ = input.readMessage(main.Spec.ProtoExecutionResult.PARSER, extensionRegistry);
+              executionResult_ = input.readMessage(main.Spec.ProtoExecutionResult.PARSER, extensionRegistry);
               if (subBuilder != null) {
-                subBuilder.mergeFrom(executionStatus_);
-                executionStatus_ = subBuilder.buildPartial();
+                subBuilder.mergeFrom(executionResult_);
+                executionResult_ = subBuilder.buildPartial();
               }
               bitField0_ |= 0x00000001;
               break;
@@ -443,41 +443,41 @@ public final class Messages {
     }
 
     private int bitField0_;
-    // required .main.ProtoExecutionResult executionStatus = 1;
-    public static final int EXECUTIONSTATUS_FIELD_NUMBER = 1;
-    private main.Spec.ProtoExecutionResult executionStatus_;
+    // required .main.ProtoExecutionResult executionResult = 1;
+    public static final int EXECUTIONRESULT_FIELD_NUMBER = 1;
+    private main.Spec.ProtoExecutionResult executionResult_;
     /**
-     * <code>required .main.ProtoExecutionResult executionStatus = 1;</code>
+     * <code>required .main.ProtoExecutionResult executionResult = 1;</code>
      */
-    public boolean hasExecutionStatus() {
+    public boolean hasExecutionResult() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
     /**
-     * <code>required .main.ProtoExecutionResult executionStatus = 1;</code>
+     * <code>required .main.ProtoExecutionResult executionResult = 1;</code>
      */
-    public main.Spec.ProtoExecutionResult getExecutionStatus() {
-      return executionStatus_;
+    public main.Spec.ProtoExecutionResult getExecutionResult() {
+      return executionResult_;
     }
     /**
-     * <code>required .main.ProtoExecutionResult executionStatus = 1;</code>
+     * <code>required .main.ProtoExecutionResult executionResult = 1;</code>
      */
-    public main.Spec.ProtoExecutionResultOrBuilder getExecutionStatusOrBuilder() {
-      return executionStatus_;
+    public main.Spec.ProtoExecutionResultOrBuilder getExecutionResultOrBuilder() {
+      return executionResult_;
     }
 
     private void initFields() {
-      executionStatus_ = main.Spec.ProtoExecutionResult.getDefaultInstance();
+      executionResult_ = main.Spec.ProtoExecutionResult.getDefaultInstance();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized != -1) return isInitialized == 1;
 
-      if (!hasExecutionStatus()) {
+      if (!hasExecutionResult()) {
         memoizedIsInitialized = 0;
         return false;
       }
-      if (!getExecutionStatus().isInitialized()) {
+      if (!getExecutionResult().isInitialized()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -489,7 +489,7 @@ public final class Messages {
                         throws java.io.IOException {
       getSerializedSize();
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeMessage(1, executionStatus_);
+        output.writeMessage(1, executionResult_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -502,7 +502,7 @@ public final class Messages {
       size = 0;
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(1, executionStatus_);
+          .computeMessageSize(1, executionResult_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -617,7 +617,7 @@ public final class Messages {
       }
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
-          getExecutionStatusFieldBuilder();
+          getExecutionResultFieldBuilder();
         }
       }
       private static Builder create() {
@@ -626,10 +626,10 @@ public final class Messages {
 
       public Builder clear() {
         super.clear();
-        if (executionStatusBuilder_ == null) {
-          executionStatus_ = main.Spec.ProtoExecutionResult.getDefaultInstance();
+        if (executionResultBuilder_ == null) {
+          executionResult_ = main.Spec.ProtoExecutionResult.getDefaultInstance();
         } else {
-          executionStatusBuilder_.clear();
+          executionResultBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000001);
         return this;
@@ -663,10 +663,10 @@ public final class Messages {
         if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
           to_bitField0_ |= 0x00000001;
         }
-        if (executionStatusBuilder_ == null) {
-          result.executionStatus_ = executionStatus_;
+        if (executionResultBuilder_ == null) {
+          result.executionResult_ = executionResult_;
         } else {
-          result.executionStatus_ = executionStatusBuilder_.build();
+          result.executionResult_ = executionResultBuilder_.build();
         }
         result.bitField0_ = to_bitField0_;
         onBuilt();
@@ -684,19 +684,19 @@ public final class Messages {
 
       public Builder mergeFrom(main.Messages.ExecutionStatusResponse other) {
         if (other == main.Messages.ExecutionStatusResponse.getDefaultInstance()) return this;
-        if (other.hasExecutionStatus()) {
-          mergeExecutionStatus(other.getExecutionStatus());
+        if (other.hasExecutionResult()) {
+          mergeExecutionResult(other.getExecutionResult());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
 
       public final boolean isInitialized() {
-        if (!hasExecutionStatus()) {
+        if (!hasExecutionResult()) {
           
           return false;
         }
-        if (!getExecutionStatus().isInitialized()) {
+        if (!getExecutionResult().isInitialized()) {
           
           return false;
         }
@@ -722,121 +722,121 @@ public final class Messages {
       }
       private int bitField0_;
 
-      // required .main.ProtoExecutionResult executionStatus = 1;
-      private main.Spec.ProtoExecutionResult executionStatus_ = main.Spec.ProtoExecutionResult.getDefaultInstance();
+      // required .main.ProtoExecutionResult executionResult = 1;
+      private main.Spec.ProtoExecutionResult executionResult_ = main.Spec.ProtoExecutionResult.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
-          main.Spec.ProtoExecutionResult, main.Spec.ProtoExecutionResult.Builder, main.Spec.ProtoExecutionResultOrBuilder> executionStatusBuilder_;
+          main.Spec.ProtoExecutionResult, main.Spec.ProtoExecutionResult.Builder, main.Spec.ProtoExecutionResultOrBuilder> executionResultBuilder_;
       /**
-       * <code>required .main.ProtoExecutionResult executionStatus = 1;</code>
+       * <code>required .main.ProtoExecutionResult executionResult = 1;</code>
        */
-      public boolean hasExecutionStatus() {
+      public boolean hasExecutionResult() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       /**
-       * <code>required .main.ProtoExecutionResult executionStatus = 1;</code>
+       * <code>required .main.ProtoExecutionResult executionResult = 1;</code>
        */
-      public main.Spec.ProtoExecutionResult getExecutionStatus() {
-        if (executionStatusBuilder_ == null) {
-          return executionStatus_;
+      public main.Spec.ProtoExecutionResult getExecutionResult() {
+        if (executionResultBuilder_ == null) {
+          return executionResult_;
         } else {
-          return executionStatusBuilder_.getMessage();
+          return executionResultBuilder_.getMessage();
         }
       }
       /**
-       * <code>required .main.ProtoExecutionResult executionStatus = 1;</code>
+       * <code>required .main.ProtoExecutionResult executionResult = 1;</code>
        */
-      public Builder setExecutionStatus(main.Spec.ProtoExecutionResult value) {
-        if (executionStatusBuilder_ == null) {
+      public Builder setExecutionResult(main.Spec.ProtoExecutionResult value) {
+        if (executionResultBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
           }
-          executionStatus_ = value;
+          executionResult_ = value;
           onChanged();
         } else {
-          executionStatusBuilder_.setMessage(value);
+          executionResultBuilder_.setMessage(value);
         }
         bitField0_ |= 0x00000001;
         return this;
       }
       /**
-       * <code>required .main.ProtoExecutionResult executionStatus = 1;</code>
+       * <code>required .main.ProtoExecutionResult executionResult = 1;</code>
        */
-      public Builder setExecutionStatus(
+      public Builder setExecutionResult(
           main.Spec.ProtoExecutionResult.Builder builderForValue) {
-        if (executionStatusBuilder_ == null) {
-          executionStatus_ = builderForValue.build();
+        if (executionResultBuilder_ == null) {
+          executionResult_ = builderForValue.build();
           onChanged();
         } else {
-          executionStatusBuilder_.setMessage(builderForValue.build());
+          executionResultBuilder_.setMessage(builderForValue.build());
         }
         bitField0_ |= 0x00000001;
         return this;
       }
       /**
-       * <code>required .main.ProtoExecutionResult executionStatus = 1;</code>
+       * <code>required .main.ProtoExecutionResult executionResult = 1;</code>
        */
-      public Builder mergeExecutionStatus(main.Spec.ProtoExecutionResult value) {
-        if (executionStatusBuilder_ == null) {
+      public Builder mergeExecutionResult(main.Spec.ProtoExecutionResult value) {
+        if (executionResultBuilder_ == null) {
           if (((bitField0_ & 0x00000001) == 0x00000001) &&
-              executionStatus_ != main.Spec.ProtoExecutionResult.getDefaultInstance()) {
-            executionStatus_ =
-              main.Spec.ProtoExecutionResult.newBuilder(executionStatus_).mergeFrom(value).buildPartial();
+              executionResult_ != main.Spec.ProtoExecutionResult.getDefaultInstance()) {
+            executionResult_ =
+              main.Spec.ProtoExecutionResult.newBuilder(executionResult_).mergeFrom(value).buildPartial();
           } else {
-            executionStatus_ = value;
+            executionResult_ = value;
           }
           onChanged();
         } else {
-          executionStatusBuilder_.mergeFrom(value);
+          executionResultBuilder_.mergeFrom(value);
         }
         bitField0_ |= 0x00000001;
         return this;
       }
       /**
-       * <code>required .main.ProtoExecutionResult executionStatus = 1;</code>
+       * <code>required .main.ProtoExecutionResult executionResult = 1;</code>
        */
-      public Builder clearExecutionStatus() {
-        if (executionStatusBuilder_ == null) {
-          executionStatus_ = main.Spec.ProtoExecutionResult.getDefaultInstance();
+      public Builder clearExecutionResult() {
+        if (executionResultBuilder_ == null) {
+          executionResult_ = main.Spec.ProtoExecutionResult.getDefaultInstance();
           onChanged();
         } else {
-          executionStatusBuilder_.clear();
+          executionResultBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000001);
         return this;
       }
       /**
-       * <code>required .main.ProtoExecutionResult executionStatus = 1;</code>
+       * <code>required .main.ProtoExecutionResult executionResult = 1;</code>
        */
-      public main.Spec.ProtoExecutionResult.Builder getExecutionStatusBuilder() {
+      public main.Spec.ProtoExecutionResult.Builder getExecutionResultBuilder() {
         bitField0_ |= 0x00000001;
         onChanged();
-        return getExecutionStatusFieldBuilder().getBuilder();
+        return getExecutionResultFieldBuilder().getBuilder();
       }
       /**
-       * <code>required .main.ProtoExecutionResult executionStatus = 1;</code>
+       * <code>required .main.ProtoExecutionResult executionResult = 1;</code>
        */
-      public main.Spec.ProtoExecutionResultOrBuilder getExecutionStatusOrBuilder() {
-        if (executionStatusBuilder_ != null) {
-          return executionStatusBuilder_.getMessageOrBuilder();
+      public main.Spec.ProtoExecutionResultOrBuilder getExecutionResultOrBuilder() {
+        if (executionResultBuilder_ != null) {
+          return executionResultBuilder_.getMessageOrBuilder();
         } else {
-          return executionStatus_;
+          return executionResult_;
         }
       }
       /**
-       * <code>required .main.ProtoExecutionResult executionStatus = 1;</code>
+       * <code>required .main.ProtoExecutionResult executionResult = 1;</code>
        */
       private com.google.protobuf.SingleFieldBuilder<
           main.Spec.ProtoExecutionResult, main.Spec.ProtoExecutionResult.Builder, main.Spec.ProtoExecutionResultOrBuilder> 
-          getExecutionStatusFieldBuilder() {
-        if (executionStatusBuilder_ == null) {
-          executionStatusBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+          getExecutionResultFieldBuilder() {
+        if (executionResultBuilder_ == null) {
+          executionResultBuilder_ = new com.google.protobuf.SingleFieldBuilder<
               main.Spec.ProtoExecutionResult, main.Spec.ProtoExecutionResult.Builder, main.Spec.ProtoExecutionResultOrBuilder>(
-                  executionStatus_,
+                  executionResult_,
                   getParentForChildren(),
                   isClean());
-          executionStatus_ = null;
+          executionResult_ = null;
         }
-        return executionStatusBuilder_;
+        return executionResultBuilder_;
       }
 
       // @@protoc_insertion_point(builder_scope:main.ExecutionStatusResponse)
@@ -16249,7 +16249,7 @@ public final class Messages {
     java.lang.String[] descriptorData = {
       "\n\024gauge/messages.proto\022\004main\032\020gauge/spec" +
       ".proto\"\024\n\022KillProcessRequest\"N\n\027Executio" +
-      "nStatusResponse\0223\n\017executionStatus\030\001 \002(\013" +
+      "nStatusResponse\0223\n\017executionResult\030\001 \002(\013" +
       "2\032.main.ProtoExecutionResult\"M\n\030Executio" +
       "nStartingRequest\0221\n\024currentExecutionInfo" +
       "\030\001 \001(\0132\023.main.ExecutionInfo\"Q\n\034SpecExecu" +
@@ -16341,7 +16341,7 @@ public final class Messages {
           internal_static_main_ExecutionStatusResponse_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_main_ExecutionStatusResponse_descriptor,
-              new java.lang.String[] { "ExecutionStatus", });
+              new java.lang.String[] { "ExecutionResult", });
           internal_static_main_ExecutionStartingRequest_descriptor =
             getDescriptor().getMessageTypes().get(2);
           internal_static_main_ExecutionStartingRequest_fieldAccessorTable = new

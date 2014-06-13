@@ -21,7 +21,7 @@ func newExecution(manifest *manifest, specifications []*specification, conn net.
 	return &e
 }
 
-func (e *execution) startExecution() *ExecutionStatus {
+func (e *execution) startExecution() *ProtoExecutionResult {
 	message := &Message{MessageType: Message_ExecutionStarting.Enum(),
 		ExecutionStartingRequest: &ExecutionStartingRequest{}}
 
@@ -29,7 +29,7 @@ func (e *execution) startExecution() *ExecutionStatus {
 	return executeAndGetStatus(e.connection, message)
 }
 
-func (e *execution) endExecution() *ExecutionStatus {
+func (e *execution) endExecution() *ProtoExecutionResult {
 	message := &Message{MessageType: Message_ExecutionEnding.Enum(),
 		ExecutionEndingRequest: &ExecutionEndingRequest{CurrentExecutionInfo: e.currentExecutionInfo}}
 
@@ -37,15 +37,16 @@ func (e *execution) endExecution() *ExecutionStatus {
 	return executeAndGetStatus(e.connection, message)
 }
 
+//todo:implement for protoSpec
 func (e *execution) notifyExecutionResult() {
-	protoSpecs := make([]*ProtoSpec, 0)
-	for _, spec := range testExecutionStatus.specifications {
-		protoSpec := convertToProtoSpec(spec)
-		protoSpecs = append(protoSpecs, protoSpec)
-	}
-	message := &Message{MessageType: Message_SuiteExecutionResult.Enum(),
-		SuiteExecutionResult: &SuiteExecutionResult{Specs: protoSpecs}}
-	e.pluginHandler.notifyPlugins(message)
+//	protoSpecs := make([]*ProtoSpec, 0)
+//	for _, spec := range testExecutionStatus.specifications {
+//		protoSpec := convertToProtoSpec(spec)
+//		protoSpecs = append(protoSpecs, protoSpec)
+//	}
+//	message := &Message{MessageType: Message_SuiteExecutionResult.Enum(),
+//		SuiteExecutionResult: &SuiteExecutionResult{Specs: protoSpecs}}
+//	e.pluginHandler.notifyPlugins(message)
 }
 
 func (e *execution) notifyExecutionStop() {
@@ -68,29 +69,7 @@ func (e *execution) killPlugins() {
 	e.pluginHandler.gracefullyKillPlugins()
 }
 
-type testExecutionStatus struct {
-	specifications         []*specification
-	specExecutionStatuses  []*specExecutionStatus
-	hooksExecutionStatuses []*ExecutionStatus
-}
 
-func (t *testExecutionStatus) isFailed() bool {
-	if t.hooksExecutionStatuses != nil {
-		for _, s := range t.hooksExecutionStatuses {
-			if !s.GetPassed() {
-				return true
-			}
-		}
-	}
-
-	for _, specStatus := range t.specExecutionStatuses {
-		if specStatus.isFailed() {
-			return true
-		}
-	}
-
-	return false
-}
 
 type executionValidationErrors map[*specification][]*stepValidationError
 

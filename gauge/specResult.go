@@ -14,13 +14,13 @@ type suiteResult struct {
 
 type specResult struct {
 	preSpec         *ProtoHookFailure
-	protoSpecResult *ProtoSpec
+	protoSpec        *ProtoSpec
 	postSpec        *ProtoHookFailure
 }
 
 type scenarioResult struct {
 	preScenario         *ProtoHookFailure
-	protoScenarioResult *ProtoScenario
+	protoScenario       *ProtoScenario
 	postScenario        *ProtoHookFailure
 }
 
@@ -56,7 +56,7 @@ func (scenarioResult *scenarioResult) getPostHook() **ProtoHookFailure {
 func (specResult *specResult) addSpecItems(spec *specification) {
 	for _, item := range spec.items {
 		if item.kind() != scenarioKind {
-			specResult.protoSpecResult.Items = append(specResult.protoSpecResult.Items, convertToProtoItem(item))
+			specResult.protoSpec.Items = append(specResult.protoSpec.Items, convertToProtoItem(item))
 		}
 	}
 }
@@ -68,15 +68,15 @@ func newSuiteResult() *suiteResult {
 	return result
 }
 
-func addPreHook(result result, execStatus *ExecutionStatus) {
-	if !execStatus.GetPassed() {
-		*(result.getPreHook()) = getProtoHookFailure(execStatus)
+func addPreHook(result result, executionResult *ProtoExecutionResult) {
+	if !executionResult.GetPassed() {
+		*(result.getPreHook()) = getProtoHookFailure(executionResult)
 	}
 }
 
-func addPostHook(result result, execStatus *ExecutionStatus) {
-	if !execStatus.GetPassed() {
-		*(result.getPostHook()) = getProtoHookFailure(execStatus)
+func addPostHook(result result, executionResult *ProtoExecutionResult) {
+	if !executionResult.GetPassed() {
+		*(result.getPostHook()) = getProtoHookFailure(executionResult)
 	}
 }
 
@@ -85,8 +85,8 @@ func (suiteResult *suiteResult) addSpecResult(specResult *specResult) {
 	suiteResult.currentSpecIndex++
 }
 
-func getProtoHookFailure(execStatus *ExecutionStatus) *ProtoHookFailure {
-	return &ProtoHookFailure{StackTrace: execStatus.StackTrace, ErrorMessage: execStatus.ErrorMessage, ScreenShot: execStatus.ScreenShot}
+func getProtoHookFailure(executionResult *ProtoExecutionResult) *ProtoHookFailure {
+	return &ProtoHookFailure{StackTrace: executionResult.StackTrace, ErrorMessage: executionResult.ErrorMessage, ScreenShot: executionResult.ScreenShot}
 }
 
 func (suiteResult *suiteResult) startTableDrivenScenarios() {
@@ -106,4 +106,17 @@ func (suiteResult *suiteResult) newSpecStart() {
 func (suiteResult *suiteResult) newScenarioStart() {
 	suiteResult.currentScenarioIndex++
 	suiteResult.getCurrentSpec().Items = append(suiteResult.getCurrentSpec().Items, new(ProtoItem))
+}
+func (specResult *specResult) addScenarioResults(scenarioResult []*scenarioResult) []*scenarioResult {
+	if (specResult.protoSpec == nil ) {
+		specResult.protoSpec = &ProtoSpec{Items:make([]*ProtoItem, 0)}
+	}
+	specResult.protoSpec.Items = append(specResult.protoSpec.Items, &ProtoScenario{})
+}
+
+func (scenarioResult *scenarioResult) addItems(protoItems []*ProtoItem) {
+	if (scenarioResult.protoScenario == nil) {
+		scenarioResult.protoScenario = &ProtoScenario{ScenarioItems:make([]*ProtoItem, 0)}
+	}
+	scenarioResult.protoScenario.ScenarioItems = append(scenarioResult.protoScenario.ScenarioItems, protoItems)
 }

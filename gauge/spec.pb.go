@@ -359,9 +359,10 @@ func (m *ProtoStep) GetStepExecutionResult() *ProtoStepExecutionResult {
 }
 
 type ProtoConcept struct {
-	ConceptStep      *ProtoStep   `protobuf:"bytes,1,req,name=conceptStep" json:"conceptStep,omitempty"`
-	Steps            []*ProtoStep `protobuf:"bytes,2,rep,name=steps" json:"steps,omitempty"`
-	XXX_unrecognized []byte       `json:"-"`
+	ConceptStep            *ProtoStep                `protobuf:"bytes,1,req,name=conceptStep" json:"conceptStep,omitempty"`
+	Steps                  []*ProtoStep              `protobuf:"bytes,2,rep,name=steps" json:"steps,omitempty"`
+	ConceptExecutionResult *ProtoStepExecutionResult `protobuf:"bytes,4,opt,name=conceptExecutionResult" json:"conceptExecutionResult,omitempty"`
+	XXX_unrecognized       []byte                    `json:"-"`
 }
 
 func (m *ProtoConcept) Reset()         { *m = ProtoConcept{} }
@@ -378,6 +379,13 @@ func (m *ProtoConcept) GetConceptStep() *ProtoStep {
 func (m *ProtoConcept) GetSteps() []*ProtoStep {
 	if m != nil {
 		return m.Steps
+	}
+	return nil
+}
+
+func (m *ProtoConcept) GetConceptExecutionResult() *ProtoStepExecutionResult {
+	if m != nil {
+		return m.ConceptExecutionResult
 	}
 	return nil
 }

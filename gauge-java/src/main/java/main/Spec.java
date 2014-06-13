@@ -6115,6 +6115,20 @@ public final class Spec {
      */
     main.Spec.ProtoStepOrBuilder getStepsOrBuilder(
         int index);
+
+    // optional .main.ProtoStepExecutionResult conceptExecutionResult = 4;
+    /**
+     * <code>optional .main.ProtoStepExecutionResult conceptExecutionResult = 4;</code>
+     */
+    boolean hasConceptExecutionResult();
+    /**
+     * <code>optional .main.ProtoStepExecutionResult conceptExecutionResult = 4;</code>
+     */
+    main.Spec.ProtoStepExecutionResult getConceptExecutionResult();
+    /**
+     * <code>optional .main.ProtoStepExecutionResult conceptExecutionResult = 4;</code>
+     */
+    main.Spec.ProtoStepExecutionResultOrBuilder getConceptExecutionResultOrBuilder();
   }
   /**
    * Protobuf type {@code main.ProtoConcept}
@@ -6186,6 +6200,19 @@ public final class Spec {
                 mutable_bitField0_ |= 0x00000002;
               }
               steps_.add(input.readMessage(main.Spec.ProtoStep.PARSER, extensionRegistry));
+              break;
+            }
+            case 34: {
+              main.Spec.ProtoStepExecutionResult.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000002) == 0x00000002)) {
+                subBuilder = conceptExecutionResult_.toBuilder();
+              }
+              conceptExecutionResult_ = input.readMessage(main.Spec.ProtoStepExecutionResult.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(conceptExecutionResult_);
+                conceptExecutionResult_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000002;
               break;
             }
           }
@@ -6289,9 +6316,32 @@ public final class Spec {
       return steps_.get(index);
     }
 
+    // optional .main.ProtoStepExecutionResult conceptExecutionResult = 4;
+    public static final int CONCEPTEXECUTIONRESULT_FIELD_NUMBER = 4;
+    private main.Spec.ProtoStepExecutionResult conceptExecutionResult_;
+    /**
+     * <code>optional .main.ProtoStepExecutionResult conceptExecutionResult = 4;</code>
+     */
+    public boolean hasConceptExecutionResult() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    /**
+     * <code>optional .main.ProtoStepExecutionResult conceptExecutionResult = 4;</code>
+     */
+    public main.Spec.ProtoStepExecutionResult getConceptExecutionResult() {
+      return conceptExecutionResult_;
+    }
+    /**
+     * <code>optional .main.ProtoStepExecutionResult conceptExecutionResult = 4;</code>
+     */
+    public main.Spec.ProtoStepExecutionResultOrBuilder getConceptExecutionResultOrBuilder() {
+      return conceptExecutionResult_;
+    }
+
     private void initFields() {
       conceptStep_ = main.Spec.ProtoStep.getDefaultInstance();
       steps_ = java.util.Collections.emptyList();
+      conceptExecutionResult_ = main.Spec.ProtoStepExecutionResult.getDefaultInstance();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -6312,6 +6362,12 @@ public final class Spec {
           return false;
         }
       }
+      if (hasConceptExecutionResult()) {
+        if (!getConceptExecutionResult().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
       memoizedIsInitialized = 1;
       return true;
     }
@@ -6324,6 +6380,9 @@ public final class Spec {
       }
       for (int i = 0; i < steps_.size(); i++) {
         output.writeMessage(2, steps_.get(i));
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeMessage(4, conceptExecutionResult_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -6341,6 +6400,10 @@ public final class Spec {
       for (int i = 0; i < steps_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(2, steps_.get(i));
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(4, conceptExecutionResult_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -6452,6 +6515,7 @@ public final class Spec {
         if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
           getConceptStepFieldBuilder();
           getStepsFieldBuilder();
+          getConceptExecutionResultFieldBuilder();
         }
       }
       private static Builder create() {
@@ -6472,6 +6536,12 @@ public final class Spec {
         } else {
           stepsBuilder_.clear();
         }
+        if (conceptExecutionResultBuilder_ == null) {
+          conceptExecutionResult_ = main.Spec.ProtoStepExecutionResult.getDefaultInstance();
+        } else {
+          conceptExecutionResultBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000004);
         return this;
       }
 
@@ -6516,6 +6586,14 @@ public final class Spec {
           result.steps_ = steps_;
         } else {
           result.steps_ = stepsBuilder_.build();
+        }
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        if (conceptExecutionResultBuilder_ == null) {
+          result.conceptExecutionResult_ = conceptExecutionResult_;
+        } else {
+          result.conceptExecutionResult_ = conceptExecutionResultBuilder_.build();
         }
         result.bitField0_ = to_bitField0_;
         onBuilt();
@@ -6562,6 +6640,9 @@ public final class Spec {
             }
           }
         }
+        if (other.hasConceptExecutionResult()) {
+          mergeConceptExecutionResult(other.getConceptExecutionResult());
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
@@ -6577,6 +6658,12 @@ public final class Spec {
         }
         for (int i = 0; i < getStepsCount(); i++) {
           if (!getSteps(i).isInitialized()) {
+            
+            return false;
+          }
+        }
+        if (hasConceptExecutionResult()) {
+          if (!getConceptExecutionResult().isInitialized()) {
             
             return false;
           }
@@ -6958,6 +7045,123 @@ public final class Spec {
           steps_ = null;
         }
         return stepsBuilder_;
+      }
+
+      // optional .main.ProtoStepExecutionResult conceptExecutionResult = 4;
+      private main.Spec.ProtoStepExecutionResult conceptExecutionResult_ = main.Spec.ProtoStepExecutionResult.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          main.Spec.ProtoStepExecutionResult, main.Spec.ProtoStepExecutionResult.Builder, main.Spec.ProtoStepExecutionResultOrBuilder> conceptExecutionResultBuilder_;
+      /**
+       * <code>optional .main.ProtoStepExecutionResult conceptExecutionResult = 4;</code>
+       */
+      public boolean hasConceptExecutionResult() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
+      }
+      /**
+       * <code>optional .main.ProtoStepExecutionResult conceptExecutionResult = 4;</code>
+       */
+      public main.Spec.ProtoStepExecutionResult getConceptExecutionResult() {
+        if (conceptExecutionResultBuilder_ == null) {
+          return conceptExecutionResult_;
+        } else {
+          return conceptExecutionResultBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>optional .main.ProtoStepExecutionResult conceptExecutionResult = 4;</code>
+       */
+      public Builder setConceptExecutionResult(main.Spec.ProtoStepExecutionResult value) {
+        if (conceptExecutionResultBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          conceptExecutionResult_ = value;
+          onChanged();
+        } else {
+          conceptExecutionResultBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000004;
+        return this;
+      }
+      /**
+       * <code>optional .main.ProtoStepExecutionResult conceptExecutionResult = 4;</code>
+       */
+      public Builder setConceptExecutionResult(
+          main.Spec.ProtoStepExecutionResult.Builder builderForValue) {
+        if (conceptExecutionResultBuilder_ == null) {
+          conceptExecutionResult_ = builderForValue.build();
+          onChanged();
+        } else {
+          conceptExecutionResultBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000004;
+        return this;
+      }
+      /**
+       * <code>optional .main.ProtoStepExecutionResult conceptExecutionResult = 4;</code>
+       */
+      public Builder mergeConceptExecutionResult(main.Spec.ProtoStepExecutionResult value) {
+        if (conceptExecutionResultBuilder_ == null) {
+          if (((bitField0_ & 0x00000004) == 0x00000004) &&
+              conceptExecutionResult_ != main.Spec.ProtoStepExecutionResult.getDefaultInstance()) {
+            conceptExecutionResult_ =
+              main.Spec.ProtoStepExecutionResult.newBuilder(conceptExecutionResult_).mergeFrom(value).buildPartial();
+          } else {
+            conceptExecutionResult_ = value;
+          }
+          onChanged();
+        } else {
+          conceptExecutionResultBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000004;
+        return this;
+      }
+      /**
+       * <code>optional .main.ProtoStepExecutionResult conceptExecutionResult = 4;</code>
+       */
+      public Builder clearConceptExecutionResult() {
+        if (conceptExecutionResultBuilder_ == null) {
+          conceptExecutionResult_ = main.Spec.ProtoStepExecutionResult.getDefaultInstance();
+          onChanged();
+        } else {
+          conceptExecutionResultBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000004);
+        return this;
+      }
+      /**
+       * <code>optional .main.ProtoStepExecutionResult conceptExecutionResult = 4;</code>
+       */
+      public main.Spec.ProtoStepExecutionResult.Builder getConceptExecutionResultBuilder() {
+        bitField0_ |= 0x00000004;
+        onChanged();
+        return getConceptExecutionResultFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .main.ProtoStepExecutionResult conceptExecutionResult = 4;</code>
+       */
+      public main.Spec.ProtoStepExecutionResultOrBuilder getConceptExecutionResultOrBuilder() {
+        if (conceptExecutionResultBuilder_ != null) {
+          return conceptExecutionResultBuilder_.getMessageOrBuilder();
+        } else {
+          return conceptExecutionResult_;
+        }
+      }
+      /**
+       * <code>optional .main.ProtoStepExecutionResult conceptExecutionResult = 4;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          main.Spec.ProtoStepExecutionResult, main.Spec.ProtoStepExecutionResult.Builder, main.Spec.ProtoStepExecutionResultOrBuilder> 
+          getConceptExecutionResultFieldBuilder() {
+        if (conceptExecutionResultBuilder_ == null) {
+          conceptExecutionResultBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              main.Spec.ProtoStepExecutionResult, main.Spec.ProtoStepExecutionResult.Builder, main.Spec.ProtoStepExecutionResultOrBuilder>(
+                  conceptExecutionResult_,
+                  getParentForChildren(),
+                  isClean());
+          conceptExecutionResult_ = null;
+        }
+        return conceptExecutionResultBuilder_;
       }
 
       // @@protoc_insertion_point(builder_scope:main.ProtoConcept)
@@ -15641,37 +15845,39 @@ public final class Spec {
       "\tProtoStep\022\022\n\nactualText\030\001 \002(\t\022\022\n\nparsed" +
       "Text\030\002 \002(\t\022!\n\tfragments\030\003 \003(\0132\016.main.Fra" +
       "gment\022;\n\023stepExecutionResult\030\004 \001(\0132\036.mai" +
-      "n.ProtoStepExecutionResult\"T\n\014ProtoConce" +
-      "pt\022$\n\013conceptStep\030\001 \002(\0132\017.main.ProtoStep" +
-      "\022\036\n\005steps\030\002 \003(\0132\017.main.ProtoStep\"\031\n\tProt" +
-      "oTags\022\014\n\004tags\030\001 \003(\t\"\230\001\n\010Fragment\0221\n\014frag" +
-      "mentType\030\001 \002(\0162\033.main.Fragment.FragmentT" +
-      "ype\022\014\n\004text\030\002 \001(\t\022\"\n\tparameter\030\003 \001(\0132\017.m" +
-      "ain.Parameter\"\'\n\014FragmentType\022\010\n\004Text\020\001\022",
-      "\r\n\tParameter\020\002\"\263\001\n\tParameter\0224\n\rparamete" +
-      "rType\030\001 \002(\0162\035.main.Parameter.ParameterTy" +
-      "pe\022\r\n\005value\030\002 \001(\t\022\037\n\005table\030\003 \001(\0132\020.main." +
-      "ProtoTable\"@\n\rParameterType\022\n\n\006Static\020\001\022" +
-      "\013\n\007Dynamic\020\002\022\013\n\007Special\020\003\022\t\n\005Table\020\004\"H\n\010" +
-      "Argument\022\014\n\004type\030\001 \002(\t\022\r\n\005value\030\002 \001(\t\022\037\n" +
-      "\005table\030\003 \001(\0132\020.main.ProtoTable\"\034\n\014ProtoC" +
-      "omment\022\014\n\004text\030\001 \002(\t\"U\n\nProtoTable\022$\n\007he" +
-      "aders\030\001 \002(\0132\023.main.ProtoTableRow\022!\n\004rows" +
-      "\030\002 \003(\0132\023.main.ProtoTableRow\"\036\n\rProtoTabl",
-      "eRow\022\r\n\005cells\030\001 \003(\t\"\260\001\n\030ProtoStepExecuti" +
-      "onResult\0223\n\017executionResult\030\001 \002(\0132\032.main" +
-      ".ProtoExecutionResult\022.\n\016preHookFailure\030" +
-      "\002 \001(\0132\026.main.ProtoHookFailure\022/\n\017postHoo" +
-      "kFailure\030\003 \001(\0132\026.main.ProtoHookFailure\"~" +
-      "\n\024ProtoExecutionResult\022\016\n\006passed\030\001 \002(\010\022\030" +
-      "\n\020recoverableError\030\002 \001(\010\022\024\n\014errorMessage" +
-      "\030\003 \001(\t\022\022\n\nstackTrace\030\004 \001(\t\022\022\n\nscreenShot" +
-      "\030\005 \001(\014\"\220\001\n\016SpecExecStatus\022\035\n\004item\030\001 \003(\0132" +
-      "\017.main.ProtoItem\022.\n\016preHookFailure\030\002 \001(\013",
-      "2\026.main.ProtoHookFailure\022/\n\017postHookFail" +
-      "ure\030\003 \001(\0132\026.main.ProtoHookFailure\"P\n\020Pro" +
-      "toHookFailure\022\022\n\nstackTrace\030\001 \002(\t\022\024\n\014err" +
-      "orMessage\030\002 \002(\t\022\022\n\nscreenShot\030\003 \001(\014"
+      "n.ProtoStepExecutionResult\"\224\001\n\014ProtoConc" +
+      "ept\022$\n\013conceptStep\030\001 \002(\0132\017.main.ProtoSte" +
+      "p\022\036\n\005steps\030\002 \003(\0132\017.main.ProtoStep\022>\n\026con" +
+      "ceptExecutionResult\030\004 \001(\0132\036.main.ProtoSt" +
+      "epExecutionResult\"\031\n\tProtoTags\022\014\n\004tags\030\001" +
+      " \003(\t\"\230\001\n\010Fragment\0221\n\014fragmentType\030\001 \002(\0162" +
+      "\033.main.Fragment.FragmentType\022\014\n\004text\030\002 \001",
+      "(\t\022\"\n\tparameter\030\003 \001(\0132\017.main.Parameter\"\'" +
+      "\n\014FragmentType\022\010\n\004Text\020\001\022\r\n\tParameter\020\002\"" +
+      "\263\001\n\tParameter\0224\n\rparameterType\030\001 \002(\0162\035.m" +
+      "ain.Parameter.ParameterType\022\r\n\005value\030\002 \001" +
+      "(\t\022\037\n\005table\030\003 \001(\0132\020.main.ProtoTable\"@\n\rP" +
+      "arameterType\022\n\n\006Static\020\001\022\013\n\007Dynamic\020\002\022\013\n" +
+      "\007Special\020\003\022\t\n\005Table\020\004\"H\n\010Argument\022\014\n\004typ" +
+      "e\030\001 \002(\t\022\r\n\005value\030\002 \001(\t\022\037\n\005table\030\003 \001(\0132\020." +
+      "main.ProtoTable\"\034\n\014ProtoComment\022\014\n\004text\030" +
+      "\001 \002(\t\"U\n\nProtoTable\022$\n\007headers\030\001 \002(\0132\023.m",
+      "ain.ProtoTableRow\022!\n\004rows\030\002 \003(\0132\023.main.P" +
+      "rotoTableRow\"\036\n\rProtoTableRow\022\r\n\005cells\030\001" +
+      " \003(\t\"\260\001\n\030ProtoStepExecutionResult\0223\n\017exe" +
+      "cutionResult\030\001 \002(\0132\032.main.ProtoExecution" +
+      "Result\022.\n\016preHookFailure\030\002 \001(\0132\026.main.Pr" +
+      "otoHookFailure\022/\n\017postHookFailure\030\003 \001(\0132" +
+      "\026.main.ProtoHookFailure\"~\n\024ProtoExecutio" +
+      "nResult\022\016\n\006passed\030\001 \002(\010\022\030\n\020recoverableEr" +
+      "ror\030\002 \001(\010\022\024\n\014errorMessage\030\003 \001(\t\022\022\n\nstack" +
+      "Trace\030\004 \001(\t\022\022\n\nscreenShot\030\005 \001(\014\"\220\001\n\016Spec",
+      "ExecStatus\022\035\n\004item\030\001 \003(\0132\017.main.ProtoIte" +
+      "m\022.\n\016preHookFailure\030\002 \001(\0132\026.main.ProtoHo" +
+      "okFailure\022/\n\017postHookFailure\030\003 \001(\0132\026.mai" +
+      "n.ProtoHookFailure\"P\n\020ProtoHookFailure\022\022" +
+      "\n\nstackTrace\030\001 \002(\t\022\024\n\014errorMessage\030\002 \002(\t" +
+      "\022\022\n\nscreenShot\030\003 \001(\014"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -15713,7 +15919,7 @@ public final class Spec {
           internal_static_main_ProtoConcept_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_main_ProtoConcept_descriptor,
-              new java.lang.String[] { "ConceptStep", "Steps", });
+              new java.lang.String[] { "ConceptStep", "Steps", "ConceptExecutionResult", });
           internal_static_main_ProtoTags_descriptor =
             getDescriptor().getMessageTypes().get(6);
           internal_static_main_ProtoTags_fieldAccessorTable = new

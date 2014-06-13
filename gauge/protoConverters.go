@@ -41,7 +41,7 @@ func convertToProtoConcept(concept *step) *ProtoItem {
 }
 
 func convertToProtoStep(step *step) *ProtoStep {
-	return &ProtoStep{Text: proto.String(step.lineText), Parameters: convertToProtoParameters(step.args), Result: result}
+	return &ProtoStep{ActualText: proto.String(step.lineText), ParsedText:proto.String(step.value), Fragments : step.fragments}
 }
 
 func convertToProtoSteps(steps []*step) []*ProtoStep {
@@ -95,6 +95,6 @@ func convertToProtoTableParam(table *table) *ProtoTable {
 
 func addExecutionResult(protoItem *ProtoItem, protoStepExecutionResult *ProtoStepExecutionResult) {
 	if protoStepExecutionResult != nil {
-		protoItem.Step.Result = protoStepExecutionResult
+		protoItem.Step.StepExecutionResult = protoStepExecutionResult
 	}
 }

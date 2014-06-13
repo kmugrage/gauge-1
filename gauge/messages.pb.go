@@ -128,17 +128,17 @@ func (*KillProcessRequest) ProtoMessage()    {}
 // Sends to any request which needs a execution status as response
 // usually step execution, hooks etc will return this
 type ExecutionStatusResponse struct {
-	ExecutionStatus  *ProtoExecutionResult `protobuf:"bytes,1,req,name=executionStatus" json:"executionStatus,omitempty"`
-	XXX_unrecognized []byte                `json:"-"`
+	ExecutionResult  *ProtoExecutionResult `protobuf:"bytes,1,req,name=executionResult" json:"executionResult,omitempty"`
+	XXX_unrecognized []byte                      `json:"-"`
 }
 
 func (m *ExecutionStatusResponse) Reset()         { *m = ExecutionStatusResponse{} }
 func (m *ExecutionStatusResponse) String() string { return proto.CompactTextString(m) }
 func (*ExecutionStatusResponse) ProtoMessage()    {}
 
-func (m *ExecutionStatusResponse) GetExecutionStatus() *ProtoExecutionResult {
+func (m *ExecutionStatusResponse) GetExecutionResult() *ProtoExecutionResult {
 	if m != nil {
-		return m.ExecutionStatus
+		return m.ExecutionResult
 	}
 	return nil
 }
@@ -392,11 +392,11 @@ func (m *StepInfo) GetIsFailed() bool {
 }
 
 type ExecuteStepRequest struct {
-	ActualStepText   *string     `protobuf:"bytes,1,req,name=actualStepText" json:"actualStepText,omitempty"`
-	ParsedStepText   *string     `protobuf:"bytes,2,req,name=parsedStepText" json:"parsedStepText,omitempty"`
-	ScenarioFailing  *bool       `protobuf:"varint,3,opt,name=scenarioFailing" json:"scenarioFailing,omitempty"`
+	ActualStepText   *string           `protobuf:"bytes,1,req,name=actualStepText" json:"actualStepText,omitempty"`
+	ParsedStepText   *string           `protobuf:"bytes,2,req,name=parsedStepText" json:"parsedStepText,omitempty"`
+	ScenarioFailing  *bool             `protobuf:"varint,3,opt,name=scenarioFailing" json:"scenarioFailing,omitempty"`
 	Args             []*Argument `protobuf:"bytes,4,rep,name=args" json:"args,omitempty"`
-	XXX_unrecognized []byte      `json:"-"`
+	XXX_unrecognized []byte            `json:"-"`
 }
 
 func (m *ExecuteStepRequest) Reset()         { *m = ExecuteStepRequest{} }
@@ -497,7 +497,7 @@ func (m *ExecutionEndingRequest) GetCurrentExecutionInfo() *ExecutionInfo {
 
 type SuiteExecutionResult struct {
 	Specs            []*ProtoSpec `protobuf:"bytes,1,rep,name=specs" json:"specs,omitempty"`
-	XXX_unrecognized []byte       `json:"-"`
+	XXX_unrecognized []byte             `json:"-"`
 }
 
 func (m *SuiteExecutionResult) Reset()         { *m = SuiteExecutionResult{} }
