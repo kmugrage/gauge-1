@@ -39,14 +39,14 @@ func (e *execution) endExecution() *ProtoExecutionResult {
 
 //todo:implement for protoSpec
 func (e *execution) notifyExecutionResult() {
-//	protoSpecs := make([]*ProtoSpec, 0)
-//	for _, spec := range testExecutionStatus.specifications {
-//		protoSpec := convertToProtoSpec(spec)
-//		protoSpecs = append(protoSpecs, protoSpec)
-//	}
-//	message := &Message{MessageType: Message_SuiteExecutionResult.Enum(),
-//		SuiteExecutionResult: &SuiteExecutionResult{Specs: protoSpecs}}
-//	e.pluginHandler.notifyPlugins(message)
+	//	protoSpecs := make([]*ProtoSpec, 0)
+	//	for _, spec := range testExecutionStatus.specifications {
+	//		protoSpec := convertToProtoSpec(spec)
+	//		protoSpecs = append(protoSpecs, protoSpec)
+	//	}
+	//	message := &Message{MessageType: Message_SuiteExecutionResult.Enum(),
+	//		SuiteExecutionResult: &SuiteExecutionResult{Specs: protoSpecs}}
+	//	e.pluginHandler.notifyPlugins(message)
 }
 
 func (e *execution) notifyExecutionStop() {
@@ -69,8 +69,6 @@ func (e *execution) killPlugins() {
 	e.pluginHandler.gracefullyKillPlugins()
 }
 
-
-
 type executionValidationErrors map[*specification][]*stepValidationError
 
 func (exe *execution) validate(conceptDictionary *conceptDictionary) executionValidationErrors {
@@ -92,14 +90,14 @@ func (exe *execution) validate(conceptDictionary *conceptDictionary) executionVa
 func (exe *execution) start() *suiteResult {
 	beforeSuiteHookExecStatus := exe.startExecution()
 	exe.suiteResult = newSuiteResult()
-	if beforeSuiteHookExecStatus.GetPassed() {
+	if beforeSuiteHookExecStatus.GetFailed() {
+		addPreHook(exe.suiteResult, beforeSuiteHookExecStatus)
+	} else {
 		for _, specificationToExecute := range exe.specifications {
 			executor := newSpecExecutor(specificationToExecute, exe.connection, exe.pluginHandler)
 			protoSpecResult := executor.execute()
 			exe.suiteResult.addSpecResult(protoSpecResult)
 		}
-	} else {
-		addPreHook(exe.suiteResult, beforeSuiteHookExecStatus)
 	}
 
 	addPostHook(exe.suiteResult, exe.endExecution())

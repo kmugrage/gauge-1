@@ -24,7 +24,6 @@ It has these top-level messages:
 	ProtoTableRow
 	ProtoStepExecutionResult
 	ProtoExecutionResult
-	SpecExecStatus
 	ProtoHookFailure
 */
 package main
@@ -159,10 +158,13 @@ func (x *Parameter_ParameterType) UnmarshalJSON(data []byte) error {
 }
 
 type ProtoSpec struct {
-	SpecHeading      *string      `protobuf:"bytes,1,req,name=specHeading" json:"specHeading,omitempty"`
-	Items            []*ProtoItem `protobuf:"bytes,2,rep,name=items" json:"items,omitempty"`
-	IsTableDriven    *bool        `protobuf:"varint,3,req,name=isTableDriven" json:"isTableDriven,omitempty"`
-	XXX_unrecognized []byte       `json:"-"`
+	SpecHeading      *string           `protobuf:"bytes,1,req,name=specHeading" json:"specHeading,omitempty"`
+	Items            []*ProtoItem      `protobuf:"bytes,2,rep,name=items" json:"items,omitempty"`
+	IsTableDriven    *bool             `protobuf:"varint,3,req,name=isTableDriven" json:"isTableDriven,omitempty"`
+	PreHookFailure   *ProtoHookFailure `protobuf:"bytes,4,opt,name=preHookFailure" json:"preHookFailure,omitempty"`
+	PostHookFailure  *ProtoHookFailure `protobuf:"bytes,5,opt,name=postHookFailure" json:"postHookFailure,omitempty"`
+	FileName         *string           `protobuf:"bytes,6,req,name=fileName" json:"fileName,omitempty"`
+	XXX_unrecognized []byte            `json:"-"`
 }
 
 func (m *ProtoSpec) Reset()         { *m = ProtoSpec{} }
@@ -188,6 +190,27 @@ func (m *ProtoSpec) GetIsTableDriven() bool {
 		return *m.IsTableDriven
 	}
 	return false
+}
+
+func (m *ProtoSpec) GetPreHookFailure() *ProtoHookFailure {
+	if m != nil {
+		return m.PreHookFailure
+	}
+	return nil
+}
+
+func (m *ProtoSpec) GetPostHookFailure() *ProtoHookFailure {
+	if m != nil {
+		return m.PostHookFailure
+	}
+	return nil
+}
+
+func (m *ProtoSpec) GetFileName() string {
+	if m != nil && m.FileName != nil {
+		return *m.FileName
+	}
+	return ""
 }
 
 type ProtoItem struct {
@@ -264,9 +287,10 @@ func (m *ProtoItem) GetTags() *ProtoTags {
 
 type ProtoScenario struct {
 	ScenarioHeading  *string           `protobuf:"bytes,1,req,name=scenarioHeading" json:"scenarioHeading,omitempty"`
-	ScenarioItems    []*ProtoItem      `protobuf:"bytes,2,rep,name=scenarioItems" json:"scenarioItems,omitempty"`
-	PreHookFailure   *ProtoHookFailure `protobuf:"bytes,3,opt,name=preHookFailure" json:"preHookFailure,omitempty"`
-	PostHookFailure  *ProtoHookFailure `protobuf:"bytes,4,opt,name=postHookFailure" json:"postHookFailure,omitempty"`
+	Failed           *bool             `protobuf:"varint,2,req,name=failed" json:"failed,omitempty"`
+	ScenarioItems    []*ProtoItem      `protobuf:"bytes,3,rep,name=scenarioItems" json:"scenarioItems,omitempty"`
+	PreHookFailure   *ProtoHookFailure `protobuf:"bytes,4,opt,name=preHookFailure" json:"preHookFailure,omitempty"`
+	PostHookFailure  *ProtoHookFailure `protobuf:"bytes,5,opt,name=postHookFailure" json:"postHookFailure,omitempty"`
 	XXX_unrecognized []byte            `json:"-"`
 }
 
@@ -279,6 +303,13 @@ func (m *ProtoScenario) GetScenarioHeading() string {
 		return *m.ScenarioHeading
 	}
 	return ""
+}
+
+func (m *ProtoScenario) GetFailed() bool {
+	if m != nil && m.Failed != nil {
+		return *m.Failed
+	}
+	return false
 }
 
 func (m *ProtoScenario) GetScenarioItems() []*ProtoItem {
@@ -361,6 +392,7 @@ func (m *ProtoStep) GetStepExecutionResult() *ProtoStepExecutionResult {
 type ProtoConcept struct {
 	ConceptStep            *ProtoStep                `protobuf:"bytes,1,req,name=conceptStep" json:"conceptStep,omitempty"`
 	Steps                  []*ProtoStep              `protobuf:"bytes,2,rep,name=steps" json:"steps,omitempty"`
+	Failed                 *bool                     `protobuf:"varint,3,req,name=failed" json:"failed,omitempty"`
 	ConceptExecutionResult *ProtoStepExecutionResult `protobuf:"bytes,4,opt,name=conceptExecutionResult" json:"conceptExecutionResult,omitempty"`
 	XXX_unrecognized       []byte                    `json:"-"`
 }
@@ -381,6 +413,13 @@ func (m *ProtoConcept) GetSteps() []*ProtoStep {
 		return m.Steps
 	}
 	return nil
+}
+
+func (m *ProtoConcept) GetFailed() bool {
+	if m != nil && m.Failed != nil {
+		return *m.Failed
+	}
+	return false
 }
 
 func (m *ProtoConcept) GetConceptExecutionResult() *ProtoStepExecutionResult {
@@ -591,7 +630,7 @@ func (m *ProtoStepExecutionResult) GetPostHookFailure() *ProtoHookFailure {
 }
 
 type ProtoExecutionResult struct {
-	Passed           *bool   `protobuf:"varint,1,req,name=passed" json:"passed,omitempty"`
+	Failed           *bool   `protobuf:"varint,1,req,name=failed" json:"failed,omitempty"`
 	RecoverableError *bool   `protobuf:"varint,2,opt,name=recoverableError" json:"recoverableError,omitempty"`
 	ErrorMessage     *string `protobuf:"bytes,3,opt,name=errorMessage" json:"errorMessage,omitempty"`
 	StackTrace       *string `protobuf:"bytes,4,opt,name=stackTrace" json:"stackTrace,omitempty"`
@@ -603,9 +642,9 @@ func (m *ProtoExecutionResult) Reset()         { *m = ProtoExecutionResult{} }
 func (m *ProtoExecutionResult) String() string { return proto.CompactTextString(m) }
 func (*ProtoExecutionResult) ProtoMessage()    {}
 
-func (m *ProtoExecutionResult) GetPassed() bool {
-	if m != nil && m.Passed != nil {
-		return *m.Passed
+func (m *ProtoExecutionResult) GetFailed() bool {
+	if m != nil && m.Failed != nil {
+		return *m.Failed
 	}
 	return false
 }
@@ -634,38 +673,6 @@ func (m *ProtoExecutionResult) GetStackTrace() string {
 func (m *ProtoExecutionResult) GetScreenShot() []byte {
 	if m != nil {
 		return m.ScreenShot
-	}
-	return nil
-}
-
-type SpecExecStatus struct {
-	Item             []*ProtoItem      `protobuf:"bytes,1,rep,name=item" json:"item,omitempty"`
-	PreHookFailure   *ProtoHookFailure `protobuf:"bytes,2,opt,name=preHookFailure" json:"preHookFailure,omitempty"`
-	PostHookFailure  *ProtoHookFailure `protobuf:"bytes,3,opt,name=postHookFailure" json:"postHookFailure,omitempty"`
-	XXX_unrecognized []byte            `json:"-"`
-}
-
-func (m *SpecExecStatus) Reset()         { *m = SpecExecStatus{} }
-func (m *SpecExecStatus) String() string { return proto.CompactTextString(m) }
-func (*SpecExecStatus) ProtoMessage()    {}
-
-func (m *SpecExecStatus) GetItem() []*ProtoItem {
-	if m != nil {
-		return m.Item
-	}
-	return nil
-}
-
-func (m *SpecExecStatus) GetPreHookFailure() *ProtoHookFailure {
-	if m != nil {
-		return m.PreHookFailure
-	}
-	return nil
-}
-
-func (m *SpecExecStatus) GetPostHookFailure() *ProtoHookFailure {
-	if m != nil {
-		return m.PostHookFailure
 	}
 	return nil
 }

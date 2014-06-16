@@ -4,6 +4,9 @@ message ProtoSpec {
     required string specHeading = 1;
     repeated ProtoItem items = 2;
     required bool isTableDriven = 3;
+    optional ProtoHookFailure preHookFailure = 4;
+    optional ProtoHookFailure postHookFailure = 5;
+    required string fileName = 6;
 }
 
 message ProtoItem {
@@ -29,9 +32,10 @@ message ProtoItem {
 
 message ProtoScenario {
     required string scenarioHeading = 1;
-    repeated ProtoItem scenarioItems = 2;
-    optional ProtoHookFailure preHookFailure = 3;
-    optional ProtoHookFailure postHookFailure = 4;
+    required bool failed = 2;
+    repeated ProtoItem scenarioItems = 3;
+    optional ProtoHookFailure preHookFailure = 4;
+    optional ProtoHookFailure postHookFailure = 5;
 }
 
 message ProtoTableDrivenScenario {
@@ -48,6 +52,7 @@ message ProtoStep {
 message ProtoConcept {
     required ProtoStep conceptStep = 1;
     repeated ProtoStep steps = 2;
+    required bool failed = 3;
     optional ProtoStepExecutionResult conceptExecutionResult = 4;
 }
 
@@ -103,18 +108,11 @@ message ProtoStepExecutionResult {
 }
 
 message ProtoExecutionResult {
-    required bool passed = 1;
+    required bool failed = 1;
     optional bool recoverableError = 2;
     optional string errorMessage = 3;
     optional string stackTrace = 4;
     optional bytes screenShot = 5;
-}
-
-
-message SpecExecStatus {
-    repeated ProtoItem item = 1;
-    optional ProtoHookFailure preHookFailure = 2;
-    optional ProtoHookFailure postHookFailure = 3;
 }
 
 message ProtoHookFailure {

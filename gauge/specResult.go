@@ -5,28 +5,28 @@ import (
 )
 
 type suiteResult struct {
-	specResults          []*specResult
-	preSuite             *ProtoHookFailure
-	postSuite            *ProtoHookFailure
-	currentSpecIndex     int
-	currentScenarioIndex int
+	specResults      []*specResult
+	preSuite         *ProtoHookFailure
+	postSuite        *ProtoHookFailure
+	isFailed         bool
+	specsFailedCount int
 }
 
 type specResult struct {
-	preSpec         *ProtoHookFailure
-	protoSpec        *ProtoSpec
-	postSpec        *ProtoHookFailure
+	protoSpec           *ProtoSpec
+	scenarioFailedCount int
+	scenarioCount       int
+	isFailed            bool
 }
 
 type scenarioResult struct {
-	preScenario         *ProtoHookFailure
-	protoScenario       *ProtoScenario
-	postScenario        *ProtoHookFailure
+	protoScenario *ProtoScenario
 }
 
 type result interface {
 	getPreHook() **ProtoHookFailure
 	getPostHook() **ProtoHookFailure
+	setFailure()
 }
 
 func (suiteResult *suiteResult) getPreHook() **ProtoHookFailure {
@@ -37,20 +37,32 @@ func (suiteResult *suiteResult) getPostHook() **ProtoHookFailure {
 	return &suiteResult.postSuite
 }
 
+func (suiteResult *suiteResult) setFailure() {
+	suiteResult.isFailed = true
+}
+
 func (specResult *specResult) getPreHook() **ProtoHookFailure {
-	return &specResult.preSpec
+	return &specResult.protoSpec.PreHookFailure
 }
 
 func (specResult *specResult) getPostHook() **ProtoHookFailure {
-	return &specResult.postSpec
+	return &specResult.protoSpec.PostHookFailure
+}
+
+func (specResult *specResult) setFailure() {
+	specResult.isFailed = true
 }
 
 func (scenarioResult *scenarioResult) getPreHook() **ProtoHookFailure {
-	return &scenarioResult.preScenario
+	return &scenarioResult.protoScenario.PreHookFailure
 }
 
 func (scenarioResult *scenarioResult) getPostHook() **ProtoHookFailure {
-	return &scenarioResult.postScenario
+	return &scenarioResult.protoScenario.PostHookFailure
+}
+
+func (scenarioResult *scenarioResult) setFailure() {
+	scenarioResult.protoScenario.Failed = proto.Bool(true)
 }
 
 func (specResult *specResult) addSpecItems(spec *specification) {
@@ -64,59 +76,76 @@ func (specResult *specResult) addSpecItems(spec *specification) {
 func newSuiteResult() *suiteResult {
 	result := new(suiteResult)
 	result.specResults = make([]*specResult, 0)
-	result.currentSpecIndex = -1
 	return result
 }
 
 func addPreHook(result result, executionResult *ProtoExecutionResult) {
-	if !executionResult.GetPassed() {
+	if executionResult.GetFailed() {
 		*(result.getPreHook()) = getProtoHookFailure(executionResult)
+		result.setFailure()
 	}
 }
 
 func addPostHook(result result, executionResult *ProtoExecutionResult) {
-	if !executionResult.GetPassed() {
+	if executionResult.GetFailed() {
 		*(result.getPostHook()) = getProtoHookFailure(executionResult)
+		result.setFailure()
 	}
 }
 
 func (suiteResult *suiteResult) addSpecResult(specResult *specResult) {
+	suiteResult.isFailed = specResult.isFailed
+	if specResult.isFailed {
+		suiteResult.specsFailedCount++
+	}
 	suiteResult.specResults = append(suiteResult.specResults, specResult)
-	suiteResult.currentSpecIndex++
+
 }
 
 func getProtoHookFailure(executionResult *ProtoExecutionResult) *ProtoHookFailure {
 	return &ProtoHookFailure{StackTrace: executionResult.StackTrace, ErrorMessage: executionResult.ErrorMessage, ScreenShot: executionResult.ScreenShot}
 }
 
-func (suiteResult *suiteResult) startTableDrivenScenarios() {
-	suiteResult.getCurrentSpec().IsTableDriven = proto.Bool(true)
+func (specResult *specResult) setFileName(fileName string) {
+	specResult.protoSpec.FileName = proto.String(fileName)
 }
 
-func (suiteResult *suiteResult) getCurrentSpec() *ProtoSpec {
-	return suiteResult.protoSpecResult[suiteResult.currentSpecIndex]
-}
-
-func (suiteResult *suiteResult) newSpecStart() {
-	suiteResult.currentSpecIndex++
-	suiteResult.currentScenarioIndex = -1
-	suiteResult.protoSpecResult = append(suiteResult.protoSpecResult, new(ProtoSpec))
-}
-
-func (suiteResult *suiteResult) newScenarioStart() {
-	suiteResult.currentScenarioIndex++
-	suiteResult.getCurrentSpec().Items = append(suiteResult.getCurrentSpec().Items, new(ProtoItem))
-}
-func (specResult *specResult) addScenarioResults(scenarioResult []*scenarioResult) []*scenarioResult {
-	if (specResult.protoSpec == nil ) {
-		specResult.protoSpec = &ProtoSpec{Items:make([]*ProtoItem, 0)}
+func (specResult *specResult) addScenarioResults(scenarioResults []*scenarioResult) {
+	for _, scenarioResult := range scenarioResults {
+		if scenarioResult.protoScenario.GetFailed() {
+			specResult.isFailed = true
+			specResult.scenarioFailedCount++
+		}
+		specResult.protoSpec.Items = append(specResult.protoSpec.Items, &ProtoItem{ItemType: ProtoItem_Scenario.Enum(), Scenario: scenarioResult.protoScenario})
 	}
-	specResult.protoSpec.Items = append(specResult.protoSpec.Items, &ProtoScenario{})
+	specResult.scenarioCount += len(scenarioResults)
+}
+
+func (specResult *specResult) addTableDrivenScenarioResult(scenarioResults [][](*scenarioResult)) {
+	numberOfScenarios := len(scenarioResults[0])
+
+	for i := 0; i < numberOfScenarios; i++ {
+		protoTableDrivenScenario := &ProtoTableDrivenScenario{Scenarios: make([]*ProtoScenario, 0)}
+		scenarioFailed := false
+		for _, eachRow := range scenarioResults {
+			protoTableDrivenScenario.Scenarios = append(protoTableDrivenScenario.GetScenarios(), eachRow[i].protoScenario)
+			if eachRow[i].protoScenario.GetFailed() {
+				scenarioFailed = true
+			}
+		}
+		if scenarioFailed {
+			specResult.scenarioFailedCount++
+			specResult.isFailed = true
+		}
+		protoItem := &ProtoItem{ItemType: ProtoItem_TableDrivenScenario.Enum(), TableDrivenScenario: protoTableDrivenScenario}
+		specResult.protoSpec.Items = append(specResult.protoSpec.Items, protoItem)
+	}
+	specResult.scenarioCount += numberOfScenarios
 }
 
 func (scenarioResult *scenarioResult) addItems(protoItems []*ProtoItem) {
-	if (scenarioResult.protoScenario == nil) {
-		scenarioResult.protoScenario = &ProtoScenario{ScenarioItems:make([]*ProtoItem, 0)}
+	if scenarioResult.protoScenario == nil {
+		scenarioResult.protoScenario = &ProtoScenario{ScenarioItems: make([]*ProtoItem, 0)}
 	}
-	scenarioResult.protoScenario.ScenarioItems = append(scenarioResult.protoScenario.ScenarioItems, protoItems)
+	scenarioResult.protoScenario.ScenarioItems = append(scenarioResult.protoScenario.ScenarioItems, protoItems...)
 }

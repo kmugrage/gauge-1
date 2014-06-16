@@ -53,18 +53,23 @@ type step struct {
 }
 
 func createStepFromStepRequest(stepReq *ExecuteStepRequest) *step {
-	var args []*stepArg
-	for _, arg := range stepReq.GetArgs() {
+	args := createStepArgsFromProtoArguments(stepReq.Args)
+	return &step{value: stepReq.GetParsedStepText(),
+	lineText: stepReq.GetActualStepText(), args: args}
+}
+
+func createStepArgsFromProtoArguments(arguments []*Argument)([]*stepArg) {
+	args := make([]*stepArg, 0)
+	for _, arguments := range arguments {
 		var a *stepArg
-		if arg.GetType() == "table" {
-			a = &stepArg{value: arg.GetValue(), argType: tableArg, table: *(tableFrom(arg.GetTable()))}
+		if arguments.GetType() == "table" {
+			a = &stepArg{value: arguments.GetValue(), argType: tableArg, table: *(tableFrom(arguments.GetTable()))}
 		} else {
-			a = &stepArg{value: arg.GetValue(), argType: static}
+			a = &stepArg{value: arguments.GetValue(), argType: static}
 		}
 		args = append(args, a)
 	}
-	return &step{value: stepReq.GetParsedStepText(),
-		lineText: stepReq.GetActualStepText(), args: args}
+	return args
 }
 
 type specification struct {
@@ -152,7 +157,7 @@ func (specParser *specParser) createSpecification(tokens []*token, conceptDictio
 			}
 		}
 	}
-	//todo move resolution of concepts after processing table headers since it modifies step value
+
 	specification.processConceptStepsFrom(conceptDictionary)
 	validationError := specParser.validateSpec(specification)
 	if validationError != nil {
@@ -320,7 +325,7 @@ func (spec *specification) createStepUsingLookup(stepToken *token, lookup *argLo
 	if argsType != nil && len(argsType) != len(stepToken.args) {
 		return nil, &parseError{stepToken.lineNo, "Step text should not have '{static}' or '{dynamic}' or '{special}'", stepToken.lineText}
 	}
-	step := &step{lineNo: stepToken.lineNo, value: stepValue, lineText: strings.TrimSpace(stepToken.lineText), executionResults: make([]*stepExecutionResult, 0)}
+	step := &step{lineNo: stepToken.lineNo, value: stepValue, lineText: strings.TrimSpace(stepToken.lineText)}
 	var argument *stepArg
 	var err *parseError
 	for i, argType := range argsType {
@@ -455,7 +460,6 @@ func (step *step) populateFragments() {
 		return
 	}
 
-	fmt.Println(argSplitIndices)
 	textStartIndex := 0
 	for argIndex, argIndices := range argSplitIndices {
 		if textStartIndex < argIndices[0] {

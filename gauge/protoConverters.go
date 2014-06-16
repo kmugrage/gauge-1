@@ -41,7 +41,7 @@ func convertToProtoConcept(concept *step) *ProtoItem {
 }
 
 func convertToProtoStep(step *step) *ProtoStep {
-	return &ProtoStep{ActualText: proto.String(step.lineText), ParsedText:proto.String(step.value), Fragments : step.fragments}
+	return &ProtoStep{ActualText: proto.String(step.lineText), ParsedText: proto.String(step.value), Fragments: step.fragments}
 }
 
 func convertToProtoSteps(steps []*step) []*ProtoStep {
