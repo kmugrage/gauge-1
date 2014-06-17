@@ -8,6 +8,5 @@ Gem::Specification.new do |s|
     s.description = "Adds Ruby support into Gauge tests"
     s.homepage    = "http://www.thoughtworks.com"
     s.files = Dir.glob("lib/**/*.rb")
-    s.executables = Dir.glob("bin/**/*").map{ |f| File.basename(f)}
 end
 
