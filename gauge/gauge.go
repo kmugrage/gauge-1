@@ -205,6 +205,7 @@ var currentEnv = flag.String([]string{"-env"}, "default", "Specifies the environ
 var addPlugin = flag.String([]string{"-add-plugin"}, "", "Adds the specified plugin to the current project")
 var pluginArgs = flag.String([]string{"-plugin-args"}, "", "Specified additional arguments to the plugin. This is used together with --add-plugin")
 var specFilesToFormat = flag.String([]string{"-format"}, "", "Formats the specified spec files")
+var refactor = flag.String([]string{"-refactor"}, "", "Refactor steps")
 
 func printUsage() {
 	fmt.Printf("gauge - version %d.%d.%d\n", MAJOR_VERSION, MINOR_VERSION, PATCH_VERSION)
@@ -287,6 +288,10 @@ func main() {
 		if err := addPluginToTheProject(pluginName, additionalArgs, getProjectManifest()); err != nil {
 			fmt.Println(err.Error())
 			os.Exit(1)
+		}
+	} else if *refactor != "" {
+		if len(flag.Args()) != 1 {
+			printUsage()
 		}
 	} else {
 		if len(flag.Args()) == 0 {
