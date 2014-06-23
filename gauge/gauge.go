@@ -293,6 +293,19 @@ func main() {
 		if len(flag.Args()) != 1 {
 			printUsage()
 		}
+		oldStepText := *refactor
+		newStepText := flag.Args()[0]
+		refactorer, err := newRefactorer(oldStepText, newStepText)
+		if err != nil {
+			fmt.Println(err.Error())
+			os.Exit(1)
+		}
+
+		err = refactorer.performRefactoring()
+		if err != nil {
+			fmt.Println(err.Error())
+			os.Exit(1)
+		}
 	} else {
 		if len(flag.Args()) == 0 {
 			printUsage()
