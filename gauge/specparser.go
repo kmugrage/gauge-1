@@ -122,7 +122,6 @@ func (parser *specParser) generateTokens(specText string) ([]*token, *parseError
 
 	}
 	return parser.tokens, nil
-
 }
 
 func (parser *specParser) tokenKindBasedOnCurrentState(state int, matchingToken tokenKind, alternateToken tokenKind) tokenKind {

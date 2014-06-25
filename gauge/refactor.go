@@ -1,5 +1,9 @@
 package main
 
+import (
+	"fmt"
+)
+
 type refactorer struct {
 	oldStep *step
 	newStep *step
@@ -7,27 +11,28 @@ type refactorer struct {
 
 func newRefactorer(oldStepText, newStepText string) (*refactorer, error) {
 	parser := new(specParser)
-	oldStepTokens, err := parser.generateTokens("* " + oldStepText)
+	stepTokens, err := parser.generateTokens("* " + oldStepText + "\n" + "*" + newStepText)
 	if err != nil {
 		return nil, err
-	}
-	newStepTokens, err := parser.generateTokens("* " + newStepText)
-	if err != nil {
-		return nil, err
-	}
-	tokens := []*token{
-		&token{kind: specKind, value: "Spec Heading", lineNo: 1},
-		&token{kind: scenarioKind, value: "Scenario heading", lineNo: 2},
 	}
 
-	dummySpec, _ := new(specParser).createSpecification(tokens, new(conceptDictionary))
-	oldStep, _ := dummySpec.createStep(oldStepTokens[0])
-	newStep, _ := dummySpec.createStep(newStepTokens[0])
+	spec := &specification{}
+	oldStep, _ := spec.createStep(stepTokens[0])
+	newStep, _ := spec.createStep(stepTokens[1])
 
 	r := &refactorer{oldStep: oldStep, newStep: newStep}
 	return r, nil
 }
 
 func (r *refactorer) performRefactoring() error {
+	fmt.Println(r.oldStep.lineText)
+	for _, f := range r.oldStep.fragments {
+		fmt.Printf("%d %s\n", f.GetFragmentType(), f.GetText())
+	}
+
+	fmt.Println(r.newStep.lineText)
+	for _, f := range r.newStep.fragments {
+		fmt.Printf("%d %s\n", f.GetFragmentType(), f.GetText())
+	}
 	return nil
 }
