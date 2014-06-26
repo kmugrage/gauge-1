@@ -29,17 +29,16 @@ It has these top-level messages:
 	SuiteExecutionResult
 	StepNamesRequest
 	StepNamesResponse
+	RefactorRequest
 	Message
 */
 package main
 
 import proto "code.google.com/p/goprotobuf/proto"
-import json "encoding/json"
 import math "math"
 
-// Reference proto, json, and math imports to suppress error if they are not otherwise used.
+// Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
-var _ = &json.SyntaxError{}
 var _ = math.Inf
 
 type Message_MessageType int32
@@ -61,6 +60,7 @@ const (
 	Message_StepNamesResponse         Message_MessageType = 13
 	Message_KillProcessRequest        Message_MessageType = 14
 	Message_SuiteExecutionResult      Message_MessageType = 15
+	Message_RefactorRequest           Message_MessageType = 16
 )
 
 var Message_MessageType_name = map[int32]string{
@@ -80,6 +80,7 @@ var Message_MessageType_name = map[int32]string{
 	13: "StepNamesResponse",
 	14: "KillProcessRequest",
 	15: "SuiteExecutionResult",
+	16: "RefactorRequest",
 }
 var Message_MessageType_value = map[string]int32{
 	"ExecutionStarting":         0,
@@ -98,6 +99,7 @@ var Message_MessageType_value = map[string]int32{
 	"StepNamesResponse":         13,
 	"KillProcessRequest":        14,
 	"SuiteExecutionResult":      15,
+	"RefactorRequest":           16,
 }
 
 func (x Message_MessageType) Enum() *Message_MessageType {
@@ -535,6 +537,38 @@ func (m *StepNamesResponse) GetSteps() []string {
 	return nil
 }
 
+type RefactorRequest struct {
+	OldStepText      *string      `protobuf:"bytes,1,req,name=oldStepText" json:"oldStepText,omitempty"`
+	NewStepText      *string      `protobuf:"bytes,2,req,name=newStepText" json:"newStepText,omitempty"`
+	Params           []*Parameter `protobuf:"bytes,3,rep,name=params" json:"params,omitempty"`
+	XXX_unrecognized []byte       `json:"-"`
+}
+
+func (m *RefactorRequest) Reset()         { *m = RefactorRequest{} }
+func (m *RefactorRequest) String() string { return proto.CompactTextString(m) }
+func (*RefactorRequest) ProtoMessage()    {}
+
+func (m *RefactorRequest) GetOldStepText() string {
+	if m != nil && m.OldStepText != nil {
+		return *m.OldStepText
+	}
+	return ""
+}
+
+func (m *RefactorRequest) GetNewStepText() string {
+	if m != nil && m.NewStepText != nil {
+		return *m.NewStepText
+	}
+	return ""
+}
+
+func (m *RefactorRequest) GetParams() []*Parameter {
+	if m != nil {
+		return m.Params
+	}
+	return nil
+}
+
 // This is the message which gets transferred all the time
 // with proper message type set
 type Message struct {
@@ -559,6 +593,7 @@ type Message struct {
 	StepNamesResponse                *StepNamesResponse                `protobuf:"bytes,16,opt,name=stepNamesResponse" json:"stepNamesResponse,omitempty"`
 	SuiteExecutionResult             *SuiteExecutionResult             `protobuf:"bytes,17,opt,name=suiteExecutionResult" json:"suiteExecutionResult,omitempty"`
 	KillProcessRequest               *KillProcessRequest               `protobuf:"bytes,18,opt,name=killProcessRequest" json:"killProcessRequest,omitempty"`
+	RefactorRequest                  *RefactorRequest                  `protobuf:"bytes,19,opt,name=refactorRequest" json:"refactorRequest,omitempty"`
 	XXX_unrecognized                 []byte                            `json:"-"`
 }
 
@@ -688,6 +723,13 @@ func (m *Message) GetSuiteExecutionResult() *SuiteExecutionResult {
 func (m *Message) GetKillProcessRequest() *KillProcessRequest {
 	if m != nil {
 		return m.KillProcessRequest
+	}
+	return nil
+}
+
+func (m *Message) GetRefactorRequest() *RefactorRequest {
+	if m != nil {
+		return m.RefactorRequest
 	}
 	return nil
 }

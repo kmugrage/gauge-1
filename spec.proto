@@ -136,3 +136,4 @@ message ProtoSpecResult {
     required int32 scenarioFailedCount = 3;
     required bool failed = 4;
 }
+

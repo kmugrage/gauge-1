@@ -95,6 +95,12 @@ message StepNamesResponse {
     repeated string steps = 1;
 }
 
+message RefactorRequest {
+    required string oldStepText = 1; 
+    required string newStepText = 2;
+	repeated Parameter params = 3;
+}
+
 // This is the message which gets transferred all the time 
 // with proper message type set
 message Message {
@@ -115,6 +121,7 @@ message Message {
         StepNamesResponse = 13;
         KillProcessRequest = 14;
         SuiteExecutionResult = 15;
+        RefactorRequest = 16;
 	}
 
   	required MessageType messageType = 1;
@@ -140,5 +147,6 @@ message Message {
     optional StepNamesResponse stepNamesResponse = 16;
   	optional SuiteExecutionResult suiteExecutionResult = 17;
   	optional KillProcessRequest killProcessRequest = 18;
+    optional RefactorRequest refactorRequest = 19;
 }
 

@@ -11922,6 +11922,1023 @@ public final class Messages {
     // @@protoc_insertion_point(class_scope:main.StepNamesResponse)
   }
 
+  public interface RefactorRequestOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+
+    // required string oldStepText = 1;
+    /**
+     * <code>required string oldStepText = 1;</code>
+     */
+    boolean hasOldStepText();
+    /**
+     * <code>required string oldStepText = 1;</code>
+     */
+    java.lang.String getOldStepText();
+    /**
+     * <code>required string oldStepText = 1;</code>
+     */
+    com.google.protobuf.ByteString
+        getOldStepTextBytes();
+
+    // required string newStepText = 2;
+    /**
+     * <code>required string newStepText = 2;</code>
+     */
+    boolean hasNewStepText();
+    /**
+     * <code>required string newStepText = 2;</code>
+     */
+    java.lang.String getNewStepText();
+    /**
+     * <code>required string newStepText = 2;</code>
+     */
+    com.google.protobuf.ByteString
+        getNewStepTextBytes();
+
+    // repeated .main.Parameter params = 3;
+    /**
+     * <code>repeated .main.Parameter params = 3;</code>
+     */
+    java.util.List<main.Spec.Parameter> 
+        getParamsList();
+    /**
+     * <code>repeated .main.Parameter params = 3;</code>
+     */
+    main.Spec.Parameter getParams(int index);
+    /**
+     * <code>repeated .main.Parameter params = 3;</code>
+     */
+    int getParamsCount();
+    /**
+     * <code>repeated .main.Parameter params = 3;</code>
+     */
+    java.util.List<? extends main.Spec.ParameterOrBuilder> 
+        getParamsOrBuilderList();
+    /**
+     * <code>repeated .main.Parameter params = 3;</code>
+     */
+    main.Spec.ParameterOrBuilder getParamsOrBuilder(
+        int index);
+  }
+  /**
+   * Protobuf type {@code main.RefactorRequest}
+   */
+  public static final class RefactorRequest extends
+      com.google.protobuf.GeneratedMessage
+      implements RefactorRequestOrBuilder {
+    // Use RefactorRequest.newBuilder() to construct.
+    private RefactorRequest(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      super(builder);
+      this.unknownFields = builder.getUnknownFields();
+    }
+    private RefactorRequest(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+    private static final RefactorRequest defaultInstance;
+    public static RefactorRequest getDefaultInstance() {
+      return defaultInstance;
+    }
+
+    public RefactorRequest getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private RefactorRequest(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 10: {
+              bitField0_ |= 0x00000001;
+              oldStepText_ = input.readBytes();
+              break;
+            }
+            case 18: {
+              bitField0_ |= 0x00000002;
+              newStepText_ = input.readBytes();
+              break;
+            }
+            case 26: {
+              if (!((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
+                params_ = new java.util.ArrayList<main.Spec.Parameter>();
+                mutable_bitField0_ |= 0x00000004;
+              }
+              params_.add(input.readMessage(main.Spec.Parameter.PARSER, extensionRegistry));
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        if (((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
+          params_ = java.util.Collections.unmodifiableList(params_);
+        }
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return main.Messages.internal_static_main_RefactorRequest_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return main.Messages.internal_static_main_RefactorRequest_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              main.Messages.RefactorRequest.class, main.Messages.RefactorRequest.Builder.class);
+    }
+
+    public static com.google.protobuf.Parser<RefactorRequest> PARSER =
+        new com.google.protobuf.AbstractParser<RefactorRequest>() {
+      public RefactorRequest parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new RefactorRequest(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<RefactorRequest> getParserForType() {
+      return PARSER;
+    }
+
+    private int bitField0_;
+    // required string oldStepText = 1;
+    public static final int OLDSTEPTEXT_FIELD_NUMBER = 1;
+    private java.lang.Object oldStepText_;
+    /**
+     * <code>required string oldStepText = 1;</code>
+     */
+    public boolean hasOldStepText() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    /**
+     * <code>required string oldStepText = 1;</code>
+     */
+    public java.lang.String getOldStepText() {
+      java.lang.Object ref = oldStepText_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          oldStepText_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>required string oldStepText = 1;</code>
+     */
+    public com.google.protobuf.ByteString
+        getOldStepTextBytes() {
+      java.lang.Object ref = oldStepText_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        oldStepText_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    // required string newStepText = 2;
+    public static final int NEWSTEPTEXT_FIELD_NUMBER = 2;
+    private java.lang.Object newStepText_;
+    /**
+     * <code>required string newStepText = 2;</code>
+     */
+    public boolean hasNewStepText() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    /**
+     * <code>required string newStepText = 2;</code>
+     */
+    public java.lang.String getNewStepText() {
+      java.lang.Object ref = newStepText_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          newStepText_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>required string newStepText = 2;</code>
+     */
+    public com.google.protobuf.ByteString
+        getNewStepTextBytes() {
+      java.lang.Object ref = newStepText_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        newStepText_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    // repeated .main.Parameter params = 3;
+    public static final int PARAMS_FIELD_NUMBER = 3;
+    private java.util.List<main.Spec.Parameter> params_;
+    /**
+     * <code>repeated .main.Parameter params = 3;</code>
+     */
+    public java.util.List<main.Spec.Parameter> getParamsList() {
+      return params_;
+    }
+    /**
+     * <code>repeated .main.Parameter params = 3;</code>
+     */
+    public java.util.List<? extends main.Spec.ParameterOrBuilder> 
+        getParamsOrBuilderList() {
+      return params_;
+    }
+    /**
+     * <code>repeated .main.Parameter params = 3;</code>
+     */
+    public int getParamsCount() {
+      return params_.size();
+    }
+    /**
+     * <code>repeated .main.Parameter params = 3;</code>
+     */
+    public main.Spec.Parameter getParams(int index) {
+      return params_.get(index);
+    }
+    /**
+     * <code>repeated .main.Parameter params = 3;</code>
+     */
+    public main.Spec.ParameterOrBuilder getParamsOrBuilder(
+        int index) {
+      return params_.get(index);
+    }
+
+    private void initFields() {
+      oldStepText_ = "";
+      newStepText_ = "";
+      params_ = java.util.Collections.emptyList();
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+
+      if (!hasOldStepText()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasNewStepText()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      for (int i = 0; i < getParamsCount(); i++) {
+        if (!getParams(i).isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeBytes(1, getOldStepTextBytes());
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeBytes(2, getNewStepTextBytes());
+      }
+      for (int i = 0; i < params_.size(); i++) {
+        output.writeMessage(3, params_.get(i));
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(1, getOldStepTextBytes());
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(2, getNewStepTextBytes());
+      }
+      for (int i = 0; i < params_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(3, params_.get(i));
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+
+    public static main.Messages.RefactorRequest parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static main.Messages.RefactorRequest parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static main.Messages.RefactorRequest parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static main.Messages.RefactorRequest parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static main.Messages.RefactorRequest parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static main.Messages.RefactorRequest parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+    public static main.Messages.RefactorRequest parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input);
+    }
+    public static main.Messages.RefactorRequest parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+    }
+    public static main.Messages.RefactorRequest parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static main.Messages.RefactorRequest parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(main.Messages.RefactorRequest prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code main.RefactorRequest}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements main.Messages.RefactorRequestOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return main.Messages.internal_static_main_RefactorRequest_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return main.Messages.internal_static_main_RefactorRequest_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                main.Messages.RefactorRequest.class, main.Messages.RefactorRequest.Builder.class);
+      }
+
+      // Construct using main.Messages.RefactorRequest.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+          getParamsFieldBuilder();
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+
+      public Builder clear() {
+        super.clear();
+        oldStepText_ = "";
+        bitField0_ = (bitField0_ & ~0x00000001);
+        newStepText_ = "";
+        bitField0_ = (bitField0_ & ~0x00000002);
+        if (paramsBuilder_ == null) {
+          params_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000004);
+        } else {
+          paramsBuilder_.clear();
+        }
+        return this;
+      }
+
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return main.Messages.internal_static_main_RefactorRequest_descriptor;
+      }
+
+      public main.Messages.RefactorRequest getDefaultInstanceForType() {
+        return main.Messages.RefactorRequest.getDefaultInstance();
+      }
+
+      public main.Messages.RefactorRequest build() {
+        main.Messages.RefactorRequest result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public main.Messages.RefactorRequest buildPartial() {
+        main.Messages.RefactorRequest result = new main.Messages.RefactorRequest(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        result.oldStepText_ = oldStepText_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.newStepText_ = newStepText_;
+        if (paramsBuilder_ == null) {
+          if (((bitField0_ & 0x00000004) == 0x00000004)) {
+            params_ = java.util.Collections.unmodifiableList(params_);
+            bitField0_ = (bitField0_ & ~0x00000004);
+          }
+          result.params_ = params_;
+        } else {
+          result.params_ = paramsBuilder_.build();
+        }
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof main.Messages.RefactorRequest) {
+          return mergeFrom((main.Messages.RefactorRequest)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(main.Messages.RefactorRequest other) {
+        if (other == main.Messages.RefactorRequest.getDefaultInstance()) return this;
+        if (other.hasOldStepText()) {
+          bitField0_ |= 0x00000001;
+          oldStepText_ = other.oldStepText_;
+          onChanged();
+        }
+        if (other.hasNewStepText()) {
+          bitField0_ |= 0x00000002;
+          newStepText_ = other.newStepText_;
+          onChanged();
+        }
+        if (paramsBuilder_ == null) {
+          if (!other.params_.isEmpty()) {
+            if (params_.isEmpty()) {
+              params_ = other.params_;
+              bitField0_ = (bitField0_ & ~0x00000004);
+            } else {
+              ensureParamsIsMutable();
+              params_.addAll(other.params_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.params_.isEmpty()) {
+            if (paramsBuilder_.isEmpty()) {
+              paramsBuilder_.dispose();
+              paramsBuilder_ = null;
+              params_ = other.params_;
+              bitField0_ = (bitField0_ & ~0x00000004);
+              paramsBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getParamsFieldBuilder() : null;
+            } else {
+              paramsBuilder_.addAllMessages(other.params_);
+            }
+          }
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        if (!hasOldStepText()) {
+          
+          return false;
+        }
+        if (!hasNewStepText()) {
+          
+          return false;
+        }
+        for (int i = 0; i < getParamsCount(); i++) {
+          if (!getParams(i).isInitialized()) {
+            
+            return false;
+          }
+        }
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        main.Messages.RefactorRequest parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (main.Messages.RefactorRequest) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      // required string oldStepText = 1;
+      private java.lang.Object oldStepText_ = "";
+      /**
+       * <code>required string oldStepText = 1;</code>
+       */
+      public boolean hasOldStepText() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      /**
+       * <code>required string oldStepText = 1;</code>
+       */
+      public java.lang.String getOldStepText() {
+        java.lang.Object ref = oldStepText_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          oldStepText_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>required string oldStepText = 1;</code>
+       */
+      public com.google.protobuf.ByteString
+          getOldStepTextBytes() {
+        java.lang.Object ref = oldStepText_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          oldStepText_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>required string oldStepText = 1;</code>
+       */
+      public Builder setOldStepText(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
+        oldStepText_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string oldStepText = 1;</code>
+       */
+      public Builder clearOldStepText() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        oldStepText_ = getDefaultInstance().getOldStepText();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string oldStepText = 1;</code>
+       */
+      public Builder setOldStepTextBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
+        oldStepText_ = value;
+        onChanged();
+        return this;
+      }
+
+      // required string newStepText = 2;
+      private java.lang.Object newStepText_ = "";
+      /**
+       * <code>required string newStepText = 2;</code>
+       */
+      public boolean hasNewStepText() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      /**
+       * <code>required string newStepText = 2;</code>
+       */
+      public java.lang.String getNewStepText() {
+        java.lang.Object ref = newStepText_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          newStepText_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>required string newStepText = 2;</code>
+       */
+      public com.google.protobuf.ByteString
+          getNewStepTextBytes() {
+        java.lang.Object ref = newStepText_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          newStepText_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>required string newStepText = 2;</code>
+       */
+      public Builder setNewStepText(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
+        newStepText_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string newStepText = 2;</code>
+       */
+      public Builder clearNewStepText() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        newStepText_ = getDefaultInstance().getNewStepText();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string newStepText = 2;</code>
+       */
+      public Builder setNewStepTextBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
+        newStepText_ = value;
+        onChanged();
+        return this;
+      }
+
+      // repeated .main.Parameter params = 3;
+      private java.util.List<main.Spec.Parameter> params_ =
+        java.util.Collections.emptyList();
+      private void ensureParamsIsMutable() {
+        if (!((bitField0_ & 0x00000004) == 0x00000004)) {
+          params_ = new java.util.ArrayList<main.Spec.Parameter>(params_);
+          bitField0_ |= 0x00000004;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilder<
+          main.Spec.Parameter, main.Spec.Parameter.Builder, main.Spec.ParameterOrBuilder> paramsBuilder_;
+
+      /**
+       * <code>repeated .main.Parameter params = 3;</code>
+       */
+      public java.util.List<main.Spec.Parameter> getParamsList() {
+        if (paramsBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(params_);
+        } else {
+          return paramsBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <code>repeated .main.Parameter params = 3;</code>
+       */
+      public int getParamsCount() {
+        if (paramsBuilder_ == null) {
+          return params_.size();
+        } else {
+          return paramsBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .main.Parameter params = 3;</code>
+       */
+      public main.Spec.Parameter getParams(int index) {
+        if (paramsBuilder_ == null) {
+          return params_.get(index);
+        } else {
+          return paramsBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .main.Parameter params = 3;</code>
+       */
+      public Builder setParams(
+          int index, main.Spec.Parameter value) {
+        if (paramsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureParamsIsMutable();
+          params_.set(index, value);
+          onChanged();
+        } else {
+          paramsBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .main.Parameter params = 3;</code>
+       */
+      public Builder setParams(
+          int index, main.Spec.Parameter.Builder builderForValue) {
+        if (paramsBuilder_ == null) {
+          ensureParamsIsMutable();
+          params_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          paramsBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .main.Parameter params = 3;</code>
+       */
+      public Builder addParams(main.Spec.Parameter value) {
+        if (paramsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureParamsIsMutable();
+          params_.add(value);
+          onChanged();
+        } else {
+          paramsBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .main.Parameter params = 3;</code>
+       */
+      public Builder addParams(
+          int index, main.Spec.Parameter value) {
+        if (paramsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureParamsIsMutable();
+          params_.add(index, value);
+          onChanged();
+        } else {
+          paramsBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .main.Parameter params = 3;</code>
+       */
+      public Builder addParams(
+          main.Spec.Parameter.Builder builderForValue) {
+        if (paramsBuilder_ == null) {
+          ensureParamsIsMutable();
+          params_.add(builderForValue.build());
+          onChanged();
+        } else {
+          paramsBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .main.Parameter params = 3;</code>
+       */
+      public Builder addParams(
+          int index, main.Spec.Parameter.Builder builderForValue) {
+        if (paramsBuilder_ == null) {
+          ensureParamsIsMutable();
+          params_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          paramsBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .main.Parameter params = 3;</code>
+       */
+      public Builder addAllParams(
+          java.lang.Iterable<? extends main.Spec.Parameter> values) {
+        if (paramsBuilder_ == null) {
+          ensureParamsIsMutable();
+          super.addAll(values, params_);
+          onChanged();
+        } else {
+          paramsBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .main.Parameter params = 3;</code>
+       */
+      public Builder clearParams() {
+        if (paramsBuilder_ == null) {
+          params_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000004);
+          onChanged();
+        } else {
+          paramsBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .main.Parameter params = 3;</code>
+       */
+      public Builder removeParams(int index) {
+        if (paramsBuilder_ == null) {
+          ensureParamsIsMutable();
+          params_.remove(index);
+          onChanged();
+        } else {
+          paramsBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .main.Parameter params = 3;</code>
+       */
+      public main.Spec.Parameter.Builder getParamsBuilder(
+          int index) {
+        return getParamsFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .main.Parameter params = 3;</code>
+       */
+      public main.Spec.ParameterOrBuilder getParamsOrBuilder(
+          int index) {
+        if (paramsBuilder_ == null) {
+          return params_.get(index);  } else {
+          return paramsBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <code>repeated .main.Parameter params = 3;</code>
+       */
+      public java.util.List<? extends main.Spec.ParameterOrBuilder> 
+           getParamsOrBuilderList() {
+        if (paramsBuilder_ != null) {
+          return paramsBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(params_);
+        }
+      }
+      /**
+       * <code>repeated .main.Parameter params = 3;</code>
+       */
+      public main.Spec.Parameter.Builder addParamsBuilder() {
+        return getParamsFieldBuilder().addBuilder(
+            main.Spec.Parameter.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .main.Parameter params = 3;</code>
+       */
+      public main.Spec.Parameter.Builder addParamsBuilder(
+          int index) {
+        return getParamsFieldBuilder().addBuilder(
+            index, main.Spec.Parameter.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .main.Parameter params = 3;</code>
+       */
+      public java.util.List<main.Spec.Parameter.Builder> 
+           getParamsBuilderList() {
+        return getParamsFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          main.Spec.Parameter, main.Spec.Parameter.Builder, main.Spec.ParameterOrBuilder> 
+          getParamsFieldBuilder() {
+        if (paramsBuilder_ == null) {
+          paramsBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              main.Spec.Parameter, main.Spec.Parameter.Builder, main.Spec.ParameterOrBuilder>(
+                  params_,
+                  ((bitField0_ & 0x00000004) == 0x00000004),
+                  getParentForChildren(),
+                  isClean());
+          params_ = null;
+        }
+        return paramsBuilder_;
+      }
+
+      // @@protoc_insertion_point(builder_scope:main.RefactorRequest)
+    }
+
+    static {
+      defaultInstance = new RefactorRequest(true);
+      defaultInstance.initFields();
+    }
+
+    // @@protoc_insertion_point(class_scope:main.RefactorRequest)
+  }
+
   public interface MessageOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
 
@@ -12190,6 +13207,20 @@ public final class Messages {
      * <code>optional .main.KillProcessRequest killProcessRequest = 18;</code>
      */
     main.Messages.KillProcessRequestOrBuilder getKillProcessRequestOrBuilder();
+
+    // optional .main.RefactorRequest refactorRequest = 19;
+    /**
+     * <code>optional .main.RefactorRequest refactorRequest = 19;</code>
+     */
+    boolean hasRefactorRequest();
+    /**
+     * <code>optional .main.RefactorRequest refactorRequest = 19;</code>
+     */
+    main.Messages.RefactorRequest getRefactorRequest();
+    /**
+     * <code>optional .main.RefactorRequest refactorRequest = 19;</code>
+     */
+    main.Messages.RefactorRequestOrBuilder getRefactorRequestOrBuilder();
   }
   /**
    * Protobuf type {@code main.Message}
@@ -12471,6 +13502,19 @@ public final class Messages {
               bitField0_ |= 0x00020000;
               break;
             }
+            case 154: {
+              main.Messages.RefactorRequest.Builder subBuilder = null;
+              if (((bitField0_ & 0x00040000) == 0x00040000)) {
+                subBuilder = refactorRequest_.toBuilder();
+              }
+              refactorRequest_ = input.readMessage(main.Messages.RefactorRequest.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(refactorRequest_);
+                refactorRequest_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00040000;
+              break;
+            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -12579,6 +13623,10 @@ public final class Messages {
        * <code>SuiteExecutionResult = 15;</code>
        */
       SuiteExecutionResult(15, 15),
+      /**
+       * <code>RefactorRequest = 16;</code>
+       */
+      RefactorRequest(16, 16),
       ;
 
       /**
@@ -12645,6 +13693,10 @@ public final class Messages {
        * <code>SuiteExecutionResult = 15;</code>
        */
       public static final int SuiteExecutionResult_VALUE = 15;
+      /**
+       * <code>RefactorRequest = 16;</code>
+       */
+      public static final int RefactorRequest_VALUE = 16;
 
 
       public final int getNumber() { return value; }
@@ -12667,6 +13719,7 @@ public final class Messages {
           case 13: return StepNamesResponse;
           case 14: return KillProcessRequest;
           case 15: return SuiteExecutionResult;
+          case 16: return RefactorRequest;
           default: return null;
         }
       }
@@ -13125,6 +14178,28 @@ public final class Messages {
       return killProcessRequest_;
     }
 
+    // optional .main.RefactorRequest refactorRequest = 19;
+    public static final int REFACTORREQUEST_FIELD_NUMBER = 19;
+    private main.Messages.RefactorRequest refactorRequest_;
+    /**
+     * <code>optional .main.RefactorRequest refactorRequest = 19;</code>
+     */
+    public boolean hasRefactorRequest() {
+      return ((bitField0_ & 0x00040000) == 0x00040000);
+    }
+    /**
+     * <code>optional .main.RefactorRequest refactorRequest = 19;</code>
+     */
+    public main.Messages.RefactorRequest getRefactorRequest() {
+      return refactorRequest_;
+    }
+    /**
+     * <code>optional .main.RefactorRequest refactorRequest = 19;</code>
+     */
+    public main.Messages.RefactorRequestOrBuilder getRefactorRequestOrBuilder() {
+      return refactorRequest_;
+    }
+
     private void initFields() {
       messageType_ = main.Messages.Message.MessageType.ExecutionStarting;
       messageId_ = 0L;
@@ -13144,6 +14219,7 @@ public final class Messages {
       stepNamesResponse_ = main.Messages.StepNamesResponse.getDefaultInstance();
       suiteExecutionResult_ = main.Messages.SuiteExecutionResult.getDefaultInstance();
       killProcessRequest_ = main.Messages.KillProcessRequest.getDefaultInstance();
+      refactorRequest_ = main.Messages.RefactorRequest.getDefaultInstance();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -13236,6 +14312,12 @@ public final class Messages {
           return false;
         }
       }
+      if (hasRefactorRequest()) {
+        if (!getRefactorRequest().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
       memoizedIsInitialized = 1;
       return true;
     }
@@ -13296,6 +14378,9 @@ public final class Messages {
       }
       if (((bitField0_ & 0x00020000) == 0x00020000)) {
         output.writeMessage(18, killProcessRequest_);
+      }
+      if (((bitField0_ & 0x00040000) == 0x00040000)) {
+        output.writeMessage(19, refactorRequest_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -13377,6 +14462,10 @@ public final class Messages {
       if (((bitField0_ & 0x00020000) == 0x00020000)) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(18, killProcessRequest_);
+      }
+      if (((bitField0_ & 0x00040000) == 0x00040000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(19, refactorRequest_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -13507,6 +14596,7 @@ public final class Messages {
           getStepNamesResponseFieldBuilder();
           getSuiteExecutionResultFieldBuilder();
           getKillProcessRequestFieldBuilder();
+          getRefactorRequestFieldBuilder();
         }
       }
       private static Builder create() {
@@ -13615,6 +14705,12 @@ public final class Messages {
           killProcessRequestBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00020000);
+        if (refactorRequestBuilder_ == null) {
+          refactorRequest_ = main.Messages.RefactorRequest.getDefaultInstance();
+        } else {
+          refactorRequestBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00040000);
         return this;
       }
 
@@ -13779,6 +14875,14 @@ public final class Messages {
         } else {
           result.killProcessRequest_ = killProcessRequestBuilder_.build();
         }
+        if (((from_bitField0_ & 0x00040000) == 0x00040000)) {
+          to_bitField0_ |= 0x00040000;
+        }
+        if (refactorRequestBuilder_ == null) {
+          result.refactorRequest_ = refactorRequest_;
+        } else {
+          result.refactorRequest_ = refactorRequestBuilder_.build();
+        }
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -13848,6 +14952,9 @@ public final class Messages {
         }
         if (other.hasKillProcessRequest()) {
           mergeKillProcessRequest(other.getKillProcessRequest());
+        }
+        if (other.hasRefactorRequest()) {
+          mergeRefactorRequest(other.getRefactorRequest());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -13936,6 +15043,12 @@ public final class Messages {
         }
         if (hasSuiteExecutionResult()) {
           if (!getSuiteExecutionResult().isInitialized()) {
+            
+            return false;
+          }
+        }
+        if (hasRefactorRequest()) {
+          if (!getRefactorRequest().isInitialized()) {
             
             return false;
           }
@@ -15959,6 +17072,123 @@ public final class Messages {
         return killProcessRequestBuilder_;
       }
 
+      // optional .main.RefactorRequest refactorRequest = 19;
+      private main.Messages.RefactorRequest refactorRequest_ = main.Messages.RefactorRequest.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          main.Messages.RefactorRequest, main.Messages.RefactorRequest.Builder, main.Messages.RefactorRequestOrBuilder> refactorRequestBuilder_;
+      /**
+       * <code>optional .main.RefactorRequest refactorRequest = 19;</code>
+       */
+      public boolean hasRefactorRequest() {
+        return ((bitField0_ & 0x00040000) == 0x00040000);
+      }
+      /**
+       * <code>optional .main.RefactorRequest refactorRequest = 19;</code>
+       */
+      public main.Messages.RefactorRequest getRefactorRequest() {
+        if (refactorRequestBuilder_ == null) {
+          return refactorRequest_;
+        } else {
+          return refactorRequestBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>optional .main.RefactorRequest refactorRequest = 19;</code>
+       */
+      public Builder setRefactorRequest(main.Messages.RefactorRequest value) {
+        if (refactorRequestBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          refactorRequest_ = value;
+          onChanged();
+        } else {
+          refactorRequestBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00040000;
+        return this;
+      }
+      /**
+       * <code>optional .main.RefactorRequest refactorRequest = 19;</code>
+       */
+      public Builder setRefactorRequest(
+          main.Messages.RefactorRequest.Builder builderForValue) {
+        if (refactorRequestBuilder_ == null) {
+          refactorRequest_ = builderForValue.build();
+          onChanged();
+        } else {
+          refactorRequestBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00040000;
+        return this;
+      }
+      /**
+       * <code>optional .main.RefactorRequest refactorRequest = 19;</code>
+       */
+      public Builder mergeRefactorRequest(main.Messages.RefactorRequest value) {
+        if (refactorRequestBuilder_ == null) {
+          if (((bitField0_ & 0x00040000) == 0x00040000) &&
+              refactorRequest_ != main.Messages.RefactorRequest.getDefaultInstance()) {
+            refactorRequest_ =
+              main.Messages.RefactorRequest.newBuilder(refactorRequest_).mergeFrom(value).buildPartial();
+          } else {
+            refactorRequest_ = value;
+          }
+          onChanged();
+        } else {
+          refactorRequestBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00040000;
+        return this;
+      }
+      /**
+       * <code>optional .main.RefactorRequest refactorRequest = 19;</code>
+       */
+      public Builder clearRefactorRequest() {
+        if (refactorRequestBuilder_ == null) {
+          refactorRequest_ = main.Messages.RefactorRequest.getDefaultInstance();
+          onChanged();
+        } else {
+          refactorRequestBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00040000);
+        return this;
+      }
+      /**
+       * <code>optional .main.RefactorRequest refactorRequest = 19;</code>
+       */
+      public main.Messages.RefactorRequest.Builder getRefactorRequestBuilder() {
+        bitField0_ |= 0x00040000;
+        onChanged();
+        return getRefactorRequestFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .main.RefactorRequest refactorRequest = 19;</code>
+       */
+      public main.Messages.RefactorRequestOrBuilder getRefactorRequestOrBuilder() {
+        if (refactorRequestBuilder_ != null) {
+          return refactorRequestBuilder_.getMessageOrBuilder();
+        } else {
+          return refactorRequest_;
+        }
+      }
+      /**
+       * <code>optional .main.RefactorRequest refactorRequest = 19;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          main.Messages.RefactorRequest, main.Messages.RefactorRequest.Builder, main.Messages.RefactorRequestOrBuilder> 
+          getRefactorRequestFieldBuilder() {
+        if (refactorRequestBuilder_ == null) {
+          refactorRequestBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              main.Messages.RefactorRequest, main.Messages.RefactorRequest.Builder, main.Messages.RefactorRequestOrBuilder>(
+                  refactorRequest_,
+                  getParentForChildren(),
+                  isClean());
+          refactorRequest_ = null;
+        }
+        return refactorRequestBuilder_;
+      }
+
       // @@protoc_insertion_point(builder_scope:main.Message)
     }
 
@@ -16071,6 +17301,11 @@ public final class Messages {
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_main_StepNamesResponse_fieldAccessorTable;
   private static com.google.protobuf.Descriptors.Descriptor
+    internal_static_main_RefactorRequest_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_main_RefactorRequest_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor
     internal_static_main_Message_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
@@ -16122,45 +17357,49 @@ public final class Messages {
       "ExecutionInfo\"C\n\024SuiteExecutionResult\022+\n" +
       "\013suiteResult\030\001 \002(\0132\026.main.ProtoSuiteResu" +
       "lt\"\022\n\020StepNamesRequest\"\"\n\021StepNamesRespo" +
-      "nse\022\r\n\005steps\030\001 \003(\t\"\352\013\n\007Message\022.\n\013messag" +
-      "eType\030\001 \002(\0162\031.main.Message.MessageType\022\021",
-      "\n\tmessageId\030\002 \002(\003\022@\n\030executionStartingRe" +
-      "quest\030\003 \001(\0132\036.main.ExecutionStartingRequ" +
-      "est\022H\n\034specExecutionStartingRequest\030\004 \001(" +
-      "\0132\".main.SpecExecutionStartingRequest\022D\n" +
-      "\032specExecutionEndingRequest\030\005 \001(\0132 .main" +
-      ".SpecExecutionEndingRequest\022P\n scenarioE" +
-      "xecutionStartingRequest\030\006 \001(\0132&.main.Sce" +
-      "narioExecutionStartingRequest\022L\n\036scenari" +
-      "oExecutionEndingRequest\030\007 \001(\0132$.main.Sce" +
-      "narioExecutionEndingRequest\022H\n\034stepExecu",
-      "tionStartingRequest\030\010 \001(\0132\".main.StepExe" +
-      "cutionStartingRequest\022D\n\032stepExecutionEn" +
-      "dingRequest\030\t \001(\0132 .main.StepExecutionEn" +
-      "dingRequest\0224\n\022executeStepRequest\030\n \001(\0132" +
-      "\030.main.ExecuteStepRequest\022<\n\026executionEn" +
-      "dingRequest\030\013 \001(\0132\034.main.ExecutionEnding" +
-      "Request\0226\n\023stepValidateRequest\030\014 \001(\0132\031.m" +
-      "ain.StepValidateRequest\0228\n\024stepValidateR" +
-      "esponse\030\r \001(\0132\032.main.StepValidateRespons" +
-      "e\022>\n\027executionStatusResponse\030\016 \001(\0132\035.mai",
-      "n.ExecutionStatusResponse\0220\n\020stepNamesRe" +
-      "quest\030\017 \001(\0132\026.main.StepNamesRequest\0222\n\021s" +
-      "tepNamesResponse\030\020 \001(\0132\027.main.StepNamesR" +
-      "esponse\0228\n\024suiteExecutionResult\030\021 \001(\0132\032." +
-      "main.SuiteExecutionResult\0224\n\022killProcess" +
-      "Request\030\022 \001(\0132\030.main.KillProcessRequest\"" +
-      "\235\003\n\013MessageType\022\025\n\021ExecutionStarting\020\000\022\031" +
-      "\n\025SpecExecutionStarting\020\001\022\027\n\023SpecExecuti" +
-      "onEnding\020\002\022\035\n\031ScenarioExecutionStarting\020" +
-      "\003\022\033\n\027ScenarioExecutionEnding\020\004\022\031\n\025StepEx",
-      "ecutionStarting\020\005\022\027\n\023StepExecutionEnding" +
-      "\020\006\022\017\n\013ExecuteStep\020\007\022\023\n\017ExecutionEnding\020\010" +
-      "\022\027\n\023StepValidateRequest\020\t\022\030\n\024StepValidat" +
-      "eResponse\020\n\022\033\n\027ExecutionStatusResponse\020\013" +
-      "\022\024\n\020StepNamesRequest\020\014\022\025\n\021StepNamesRespo" +
-      "nse\020\r\022\026\n\022KillProcessRequest\020\016\022\030\n\024SuiteEx" +
-      "ecutionResult\020\017"
+      "nse\022\r\n\005steps\030\001 \003(\t\"\\\n\017RefactorRequest\022\023\n" +
+      "\013oldStepText\030\001 \002(\t\022\023\n\013newStepText\030\002 \002(\t\022",
+      "\037\n\006params\030\003 \003(\0132\017.main.Parameter\"\257\014\n\007Mes" +
+      "sage\022.\n\013messageType\030\001 \002(\0162\031.main.Message" +
+      ".MessageType\022\021\n\tmessageId\030\002 \002(\003\022@\n\030execu" +
+      "tionStartingRequest\030\003 \001(\0132\036.main.Executi" +
+      "onStartingRequest\022H\n\034specExecutionStarti" +
+      "ngRequest\030\004 \001(\0132\".main.SpecExecutionStar" +
+      "tingRequest\022D\n\032specExecutionEndingReques" +
+      "t\030\005 \001(\0132 .main.SpecExecutionEndingReques" +
+      "t\022P\n scenarioExecutionStartingRequest\030\006 " +
+      "\001(\0132&.main.ScenarioExecutionStartingRequ",
+      "est\022L\n\036scenarioExecutionEndingRequest\030\007 " +
+      "\001(\0132$.main.ScenarioExecutionEndingReques" +
+      "t\022H\n\034stepExecutionStartingRequest\030\010 \001(\0132" +
+      "\".main.StepExecutionStartingRequest\022D\n\032s" +
+      "tepExecutionEndingRequest\030\t \001(\0132 .main.S" +
+      "tepExecutionEndingRequest\0224\n\022executeStep" +
+      "Request\030\n \001(\0132\030.main.ExecuteStepRequest\022" +
+      "<\n\026executionEndingRequest\030\013 \001(\0132\034.main.E" +
+      "xecutionEndingRequest\0226\n\023stepValidateReq" +
+      "uest\030\014 \001(\0132\031.main.StepValidateRequest\0228\n",
+      "\024stepValidateResponse\030\r \001(\0132\032.main.StepV" +
+      "alidateResponse\022>\n\027executionStatusRespon" +
+      "se\030\016 \001(\0132\035.main.ExecutionStatusResponse\022" +
+      "0\n\020stepNamesRequest\030\017 \001(\0132\026.main.StepNam" +
+      "esRequest\0222\n\021stepNamesResponse\030\020 \001(\0132\027.m" +
+      "ain.StepNamesResponse\0228\n\024suiteExecutionR" +
+      "esult\030\021 \001(\0132\032.main.SuiteExecutionResult\022" +
+      "4\n\022killProcessRequest\030\022 \001(\0132\030.main.KillP" +
+      "rocessRequest\022.\n\017refactorRequest\030\023 \001(\0132\025" +
+      ".main.RefactorRequest\"\262\003\n\013MessageType\022\025\n",
+      "\021ExecutionStarting\020\000\022\031\n\025SpecExecutionSta" +
+      "rting\020\001\022\027\n\023SpecExecutionEnding\020\002\022\035\n\031Scen" +
+      "arioExecutionStarting\020\003\022\033\n\027ScenarioExecu" +
+      "tionEnding\020\004\022\031\n\025StepExecutionStarting\020\005\022" +
+      "\027\n\023StepExecutionEnding\020\006\022\017\n\013ExecuteStep\020" +
+      "\007\022\023\n\017ExecutionEnding\020\010\022\027\n\023StepValidateRe" +
+      "quest\020\t\022\030\n\024StepValidateResponse\020\n\022\033\n\027Exe" +
+      "cutionStatusResponse\020\013\022\024\n\020StepNamesReque" +
+      "st\020\014\022\025\n\021StepNamesResponse\020\r\022\026\n\022KillProce" +
+      "ssRequest\020\016\022\030\n\024SuiteExecutionResult\020\017\022\023\n",
+      "\017RefactorRequest\020\020"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -16287,12 +17526,18 @@ public final class Messages {
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_main_StepNamesResponse_descriptor,
               new java.lang.String[] { "Steps", });
-          internal_static_main_Message_descriptor =
+          internal_static_main_RefactorRequest_descriptor =
             getDescriptor().getMessageTypes().get(20);
+          internal_static_main_RefactorRequest_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_main_RefactorRequest_descriptor,
+              new java.lang.String[] { "OldStepText", "NewStepText", "Params", });
+          internal_static_main_Message_descriptor =
+            getDescriptor().getMessageTypes().get(21);
           internal_static_main_Message_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_main_Message_descriptor,
-              new java.lang.String[] { "MessageType", "MessageId", "ExecutionStartingRequest", "SpecExecutionStartingRequest", "SpecExecutionEndingRequest", "ScenarioExecutionStartingRequest", "ScenarioExecutionEndingRequest", "StepExecutionStartingRequest", "StepExecutionEndingRequest", "ExecuteStepRequest", "ExecutionEndingRequest", "StepValidateRequest", "StepValidateResponse", "ExecutionStatusResponse", "StepNamesRequest", "StepNamesResponse", "SuiteExecutionResult", "KillProcessRequest", });
+              new java.lang.String[] { "MessageType", "MessageId", "ExecutionStartingRequest", "SpecExecutionStartingRequest", "SpecExecutionEndingRequest", "ScenarioExecutionStartingRequest", "ScenarioExecutionEndingRequest", "StepExecutionStartingRequest", "StepExecutionEndingRequest", "ExecuteStepRequest", "ExecutionEndingRequest", "StepValidateRequest", "StepValidateResponse", "ExecutionStatusResponse", "StepNamesRequest", "StepNamesResponse", "SuiteExecutionResult", "KillProcessRequest", "RefactorRequest", });
           return null;
         }
       };

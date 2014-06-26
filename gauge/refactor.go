@@ -1,6 +1,7 @@
 package main
 
 import (
+	"code.google.com/p/goprotobuf/proto"
 	"fmt"
 )
 
@@ -17,22 +18,21 @@ func newRefactorer(oldStepText, newStepText string) (*refactorer, error) {
 	}
 
 	spec := &specification{}
-	oldStep, _ := spec.createStep(stepTokens[0])
-	newStep, _ := spec.createStep(stepTokens[1])
+	oldStep, err := spec.createStepUsingLookup(stepTokens[0], nil)
+	if err != nil {
+		return nil, err
+	}
+	newStep, err := spec.createStepUsingLookup(stepTokens[1], nil)
+	if err != nil {
+		return nil, err
+	}
 
 	r := &refactorer{oldStep: oldStep, newStep: newStep}
 	return r, nil
 }
 
 func (r *refactorer) performRefactoring() error {
-	fmt.Println(r.oldStep.lineText)
-	for _, f := range r.oldStep.fragments {
-		fmt.Printf("%d %s\n", f.GetFragmentType(), f.GetText())
-	}
-
-	fmt.Println(r.newStep.lineText)
-	for _, f := range r.newStep.fragments {
-		fmt.Printf("%d %s\n", f.GetFragmentType(), f.GetText())
-	}
+	request := &RefactorRequest{OldStepText: proto.String(r.oldStep.value), NewStepText: proto.String(r.newStep.value)}
+	fmt.Println(request.GetNewStepText())
 	return nil
 }

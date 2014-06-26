@@ -27,6 +27,7 @@ module Main
   class SuiteExecutionResult < ::ProtocolBuffers::Message; end
   class StepNamesRequest < ::ProtocolBuffers::Message; end
   class StepNamesResponse < ::ProtocolBuffers::Message; end
+  class RefactorRequest < ::ProtocolBuffers::Message; end
   class Message < ::ProtocolBuffers::Message; end
 
   class KillProcessRequest < ::ProtocolBuffers::Message
@@ -161,6 +162,14 @@ module Main
     repeated :string, :steps, 1
   end
 
+  class RefactorRequest < ::ProtocolBuffers::Message
+    set_fully_qualified_name "main.RefactorRequest"
+
+    required :string, :oldStepText, 1
+    required :string, :newStepText, 2
+    repeated ::Main::Parameter, :params, 3
+  end
+
   class Message < ::ProtocolBuffers::Message
     # forward declarations
 
@@ -186,6 +195,7 @@ module Main
       StepNamesResponse = 13
       KillProcessRequest = 14
       SuiteExecutionResult = 15
+      RefactorRequest = 16
     end
 
     set_fully_qualified_name "main.Message"
@@ -208,6 +218,7 @@ module Main
     optional ::Main::StepNamesResponse, :stepNamesResponse, 16
     optional ::Main::SuiteExecutionResult, :suiteExecutionResult, 17
     optional ::Main::KillProcessRequest, :killProcessRequest, 18
+    optional ::Main::RefactorRequest, :refactorRequest, 19
   end
 
 end
