@@ -7891,29 +7891,29 @@ public final class Messages {
      */
     boolean getScenarioFailing();
 
-    // repeated .main.Argument args = 4;
+    // repeated .main.Parameter parameters = 4;
     /**
-     * <code>repeated .main.Argument args = 4;</code>
+     * <code>repeated .main.Parameter parameters = 4;</code>
      */
-    java.util.List<main.Spec.Argument> 
-        getArgsList();
+    java.util.List<main.Spec.Parameter> 
+        getParametersList();
     /**
-     * <code>repeated .main.Argument args = 4;</code>
+     * <code>repeated .main.Parameter parameters = 4;</code>
      */
-    main.Spec.Argument getArgs(int index);
+    main.Spec.Parameter getParameters(int index);
     /**
-     * <code>repeated .main.Argument args = 4;</code>
+     * <code>repeated .main.Parameter parameters = 4;</code>
      */
-    int getArgsCount();
+    int getParametersCount();
     /**
-     * <code>repeated .main.Argument args = 4;</code>
+     * <code>repeated .main.Parameter parameters = 4;</code>
      */
-    java.util.List<? extends main.Spec.ArgumentOrBuilder> 
-        getArgsOrBuilderList();
+    java.util.List<? extends main.Spec.ParameterOrBuilder> 
+        getParametersOrBuilderList();
     /**
-     * <code>repeated .main.Argument args = 4;</code>
+     * <code>repeated .main.Parameter parameters = 4;</code>
      */
-    main.Spec.ArgumentOrBuilder getArgsOrBuilder(
+    main.Spec.ParameterOrBuilder getParametersOrBuilder(
         int index);
   }
   /**
@@ -7984,10 +7984,10 @@ public final class Messages {
             }
             case 34: {
               if (!((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
-                args_ = new java.util.ArrayList<main.Spec.Argument>();
+                parameters_ = new java.util.ArrayList<main.Spec.Parameter>();
                 mutable_bitField0_ |= 0x00000008;
               }
-              args_.add(input.readMessage(main.Spec.Argument.PARSER, extensionRegistry));
+              parameters_.add(input.readMessage(main.Spec.Parameter.PARSER, extensionRegistry));
               break;
             }
           }
@@ -7999,7 +7999,7 @@ public final class Messages {
             e.getMessage()).setUnfinishedMessage(this);
       } finally {
         if (((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
-          args_ = java.util.Collections.unmodifiableList(args_);
+          parameters_ = java.util.Collections.unmodifiableList(parameters_);
         }
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
@@ -8135,47 +8135,47 @@ public final class Messages {
       return scenarioFailing_;
     }
 
-    // repeated .main.Argument args = 4;
-    public static final int ARGS_FIELD_NUMBER = 4;
-    private java.util.List<main.Spec.Argument> args_;
+    // repeated .main.Parameter parameters = 4;
+    public static final int PARAMETERS_FIELD_NUMBER = 4;
+    private java.util.List<main.Spec.Parameter> parameters_;
     /**
-     * <code>repeated .main.Argument args = 4;</code>
+     * <code>repeated .main.Parameter parameters = 4;</code>
      */
-    public java.util.List<main.Spec.Argument> getArgsList() {
-      return args_;
+    public java.util.List<main.Spec.Parameter> getParametersList() {
+      return parameters_;
     }
     /**
-     * <code>repeated .main.Argument args = 4;</code>
+     * <code>repeated .main.Parameter parameters = 4;</code>
      */
-    public java.util.List<? extends main.Spec.ArgumentOrBuilder> 
-        getArgsOrBuilderList() {
-      return args_;
+    public java.util.List<? extends main.Spec.ParameterOrBuilder> 
+        getParametersOrBuilderList() {
+      return parameters_;
     }
     /**
-     * <code>repeated .main.Argument args = 4;</code>
+     * <code>repeated .main.Parameter parameters = 4;</code>
      */
-    public int getArgsCount() {
-      return args_.size();
+    public int getParametersCount() {
+      return parameters_.size();
     }
     /**
-     * <code>repeated .main.Argument args = 4;</code>
+     * <code>repeated .main.Parameter parameters = 4;</code>
      */
-    public main.Spec.Argument getArgs(int index) {
-      return args_.get(index);
+    public main.Spec.Parameter getParameters(int index) {
+      return parameters_.get(index);
     }
     /**
-     * <code>repeated .main.Argument args = 4;</code>
+     * <code>repeated .main.Parameter parameters = 4;</code>
      */
-    public main.Spec.ArgumentOrBuilder getArgsOrBuilder(
+    public main.Spec.ParameterOrBuilder getParametersOrBuilder(
         int index) {
-      return args_.get(index);
+      return parameters_.get(index);
     }
 
     private void initFields() {
       actualStepText_ = "";
       parsedStepText_ = "";
       scenarioFailing_ = false;
-      args_ = java.util.Collections.emptyList();
+      parameters_ = java.util.Collections.emptyList();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -8190,8 +8190,8 @@ public final class Messages {
         memoizedIsInitialized = 0;
         return false;
       }
-      for (int i = 0; i < getArgsCount(); i++) {
-        if (!getArgs(i).isInitialized()) {
+      for (int i = 0; i < getParametersCount(); i++) {
+        if (!getParameters(i).isInitialized()) {
           memoizedIsInitialized = 0;
           return false;
         }
@@ -8212,8 +8212,8 @@ public final class Messages {
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         output.writeBool(3, scenarioFailing_);
       }
-      for (int i = 0; i < args_.size(); i++) {
-        output.writeMessage(4, args_.get(i));
+      for (int i = 0; i < parameters_.size(); i++) {
+        output.writeMessage(4, parameters_.get(i));
       }
       getUnknownFields().writeTo(output);
     }
@@ -8236,9 +8236,9 @@ public final class Messages {
         size += com.google.protobuf.CodedOutputStream
           .computeBoolSize(3, scenarioFailing_);
       }
-      for (int i = 0; i < args_.size(); i++) {
+      for (int i = 0; i < parameters_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(4, args_.get(i));
+          .computeMessageSize(4, parameters_.get(i));
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -8348,7 +8348,7 @@ public final class Messages {
       }
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
-          getArgsFieldBuilder();
+          getParametersFieldBuilder();
         }
       }
       private static Builder create() {
@@ -8363,11 +8363,11 @@ public final class Messages {
         bitField0_ = (bitField0_ & ~0x00000002);
         scenarioFailing_ = false;
         bitField0_ = (bitField0_ & ~0x00000004);
-        if (argsBuilder_ == null) {
-          args_ = java.util.Collections.emptyList();
+        if (parametersBuilder_ == null) {
+          parameters_ = java.util.Collections.emptyList();
           bitField0_ = (bitField0_ & ~0x00000008);
         } else {
-          argsBuilder_.clear();
+          parametersBuilder_.clear();
         }
         return this;
       }
@@ -8409,14 +8409,14 @@ public final class Messages {
           to_bitField0_ |= 0x00000004;
         }
         result.scenarioFailing_ = scenarioFailing_;
-        if (argsBuilder_ == null) {
+        if (parametersBuilder_ == null) {
           if (((bitField0_ & 0x00000008) == 0x00000008)) {
-            args_ = java.util.Collections.unmodifiableList(args_);
+            parameters_ = java.util.Collections.unmodifiableList(parameters_);
             bitField0_ = (bitField0_ & ~0x00000008);
           }
-          result.args_ = args_;
+          result.parameters_ = parameters_;
         } else {
-          result.args_ = argsBuilder_.build();
+          result.parameters_ = parametersBuilder_.build();
         }
         result.bitField0_ = to_bitField0_;
         onBuilt();
@@ -8447,29 +8447,29 @@ public final class Messages {
         if (other.hasScenarioFailing()) {
           setScenarioFailing(other.getScenarioFailing());
         }
-        if (argsBuilder_ == null) {
-          if (!other.args_.isEmpty()) {
-            if (args_.isEmpty()) {
-              args_ = other.args_;
+        if (parametersBuilder_ == null) {
+          if (!other.parameters_.isEmpty()) {
+            if (parameters_.isEmpty()) {
+              parameters_ = other.parameters_;
               bitField0_ = (bitField0_ & ~0x00000008);
             } else {
-              ensureArgsIsMutable();
-              args_.addAll(other.args_);
+              ensureParametersIsMutable();
+              parameters_.addAll(other.parameters_);
             }
             onChanged();
           }
         } else {
-          if (!other.args_.isEmpty()) {
-            if (argsBuilder_.isEmpty()) {
-              argsBuilder_.dispose();
-              argsBuilder_ = null;
-              args_ = other.args_;
+          if (!other.parameters_.isEmpty()) {
+            if (parametersBuilder_.isEmpty()) {
+              parametersBuilder_.dispose();
+              parametersBuilder_ = null;
+              parameters_ = other.parameters_;
               bitField0_ = (bitField0_ & ~0x00000008);
-              argsBuilder_ = 
+              parametersBuilder_ = 
                 com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
-                   getArgsFieldBuilder() : null;
+                   getParametersFieldBuilder() : null;
             } else {
-              argsBuilder_.addAllMessages(other.args_);
+              parametersBuilder_.addAllMessages(other.parameters_);
             }
           }
         }
@@ -8486,8 +8486,8 @@ public final class Messages {
           
           return false;
         }
-        for (int i = 0; i < getArgsCount(); i++) {
-          if (!getArgs(i).isInitialized()) {
+        for (int i = 0; i < getParametersCount(); i++) {
+          if (!getParameters(i).isInitialized()) {
             
             return false;
           }
@@ -8695,244 +8695,244 @@ public final class Messages {
         return this;
       }
 
-      // repeated .main.Argument args = 4;
-      private java.util.List<main.Spec.Argument> args_ =
+      // repeated .main.Parameter parameters = 4;
+      private java.util.List<main.Spec.Parameter> parameters_ =
         java.util.Collections.emptyList();
-      private void ensureArgsIsMutable() {
+      private void ensureParametersIsMutable() {
         if (!((bitField0_ & 0x00000008) == 0x00000008)) {
-          args_ = new java.util.ArrayList<main.Spec.Argument>(args_);
+          parameters_ = new java.util.ArrayList<main.Spec.Parameter>(parameters_);
           bitField0_ |= 0x00000008;
          }
       }
 
       private com.google.protobuf.RepeatedFieldBuilder<
-          main.Spec.Argument, main.Spec.Argument.Builder, main.Spec.ArgumentOrBuilder> argsBuilder_;
+          main.Spec.Parameter, main.Spec.Parameter.Builder, main.Spec.ParameterOrBuilder> parametersBuilder_;
 
       /**
-       * <code>repeated .main.Argument args = 4;</code>
+       * <code>repeated .main.Parameter parameters = 4;</code>
        */
-      public java.util.List<main.Spec.Argument> getArgsList() {
-        if (argsBuilder_ == null) {
-          return java.util.Collections.unmodifiableList(args_);
+      public java.util.List<main.Spec.Parameter> getParametersList() {
+        if (parametersBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(parameters_);
         } else {
-          return argsBuilder_.getMessageList();
+          return parametersBuilder_.getMessageList();
         }
       }
       /**
-       * <code>repeated .main.Argument args = 4;</code>
+       * <code>repeated .main.Parameter parameters = 4;</code>
        */
-      public int getArgsCount() {
-        if (argsBuilder_ == null) {
-          return args_.size();
+      public int getParametersCount() {
+        if (parametersBuilder_ == null) {
+          return parameters_.size();
         } else {
-          return argsBuilder_.getCount();
+          return parametersBuilder_.getCount();
         }
       }
       /**
-       * <code>repeated .main.Argument args = 4;</code>
+       * <code>repeated .main.Parameter parameters = 4;</code>
        */
-      public main.Spec.Argument getArgs(int index) {
-        if (argsBuilder_ == null) {
-          return args_.get(index);
+      public main.Spec.Parameter getParameters(int index) {
+        if (parametersBuilder_ == null) {
+          return parameters_.get(index);
         } else {
-          return argsBuilder_.getMessage(index);
+          return parametersBuilder_.getMessage(index);
         }
       }
       /**
-       * <code>repeated .main.Argument args = 4;</code>
+       * <code>repeated .main.Parameter parameters = 4;</code>
        */
-      public Builder setArgs(
-          int index, main.Spec.Argument value) {
-        if (argsBuilder_ == null) {
+      public Builder setParameters(
+          int index, main.Spec.Parameter value) {
+        if (parametersBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
           }
-          ensureArgsIsMutable();
-          args_.set(index, value);
+          ensureParametersIsMutable();
+          parameters_.set(index, value);
           onChanged();
         } else {
-          argsBuilder_.setMessage(index, value);
+          parametersBuilder_.setMessage(index, value);
         }
         return this;
       }
       /**
-       * <code>repeated .main.Argument args = 4;</code>
+       * <code>repeated .main.Parameter parameters = 4;</code>
        */
-      public Builder setArgs(
-          int index, main.Spec.Argument.Builder builderForValue) {
-        if (argsBuilder_ == null) {
-          ensureArgsIsMutable();
-          args_.set(index, builderForValue.build());
+      public Builder setParameters(
+          int index, main.Spec.Parameter.Builder builderForValue) {
+        if (parametersBuilder_ == null) {
+          ensureParametersIsMutable();
+          parameters_.set(index, builderForValue.build());
           onChanged();
         } else {
-          argsBuilder_.setMessage(index, builderForValue.build());
+          parametersBuilder_.setMessage(index, builderForValue.build());
         }
         return this;
       }
       /**
-       * <code>repeated .main.Argument args = 4;</code>
+       * <code>repeated .main.Parameter parameters = 4;</code>
        */
-      public Builder addArgs(main.Spec.Argument value) {
-        if (argsBuilder_ == null) {
+      public Builder addParameters(main.Spec.Parameter value) {
+        if (parametersBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
           }
-          ensureArgsIsMutable();
-          args_.add(value);
+          ensureParametersIsMutable();
+          parameters_.add(value);
           onChanged();
         } else {
-          argsBuilder_.addMessage(value);
+          parametersBuilder_.addMessage(value);
         }
         return this;
       }
       /**
-       * <code>repeated .main.Argument args = 4;</code>
+       * <code>repeated .main.Parameter parameters = 4;</code>
        */
-      public Builder addArgs(
-          int index, main.Spec.Argument value) {
-        if (argsBuilder_ == null) {
+      public Builder addParameters(
+          int index, main.Spec.Parameter value) {
+        if (parametersBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
           }
-          ensureArgsIsMutable();
-          args_.add(index, value);
+          ensureParametersIsMutable();
+          parameters_.add(index, value);
           onChanged();
         } else {
-          argsBuilder_.addMessage(index, value);
+          parametersBuilder_.addMessage(index, value);
         }
         return this;
       }
       /**
-       * <code>repeated .main.Argument args = 4;</code>
+       * <code>repeated .main.Parameter parameters = 4;</code>
        */
-      public Builder addArgs(
-          main.Spec.Argument.Builder builderForValue) {
-        if (argsBuilder_ == null) {
-          ensureArgsIsMutable();
-          args_.add(builderForValue.build());
+      public Builder addParameters(
+          main.Spec.Parameter.Builder builderForValue) {
+        if (parametersBuilder_ == null) {
+          ensureParametersIsMutable();
+          parameters_.add(builderForValue.build());
           onChanged();
         } else {
-          argsBuilder_.addMessage(builderForValue.build());
+          parametersBuilder_.addMessage(builderForValue.build());
         }
         return this;
       }
       /**
-       * <code>repeated .main.Argument args = 4;</code>
+       * <code>repeated .main.Parameter parameters = 4;</code>
        */
-      public Builder addArgs(
-          int index, main.Spec.Argument.Builder builderForValue) {
-        if (argsBuilder_ == null) {
-          ensureArgsIsMutable();
-          args_.add(index, builderForValue.build());
+      public Builder addParameters(
+          int index, main.Spec.Parameter.Builder builderForValue) {
+        if (parametersBuilder_ == null) {
+          ensureParametersIsMutable();
+          parameters_.add(index, builderForValue.build());
           onChanged();
         } else {
-          argsBuilder_.addMessage(index, builderForValue.build());
+          parametersBuilder_.addMessage(index, builderForValue.build());
         }
         return this;
       }
       /**
-       * <code>repeated .main.Argument args = 4;</code>
+       * <code>repeated .main.Parameter parameters = 4;</code>
        */
-      public Builder addAllArgs(
-          java.lang.Iterable<? extends main.Spec.Argument> values) {
-        if (argsBuilder_ == null) {
-          ensureArgsIsMutable();
-          super.addAll(values, args_);
+      public Builder addAllParameters(
+          java.lang.Iterable<? extends main.Spec.Parameter> values) {
+        if (parametersBuilder_ == null) {
+          ensureParametersIsMutable();
+          super.addAll(values, parameters_);
           onChanged();
         } else {
-          argsBuilder_.addAllMessages(values);
+          parametersBuilder_.addAllMessages(values);
         }
         return this;
       }
       /**
-       * <code>repeated .main.Argument args = 4;</code>
+       * <code>repeated .main.Parameter parameters = 4;</code>
        */
-      public Builder clearArgs() {
-        if (argsBuilder_ == null) {
-          args_ = java.util.Collections.emptyList();
+      public Builder clearParameters() {
+        if (parametersBuilder_ == null) {
+          parameters_ = java.util.Collections.emptyList();
           bitField0_ = (bitField0_ & ~0x00000008);
           onChanged();
         } else {
-          argsBuilder_.clear();
+          parametersBuilder_.clear();
         }
         return this;
       }
       /**
-       * <code>repeated .main.Argument args = 4;</code>
+       * <code>repeated .main.Parameter parameters = 4;</code>
        */
-      public Builder removeArgs(int index) {
-        if (argsBuilder_ == null) {
-          ensureArgsIsMutable();
-          args_.remove(index);
+      public Builder removeParameters(int index) {
+        if (parametersBuilder_ == null) {
+          ensureParametersIsMutable();
+          parameters_.remove(index);
           onChanged();
         } else {
-          argsBuilder_.remove(index);
+          parametersBuilder_.remove(index);
         }
         return this;
       }
       /**
-       * <code>repeated .main.Argument args = 4;</code>
+       * <code>repeated .main.Parameter parameters = 4;</code>
        */
-      public main.Spec.Argument.Builder getArgsBuilder(
+      public main.Spec.Parameter.Builder getParametersBuilder(
           int index) {
-        return getArgsFieldBuilder().getBuilder(index);
+        return getParametersFieldBuilder().getBuilder(index);
       }
       /**
-       * <code>repeated .main.Argument args = 4;</code>
+       * <code>repeated .main.Parameter parameters = 4;</code>
        */
-      public main.Spec.ArgumentOrBuilder getArgsOrBuilder(
+      public main.Spec.ParameterOrBuilder getParametersOrBuilder(
           int index) {
-        if (argsBuilder_ == null) {
-          return args_.get(index);  } else {
-          return argsBuilder_.getMessageOrBuilder(index);
+        if (parametersBuilder_ == null) {
+          return parameters_.get(index);  } else {
+          return parametersBuilder_.getMessageOrBuilder(index);
         }
       }
       /**
-       * <code>repeated .main.Argument args = 4;</code>
+       * <code>repeated .main.Parameter parameters = 4;</code>
        */
-      public java.util.List<? extends main.Spec.ArgumentOrBuilder> 
-           getArgsOrBuilderList() {
-        if (argsBuilder_ != null) {
-          return argsBuilder_.getMessageOrBuilderList();
+      public java.util.List<? extends main.Spec.ParameterOrBuilder> 
+           getParametersOrBuilderList() {
+        if (parametersBuilder_ != null) {
+          return parametersBuilder_.getMessageOrBuilderList();
         } else {
-          return java.util.Collections.unmodifiableList(args_);
+          return java.util.Collections.unmodifiableList(parameters_);
         }
       }
       /**
-       * <code>repeated .main.Argument args = 4;</code>
+       * <code>repeated .main.Parameter parameters = 4;</code>
        */
-      public main.Spec.Argument.Builder addArgsBuilder() {
-        return getArgsFieldBuilder().addBuilder(
-            main.Spec.Argument.getDefaultInstance());
+      public main.Spec.Parameter.Builder addParametersBuilder() {
+        return getParametersFieldBuilder().addBuilder(
+            main.Spec.Parameter.getDefaultInstance());
       }
       /**
-       * <code>repeated .main.Argument args = 4;</code>
+       * <code>repeated .main.Parameter parameters = 4;</code>
        */
-      public main.Spec.Argument.Builder addArgsBuilder(
+      public main.Spec.Parameter.Builder addParametersBuilder(
           int index) {
-        return getArgsFieldBuilder().addBuilder(
-            index, main.Spec.Argument.getDefaultInstance());
+        return getParametersFieldBuilder().addBuilder(
+            index, main.Spec.Parameter.getDefaultInstance());
       }
       /**
-       * <code>repeated .main.Argument args = 4;</code>
+       * <code>repeated .main.Parameter parameters = 4;</code>
        */
-      public java.util.List<main.Spec.Argument.Builder> 
-           getArgsBuilderList() {
-        return getArgsFieldBuilder().getBuilderList();
+      public java.util.List<main.Spec.Parameter.Builder> 
+           getParametersBuilderList() {
+        return getParametersFieldBuilder().getBuilderList();
       }
       private com.google.protobuf.RepeatedFieldBuilder<
-          main.Spec.Argument, main.Spec.Argument.Builder, main.Spec.ArgumentOrBuilder> 
-          getArgsFieldBuilder() {
-        if (argsBuilder_ == null) {
-          argsBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
-              main.Spec.Argument, main.Spec.Argument.Builder, main.Spec.ArgumentOrBuilder>(
-                  args_,
+          main.Spec.Parameter, main.Spec.Parameter.Builder, main.Spec.ParameterOrBuilder> 
+          getParametersFieldBuilder() {
+        if (parametersBuilder_ == null) {
+          parametersBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              main.Spec.Parameter, main.Spec.Parameter.Builder, main.Spec.ParameterOrBuilder>(
+                  parameters_,
                   ((bitField0_ & 0x00000008) == 0x00000008),
                   getParentForChildren(),
                   isClean());
-          args_ = null;
+          parameters_ = null;
         }
-        return argsBuilder_;
+        return parametersBuilder_;
       }
 
       // @@protoc_insertion_point(builder_scope:main.ExecuteStepRequest)
@@ -8964,15 +8964,15 @@ public final class Messages {
     com.google.protobuf.ByteString
         getStepTextBytes();
 
-    // required int32 numberOfArguments = 2;
+    // required int32 numberOfParameters = 2;
     /**
-     * <code>required int32 numberOfArguments = 2;</code>
+     * <code>required int32 numberOfParameters = 2;</code>
      */
-    boolean hasNumberOfArguments();
+    boolean hasNumberOfParameters();
     /**
-     * <code>required int32 numberOfArguments = 2;</code>
+     * <code>required int32 numberOfParameters = 2;</code>
      */
-    int getNumberOfArguments();
+    int getNumberOfParameters();
   }
   /**
    * Protobuf type {@code main.StepValidateRequest}
@@ -9032,7 +9032,7 @@ public final class Messages {
             }
             case 16: {
               bitField0_ |= 0x00000002;
-              numberOfArguments_ = input.readInt32();
+              numberOfParameters_ = input.readInt32();
               break;
             }
           }
@@ -9118,25 +9118,25 @@ public final class Messages {
       }
     }
 
-    // required int32 numberOfArguments = 2;
-    public static final int NUMBEROFARGUMENTS_FIELD_NUMBER = 2;
-    private int numberOfArguments_;
+    // required int32 numberOfParameters = 2;
+    public static final int NUMBEROFPARAMETERS_FIELD_NUMBER = 2;
+    private int numberOfParameters_;
     /**
-     * <code>required int32 numberOfArguments = 2;</code>
+     * <code>required int32 numberOfParameters = 2;</code>
      */
-    public boolean hasNumberOfArguments() {
+    public boolean hasNumberOfParameters() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
     /**
-     * <code>required int32 numberOfArguments = 2;</code>
+     * <code>required int32 numberOfParameters = 2;</code>
      */
-    public int getNumberOfArguments() {
-      return numberOfArguments_;
+    public int getNumberOfParameters() {
+      return numberOfParameters_;
     }
 
     private void initFields() {
       stepText_ = "";
-      numberOfArguments_ = 0;
+      numberOfParameters_ = 0;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -9147,7 +9147,7 @@ public final class Messages {
         memoizedIsInitialized = 0;
         return false;
       }
-      if (!hasNumberOfArguments()) {
+      if (!hasNumberOfParameters()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -9162,7 +9162,7 @@ public final class Messages {
         output.writeBytes(1, getStepTextBytes());
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeInt32(2, numberOfArguments_);
+        output.writeInt32(2, numberOfParameters_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -9179,7 +9179,7 @@ public final class Messages {
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(2, numberOfArguments_);
+          .computeInt32Size(2, numberOfParameters_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -9299,7 +9299,7 @@ public final class Messages {
         super.clear();
         stepText_ = "";
         bitField0_ = (bitField0_ & ~0x00000001);
-        numberOfArguments_ = 0;
+        numberOfParameters_ = 0;
         bitField0_ = (bitField0_ & ~0x00000002);
         return this;
       }
@@ -9336,7 +9336,7 @@ public final class Messages {
         if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
           to_bitField0_ |= 0x00000002;
         }
-        result.numberOfArguments_ = numberOfArguments_;
+        result.numberOfParameters_ = numberOfParameters_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -9358,8 +9358,8 @@ public final class Messages {
           stepText_ = other.stepText_;
           onChanged();
         }
-        if (other.hasNumberOfArguments()) {
-          setNumberOfArguments(other.getNumberOfArguments());
+        if (other.hasNumberOfParameters()) {
+          setNumberOfParameters(other.getNumberOfParameters());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -9370,7 +9370,7 @@ public final class Messages {
           
           return false;
         }
-        if (!hasNumberOfArguments()) {
+        if (!hasNumberOfParameters()) {
           
           return false;
         }
@@ -9470,35 +9470,35 @@ public final class Messages {
         return this;
       }
 
-      // required int32 numberOfArguments = 2;
-      private int numberOfArguments_ ;
+      // required int32 numberOfParameters = 2;
+      private int numberOfParameters_ ;
       /**
-       * <code>required int32 numberOfArguments = 2;</code>
+       * <code>required int32 numberOfParameters = 2;</code>
        */
-      public boolean hasNumberOfArguments() {
+      public boolean hasNumberOfParameters() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
       /**
-       * <code>required int32 numberOfArguments = 2;</code>
+       * <code>required int32 numberOfParameters = 2;</code>
        */
-      public int getNumberOfArguments() {
-        return numberOfArguments_;
+      public int getNumberOfParameters() {
+        return numberOfParameters_;
       }
       /**
-       * <code>required int32 numberOfArguments = 2;</code>
+       * <code>required int32 numberOfParameters = 2;</code>
        */
-      public Builder setNumberOfArguments(int value) {
+      public Builder setNumberOfParameters(int value) {
         bitField0_ |= 0x00000002;
-        numberOfArguments_ = value;
+        numberOfParameters_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>required int32 numberOfArguments = 2;</code>
+       * <code>required int32 numberOfParameters = 2;</code>
        */
-      public Builder clearNumberOfArguments() {
+      public Builder clearNumberOfParameters() {
         bitField0_ = (bitField0_ & ~0x00000002);
-        numberOfArguments_ = 0;
+        numberOfParameters_ = 0;
         onChanged();
         return this;
       }
@@ -17346,60 +17346,60 @@ public final class Messages {
       "Info\022\014\n\004name\030\001 \002(\t\022\020\n\010isFailed\030\002 \002(\010\022\014\n\004" +
       "tags\030\003 \003(\t\"D\n\010StepInfo\022&\n\004step\030\001 \002(\0132\030.m" +
       "ain.ExecuteStepRequest\022\020\n\010isFailed\030\002 \002(\010" +
-      "\"{\n\022ExecuteStepRequest\022\026\n\016actualStepText" +
-      "\030\001 \002(\t\022\026\n\016parsedStepText\030\002 \002(\t\022\027\n\017scenar" +
-      "ioFailing\030\003 \001(\010\022\034\n\004args\030\004 \003(\0132\016.main.Arg",
-      "ument\"B\n\023StepValidateRequest\022\020\n\010stepText" +
-      "\030\001 \002(\t\022\031\n\021numberOfArguments\030\002 \002(\005\"=\n\024Ste" +
-      "pValidateResponse\022\017\n\007isValid\030\001 \002(\010\022\024\n\014er" +
-      "rorMessage\030\002 \001(\t\"K\n\026ExecutionEndingReque" +
-      "st\0221\n\024currentExecutionInfo\030\001 \001(\0132\023.main." +
-      "ExecutionInfo\"C\n\024SuiteExecutionResult\022+\n" +
-      "\013suiteResult\030\001 \002(\0132\026.main.ProtoSuiteResu" +
-      "lt\"\022\n\020StepNamesRequest\"\"\n\021StepNamesRespo" +
-      "nse\022\r\n\005steps\030\001 \003(\t\"\\\n\017RefactorRequest\022\023\n" +
-      "\013oldStepText\030\001 \002(\t\022\023\n\013newStepText\030\002 \002(\t\022",
-      "\037\n\006params\030\003 \003(\0132\017.main.Parameter\"\257\014\n\007Mes" +
-      "sage\022.\n\013messageType\030\001 \002(\0162\031.main.Message" +
-      ".MessageType\022\021\n\tmessageId\030\002 \002(\003\022@\n\030execu" +
-      "tionStartingRequest\030\003 \001(\0132\036.main.Executi" +
-      "onStartingRequest\022H\n\034specExecutionStarti" +
-      "ngRequest\030\004 \001(\0132\".main.SpecExecutionStar" +
-      "tingRequest\022D\n\032specExecutionEndingReques" +
-      "t\030\005 \001(\0132 .main.SpecExecutionEndingReques" +
-      "t\022P\n scenarioExecutionStartingRequest\030\006 " +
-      "\001(\0132&.main.ScenarioExecutionStartingRequ",
-      "est\022L\n\036scenarioExecutionEndingRequest\030\007 " +
-      "\001(\0132$.main.ScenarioExecutionEndingReques" +
-      "t\022H\n\034stepExecutionStartingRequest\030\010 \001(\0132" +
-      "\".main.StepExecutionStartingRequest\022D\n\032s" +
-      "tepExecutionEndingRequest\030\t \001(\0132 .main.S" +
-      "tepExecutionEndingRequest\0224\n\022executeStep" +
-      "Request\030\n \001(\0132\030.main.ExecuteStepRequest\022" +
-      "<\n\026executionEndingRequest\030\013 \001(\0132\034.main.E" +
-      "xecutionEndingRequest\0226\n\023stepValidateReq" +
-      "uest\030\014 \001(\0132\031.main.StepValidateRequest\0228\n",
-      "\024stepValidateResponse\030\r \001(\0132\032.main.StepV" +
-      "alidateResponse\022>\n\027executionStatusRespon" +
-      "se\030\016 \001(\0132\035.main.ExecutionStatusResponse\022" +
-      "0\n\020stepNamesRequest\030\017 \001(\0132\026.main.StepNam" +
-      "esRequest\0222\n\021stepNamesResponse\030\020 \001(\0132\027.m" +
-      "ain.StepNamesResponse\0228\n\024suiteExecutionR" +
-      "esult\030\021 \001(\0132\032.main.SuiteExecutionResult\022" +
-      "4\n\022killProcessRequest\030\022 \001(\0132\030.main.KillP" +
-      "rocessRequest\022.\n\017refactorRequest\030\023 \001(\0132\025" +
-      ".main.RefactorRequest\"\262\003\n\013MessageType\022\025\n",
-      "\021ExecutionStarting\020\000\022\031\n\025SpecExecutionSta" +
-      "rting\020\001\022\027\n\023SpecExecutionEnding\020\002\022\035\n\031Scen" +
-      "arioExecutionStarting\020\003\022\033\n\027ScenarioExecu" +
-      "tionEnding\020\004\022\031\n\025StepExecutionStarting\020\005\022" +
-      "\027\n\023StepExecutionEnding\020\006\022\017\n\013ExecuteStep\020" +
-      "\007\022\023\n\017ExecutionEnding\020\010\022\027\n\023StepValidateRe" +
-      "quest\020\t\022\030\n\024StepValidateResponse\020\n\022\033\n\027Exe" +
-      "cutionStatusResponse\020\013\022\024\n\020StepNamesReque" +
-      "st\020\014\022\025\n\021StepNamesResponse\020\r\022\026\n\022KillProce" +
-      "ssRequest\020\016\022\030\n\024SuiteExecutionResult\020\017\022\023\n",
-      "\017RefactorRequest\020\020"
+      "\"\202\001\n\022ExecuteStepRequest\022\026\n\016actualStepTex" +
+      "t\030\001 \002(\t\022\026\n\016parsedStepText\030\002 \002(\t\022\027\n\017scena" +
+      "rioFailing\030\003 \001(\010\022#\n\nparameters\030\004 \003(\0132\017.m",
+      "ain.Parameter\"C\n\023StepValidateRequest\022\020\n\010" +
+      "stepText\030\001 \002(\t\022\032\n\022numberOfParameters\030\002 \002" +
+      "(\005\"=\n\024StepValidateResponse\022\017\n\007isValid\030\001 " +
+      "\002(\010\022\024\n\014errorMessage\030\002 \001(\t\"K\n\026ExecutionEn" +
+      "dingRequest\0221\n\024currentExecutionInfo\030\001 \001(" +
+      "\0132\023.main.ExecutionInfo\"C\n\024SuiteExecution" +
+      "Result\022+\n\013suiteResult\030\001 \002(\0132\026.main.Proto" +
+      "SuiteResult\"\022\n\020StepNamesRequest\"\"\n\021StepN" +
+      "amesResponse\022\r\n\005steps\030\001 \003(\t\"\\\n\017RefactorR" +
+      "equest\022\023\n\013oldStepText\030\001 \002(\t\022\023\n\013newStepTe",
+      "xt\030\002 \002(\t\022\037\n\006params\030\003 \003(\0132\017.main.Paramete" +
+      "r\"\257\014\n\007Message\022.\n\013messageType\030\001 \002(\0162\031.mai" +
+      "n.Message.MessageType\022\021\n\tmessageId\030\002 \002(\003" +
+      "\022@\n\030executionStartingRequest\030\003 \001(\0132\036.mai" +
+      "n.ExecutionStartingRequest\022H\n\034specExecut" +
+      "ionStartingRequest\030\004 \001(\0132\".main.SpecExec" +
+      "utionStartingRequest\022D\n\032specExecutionEnd" +
+      "ingRequest\030\005 \001(\0132 .main.SpecExecutionEnd" +
+      "ingRequest\022P\n scenarioExecutionStartingR" +
+      "equest\030\006 \001(\0132&.main.ScenarioExecutionSta",
+      "rtingRequest\022L\n\036scenarioExecutionEndingR" +
+      "equest\030\007 \001(\0132$.main.ScenarioExecutionEnd" +
+      "ingRequest\022H\n\034stepExecutionStartingReque" +
+      "st\030\010 \001(\0132\".main.StepExecutionStartingReq" +
+      "uest\022D\n\032stepExecutionEndingRequest\030\t \001(\013" +
+      "2 .main.StepExecutionEndingRequest\0224\n\022ex" +
+      "ecuteStepRequest\030\n \001(\0132\030.main.ExecuteSte" +
+      "pRequest\022<\n\026executionEndingRequest\030\013 \001(\013" +
+      "2\034.main.ExecutionEndingRequest\0226\n\023stepVa" +
+      "lidateRequest\030\014 \001(\0132\031.main.StepValidateR",
+      "equest\0228\n\024stepValidateResponse\030\r \001(\0132\032.m" +
+      "ain.StepValidateResponse\022>\n\027executionSta" +
+      "tusResponse\030\016 \001(\0132\035.main.ExecutionStatus" +
+      "Response\0220\n\020stepNamesRequest\030\017 \001(\0132\026.mai" +
+      "n.StepNamesRequest\0222\n\021stepNamesResponse\030" +
+      "\020 \001(\0132\027.main.StepNamesResponse\0228\n\024suiteE" +
+      "xecutionResult\030\021 \001(\0132\032.main.SuiteExecuti" +
+      "onResult\0224\n\022killProcessRequest\030\022 \001(\0132\030.m" +
+      "ain.KillProcessRequest\022.\n\017refactorReques" +
+      "t\030\023 \001(\0132\025.main.RefactorRequest\"\262\003\n\013Messa",
+      "geType\022\025\n\021ExecutionStarting\020\000\022\031\n\025SpecExe" +
+      "cutionStarting\020\001\022\027\n\023SpecExecutionEnding\020" +
+      "\002\022\035\n\031ScenarioExecutionStarting\020\003\022\033\n\027Scen" +
+      "arioExecutionEnding\020\004\022\031\n\025StepExecutionSt" +
+      "arting\020\005\022\027\n\023StepExecutionEnding\020\006\022\017\n\013Exe" +
+      "cuteStep\020\007\022\023\n\017ExecutionEnding\020\010\022\027\n\023StepV" +
+      "alidateRequest\020\t\022\030\n\024StepValidateResponse" +
+      "\020\n\022\033\n\027ExecutionStatusResponse\020\013\022\024\n\020StepN" +
+      "amesRequest\020\014\022\025\n\021StepNamesResponse\020\r\022\026\n\022" +
+      "KillProcessRequest\020\016\022\030\n\024SuiteExecutionRe",
+      "sult\020\017\022\023\n\017RefactorRequest\020\020"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -17489,13 +17489,13 @@ public final class Messages {
           internal_static_main_ExecuteStepRequest_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_main_ExecuteStepRequest_descriptor,
-              new java.lang.String[] { "ActualStepText", "ParsedStepText", "ScenarioFailing", "Args", });
+              new java.lang.String[] { "ActualStepText", "ParsedStepText", "ScenarioFailing", "Parameters", });
           internal_static_main_StepValidateRequest_descriptor =
             getDescriptor().getMessageTypes().get(14);
           internal_static_main_StepValidateRequest_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_main_StepValidateRequest_descriptor,
-              new java.lang.String[] { "StepText", "NumberOfArguments", });
+              new java.lang.String[] { "StepText", "NumberOfParameters", });
           internal_static_main_StepValidateResponse_descriptor =
             getDescriptor().getMessageTypes().get(15);
           internal_static_main_StepValidateResponse_fieldAccessorTable = new

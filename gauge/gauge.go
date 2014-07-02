@@ -497,7 +497,7 @@ func printScenarioFailure(scenario *ProtoScenario) {
 
 func printStepFailure(step *ProtoStep) {
 	stepExecResult := step.StepExecutionResult
-	if stepExecResult.ExecutionResult.GetFailed() {
+	if stepExecResult != nil && stepExecResult.ExecutionResult.GetFailed() {
 		fmt.Printf("\x1b[31;1m\t %s\n\x1b[0m", step.GetActualText())
 		printHookError(stepExecResult.GetPreHookFailure())
 		printError(stepExecResult.ExecutionResult)
@@ -507,7 +507,7 @@ func printStepFailure(step *ProtoStep) {
 
 func printConceptFailure(concept *ProtoConcept) {
 	conceptExecResult := concept.ConceptExecutionResult
-	if concept.GetFailed() {
+	if conceptExecResult != nil && conceptExecResult.GetExecutionResult().GetFailed() {
 		fmt.Printf("\x1b[31;1m\t %s\n\x1b[0m", concept.ConceptStep.GetActualText())
 		printError(conceptExecResult.ExecutionResult)
 	}
@@ -567,8 +567,11 @@ func getSpecFiles(specSource string) []string {
 
 func findSpecs(specSource string, conceptDictionary *conceptDictionary) (map[string]*specification, []*parseResult) {
 	specFiles := getSpecFiles(specSource)
-	if specFiles == nil {
-		fmt.Printf("Spec file or directory does not exist: %s", specSource)
+	if specFiles == nil  {
+		fmt.Printf("Spec file or directory does not exist: %s\n", specSource)
+		os.Exit(1)
+	} else if len(specFiles) == 0 {
+		fmt.Printf("No spec files were found in %s\n", specSource)
 		os.Exit(1)
 	}
 	parseResults := make([]*parseResult, 0)

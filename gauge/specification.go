@@ -21,7 +21,8 @@ const (
 	static                argType = "static"
 	dynamic               argType = "dynamic"
 	tableArg              argType = "table"
-	special               argType = "special"
+	specialString         argType = "special_string"
+	specialTable          argType = "special_table"
 	PARAMETER_PLACEHOLDER         = "{}"
 )
 
@@ -53,25 +54,37 @@ type step struct {
 }
 
 func createStepFromStepRequest(stepReq *ExecuteStepRequest) *step {
-	args := createStepArgsFromProtoArguments(stepReq.Args)
+	args := createStepArgsFromProtoArguments(stepReq.GetParameters())
 	step := &step{value: stepReq.GetParsedStepText(),
-		lineText: stepReq.GetActualStepText(), args: args}
-	step.populateFragments()
+		lineText: stepReq.GetActualStepText()}
+	step.addArgs(args...)
 	return step
 }
 
-func createStepArgsFromProtoArguments(arguments []*Argument) []*stepArg {
-	args := make([]*stepArg, 0)
-	for _, arguments := range arguments {
-		var a *stepArg
-		if arguments.GetType() == "table" {
-			a = &stepArg{value: arguments.GetValue(), argType: tableArg, table: *(tableFrom(arguments.GetTable()))}
-		} else {
-			a = &stepArg{value: arguments.GetValue(), argType: static}
+func createStepArgsFromProtoArguments(parameters []*Parameter) []*stepArg {
+	stepArgs := make([]*stepArg, 0)
+	for _, parameter := range parameters {
+		var arg *stepArg
+		switch parameter.GetParameterType() {
+		case Parameter_Static:
+			arg = &stepArg{argType: static, value: parameter.GetValue()}
+			break
+		case Parameter_Dynamic:
+			arg = &stepArg{argType: dynamic, value: parameter.GetValue()}
+			break
+		case Parameter_Special_String:
+			arg = &stepArg{argType: specialString, value: parameter.GetValue()}
+			break
+		case Parameter_Table:
+			arg = &stepArg{argType: tableArg, table: *(tableFrom(parameter.GetTable()))}
+			break
+		case Parameter_Special_Table:
+			arg = &stepArg{argType: specialTable, table: *(tableFrom(parameter.GetTable()))}
+			break
 		}
-		args = append(args, a)
+		stepArgs = append(stepArgs, arg)
 	}
-	return args
+	return stepArgs
 }
 
 type specification struct {
@@ -328,16 +341,15 @@ func (spec *specification) createStepUsingLookup(stepToken *token, lookup *argLo
 		return nil, &parseError{stepToken.lineNo, "Step text should not have '{static}' or '{dynamic}' or '{special}'", stepToken.lineText}
 	}
 	step := &step{lineNo: stepToken.lineNo, value: stepValue, lineText: strings.TrimSpace(stepToken.lineText)}
-	var argument *stepArg
-	var err *parseError
+	arguments := make([]*stepArg, 0)
 	for i, argType := range argsType {
-		argument, err = spec.createStepArg(stepToken.args[i], argType, stepToken, lookup)
+		argument, err := spec.createStepArg(stepToken.args[i], argType, stepToken, lookup)
 		if err != nil {
 			return nil, err
 		}
-		step.args = append(step.args, argument)
+		arguments = append(arguments, argument)
 	}
-	step.populateFragments()
+	step.addArgs(arguments...)
 	return step, nil
 }
 
@@ -401,15 +413,14 @@ func (specification *specification) addDataTable(table *table) {
 
 func (specification *specification) addTags(tags *tags) {
 	specification.tags = tags
-	specification.addItem(tags)
 }
 
 func (specification *specification) latestScenario() *scenario {
-	return specification.scenarios[len(specification.scenarios)-1]
+	return specification.scenarios[len(specification.scenarios) - 1]
 }
 
 func (specification *specification) latestContext() *step {
-	return specification.contexts[len(specification.contexts)-1]
+	return specification.contexts[len(specification.contexts) - 1]
 }
 
 func (specParser *specParser) validateSpec(specification *specification) *parseError {
@@ -449,7 +460,23 @@ func extractStepValueAndParameterTypes(stepTokenValue string) (string, []string)
 	return r.ReplaceAllString(stepTokenValue, PARAMETER_PLACEHOLDER), argsType
 }
 
-//todo: trigger populateFragments when args are added so that we don't forget to call it when we set step.args
+func (step *step) addArgs(args ...*stepArg) {
+	step.args = append(step.args, args...)
+	step.populateFragments()
+}
+
+func (step *step) addInlineTableHeaders(headers []string) {
+	tableArg := &stepArg{argType: tableArg}
+	tableArg.table.addHeaders(headers)
+	step.addArgs(tableArg)
+}
+
+func (step *step) addInlineTableRow(row []tableCell) {
+	lastArg := step.args[len(step.args) - 1]
+	lastArg.table.addRows(row)
+	step.populateFragments()
+}
+
 func (step *step) populateFragments() {
 	r := regexp.MustCompile(PARAMETER_PLACEHOLDER)
 	/*
@@ -458,6 +485,7 @@ func (step *step) populateFragments() {
 		[[6 8] [13 15]]
 	*/
 	argSplitIndices := r.FindAllStringSubmatchIndex(step.value, -1)
+	step.fragments = make([]*Fragment, 0)
 	if len(step.args) == 0 {
 		step.fragments = append(step.fragments, &Fragment{FragmentType: Fragment_Text.Enum(), Text: proto.String(step.value)})
 		return
@@ -506,15 +534,12 @@ func (spec *specification) createStepArg(argValue string, typeOfArg string, toke
 //Step value is modified when inline table is found to account for the new parameter by appending {}
 //todo validate headers for dynamic
 func addInlineTableHeader(step *step, token *token) {
-	tableArg := &stepArg{argType: tableArg}
-	tableArg.table.addHeaders(token.args)
-	step.args = append(step.args, tableArg)
 	step.value = fmt.Sprintf("%s %s", step.value, PARAMETER_PLACEHOLDER)
+	step.addInlineTableHeaders(token.args)
 }
 
 func addInlineTableRow(step *step, token *token, argLookup *argLookup) parseResult {
 	dynamicArgMatcher := regexp.MustCompile("^<(.*)>$")
-	tableArg := step.args[len(step.args)-1]
 	tableValues := make([]tableCell, 0)
 	for _, tableValue := range token.args {
 		if dynamicArgMatcher.MatchString(tableValue) {
@@ -528,7 +553,7 @@ func addInlineTableRow(step *step, token *token, argLookup *argLookup) parseResu
 			tableValues = append(tableValues, tableCell{value: tableValue, cellType: static})
 		}
 	}
-	tableArg.table.addRows(tableValues)
+	step.addInlineTableRow(tableValues)
 	return parseResult{ok: true}
 }
 
@@ -623,7 +648,6 @@ func (scenario *scenario) addStep(step *step) {
 
 func (scenario *scenario) addTags(tags *tags) {
 	scenario.tags = tags
-	scenario.addItem(tags)
 }
 
 func (scenario *scenario) addComment(comment *comment) {
@@ -639,7 +663,7 @@ func (scenario *scenario) addItem(itemToAdd item) {
 }
 
 func (scenario *scenario) latestStep() *step {
-	return scenario.steps[len(scenario.steps)-1]
+	return scenario.steps[len(scenario.steps) - 1]
 }
 
 func (heading *heading) kind() tokenKind {
@@ -656,4 +680,14 @@ func (tags *tags) kind() tokenKind {
 
 func (step step) kind() tokenKind {
 	return stepKind
+}
+
+func (specification *specification) getSpecItems() []item {
+	specItems := make([]item, 0)
+	for _, item := range specification.items {
+		if item.kind() != scenarioKind {
+			specItems = append(specItems, item)
+		}
+	}
+	return specItems
 }

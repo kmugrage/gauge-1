@@ -24,6 +24,7 @@ package main
 
 import proto "code.google.com/p/goprotobuf/proto"
 import math "math"
+import main1 "spec.pb"
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
@@ -140,15 +141,15 @@ func (m *GetAllSpecsRequest) String() string { return proto.CompactTextString(m)
 func (*GetAllSpecsRequest) ProtoMessage()    {}
 
 type GetAllSpecsResponse struct {
-	Specs            []*ProtoSpec `protobuf:"bytes,1,rep,name=specs" json:"specs,omitempty"`
-	XXX_unrecognized []byte       `json:"-"`
+	Specs            []*main1.ProtoSpec `protobuf:"bytes,1,rep,name=specs" json:"specs,omitempty"`
+	XXX_unrecognized []byte             `json:"-"`
 }
 
 func (m *GetAllSpecsResponse) Reset()         { *m = GetAllSpecsResponse{} }
 func (m *GetAllSpecsResponse) String() string { return proto.CompactTextString(m) }
 func (*GetAllSpecsResponse) ProtoMessage()    {}
 
-func (m *GetAllSpecsResponse) GetSpecs() []*ProtoSpec {
+func (m *GetAllSpecsResponse) GetSpecs() []*main1.ProtoSpec {
 	if m != nil {
 		return m.Specs
 	}
