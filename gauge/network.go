@@ -137,6 +137,14 @@ func (listener *gaugeListener) handleConnection(conn net.Conn, messageHandler Me
 	}
 }
 
+func killRunner(connection net.Conn) error {
+	id := common.GetUniqueId()
+	message := &Message{MessageId: &id, MessageType: Message_KillProcessRequest.Enum(),
+		KillProcessRequest: &KillProcessRequest{}}
+
+	return writeMessage(connection, message)
+}
+
 // Sends the specified message and waits for a response
 // This function blocks till it gets a response
 // Each message gets a unique id and messages are prefixed with it's length

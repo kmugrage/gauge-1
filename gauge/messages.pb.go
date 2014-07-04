@@ -36,7 +36,6 @@ package main
 
 import proto "code.google.com/p/goprotobuf/proto"
 import math "math"
-import main1 "spec.pb"
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
@@ -131,15 +130,15 @@ func (*KillProcessRequest) ProtoMessage()    {}
 // Sends to any request which needs a execution status as response
 // usually step execution, hooks etc will return this
 type ExecutionStatusResponse struct {
-	ExecutionResult  *main1.ProtoExecutionResult `protobuf:"bytes,1,req,name=executionResult" json:"executionResult,omitempty"`
-	XXX_unrecognized []byte                      `json:"-"`
+	ExecutionResult  *ProtoExecutionResult `protobuf:"bytes,1,req,name=executionResult" json:"executionResult,omitempty"`
+	XXX_unrecognized []byte                `json:"-"`
 }
 
 func (m *ExecutionStatusResponse) Reset()         { *m = ExecutionStatusResponse{} }
 func (m *ExecutionStatusResponse) String() string { return proto.CompactTextString(m) }
 func (*ExecutionStatusResponse) ProtoMessage()    {}
 
-func (m *ExecutionStatusResponse) GetExecutionResult() *main1.ProtoExecutionResult {
+func (m *ExecutionStatusResponse) GetExecutionResult() *ProtoExecutionResult {
 	if m != nil {
 		return m.ExecutionResult
 	}
@@ -395,11 +394,11 @@ func (m *StepInfo) GetIsFailed() bool {
 }
 
 type ExecuteStepRequest struct {
-	ActualStepText   *string            `protobuf:"bytes,1,req,name=actualStepText" json:"actualStepText,omitempty"`
-	ParsedStepText   *string            `protobuf:"bytes,2,req,name=parsedStepText" json:"parsedStepText,omitempty"`
-	ScenarioFailing  *bool              `protobuf:"varint,3,opt,name=scenarioFailing" json:"scenarioFailing,omitempty"`
-	Parameters       []*main1.Parameter `protobuf:"bytes,4,rep,name=parameters" json:"parameters,omitempty"`
-	XXX_unrecognized []byte             `json:"-"`
+	ActualStepText   *string      `protobuf:"bytes,1,req,name=actualStepText" json:"actualStepText,omitempty"`
+	ParsedStepText   *string      `protobuf:"bytes,2,req,name=parsedStepText" json:"parsedStepText,omitempty"`
+	ScenarioFailing  *bool        `protobuf:"varint,3,opt,name=scenarioFailing" json:"scenarioFailing,omitempty"`
+	Parameters       []*Parameter `protobuf:"bytes,4,rep,name=parameters" json:"parameters,omitempty"`
+	XXX_unrecognized []byte       `json:"-"`
 }
 
 func (m *ExecuteStepRequest) Reset()         { *m = ExecuteStepRequest{} }
@@ -427,7 +426,7 @@ func (m *ExecuteStepRequest) GetScenarioFailing() bool {
 	return false
 }
 
-func (m *ExecuteStepRequest) GetParameters() []*main1.Parameter {
+func (m *ExecuteStepRequest) GetParameters() []*Parameter {
 	if m != nil {
 		return m.Parameters
 	}
@@ -499,15 +498,15 @@ func (m *ExecutionEndingRequest) GetCurrentExecutionInfo() *ExecutionInfo {
 }
 
 type SuiteExecutionResult struct {
-	SuiteResult      *main1.ProtoSuiteResult `protobuf:"bytes,1,req,name=suiteResult" json:"suiteResult,omitempty"`
-	XXX_unrecognized []byte                  `json:"-"`
+	SuiteResult      *ProtoSuiteResult `protobuf:"bytes,1,req,name=suiteResult" json:"suiteResult,omitempty"`
+	XXX_unrecognized []byte            `json:"-"`
 }
 
 func (m *SuiteExecutionResult) Reset()         { *m = SuiteExecutionResult{} }
 func (m *SuiteExecutionResult) String() string { return proto.CompactTextString(m) }
 func (*SuiteExecutionResult) ProtoMessage()    {}
 
-func (m *SuiteExecutionResult) GetSuiteResult() *main1.ProtoSuiteResult {
+func (m *SuiteExecutionResult) GetSuiteResult() *ProtoSuiteResult {
 	if m != nil {
 		return m.SuiteResult
 	}
@@ -539,10 +538,10 @@ func (m *StepNamesResponse) GetSteps() []string {
 }
 
 type RefactorRequest struct {
-	OldStepText      *string            `protobuf:"bytes,1,req,name=oldStepText" json:"oldStepText,omitempty"`
-	NewStepText      *string            `protobuf:"bytes,2,req,name=newStepText" json:"newStepText,omitempty"`
-	Params           []*main1.Parameter `protobuf:"bytes,3,rep,name=params" json:"params,omitempty"`
-	XXX_unrecognized []byte             `json:"-"`
+	OldStepText      *string      `protobuf:"bytes,1,req,name=oldStepText" json:"oldStepText,omitempty"`
+	NewStepText      *string      `protobuf:"bytes,2,req,name=newStepText" json:"newStepText,omitempty"`
+	Params           []*Parameter `protobuf:"bytes,3,rep,name=params" json:"params,omitempty"`
+	XXX_unrecognized []byte       `json:"-"`
 }
 
 func (m *RefactorRequest) Reset()         { *m = RefactorRequest{} }
@@ -563,7 +562,7 @@ func (m *RefactorRequest) GetNewStepText() string {
 	return ""
 }
 
-func (m *RefactorRequest) GetParams() []*main1.Parameter {
+func (m *RefactorRequest) GetParams() []*Parameter {
 	if m != nil {
 		return m.Params
 	}

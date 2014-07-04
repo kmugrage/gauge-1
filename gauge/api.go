@@ -101,14 +101,6 @@ func requestForSteps(connection net.Conn) []string {
 	return make([]string, 0)
 }
 
-func killRunner(connection net.Conn) error {
-	id := common.GetUniqueId()
-	message := &Message{MessageId: &id, MessageType: Message_KillProcessRequest.Enum(),
-		KillProcessRequest: &KillProcessRequest{}}
-
-	return writeMessage(connection, message)
-}
-
 func createGetStepNamesRequest() *Message {
 	return &Message{MessageType: Message_StepNamesRequest.Enum(), StepNamesRequest: &StepNamesRequest{}}
 }

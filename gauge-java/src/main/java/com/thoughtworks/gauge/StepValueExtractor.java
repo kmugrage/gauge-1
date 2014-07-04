@@ -25,7 +25,7 @@ public class StepValueExtractor {
             } else if (aChar == '<' && !inBracket) {
                 inBracket = true;
             } else if (aChar == '>' && inBracket) {
-                extractedValue.append("{}");
+                extractedValue.append("<>");
                 paramCount++;
                 inBracket = false;
             } else if (aChar == '\\') {

@@ -301,7 +301,16 @@ func main() {
 			os.Exit(1)
 		}
 
-		err = refactorer.performRefactoring()
+		manifest := getProjectManifest()
+		runnerConnection, runnerError := startRunnerAndMakeConnection(manifest)
+		if runnerError != nil {
+			fmt.Printf("Failed to start a runner. %s\n", runnerError.Error())
+			os.Exit(1)
+		}
+
+		defer killRunner(runnerConnection)
+
+		err = refactorer.performRefactoring(runnerConnection)
 		if err != nil {
 			fmt.Println(err.Error())
 			os.Exit(1)
@@ -567,7 +576,7 @@ func getSpecFiles(specSource string) []string {
 
 func findSpecs(specSource string, conceptDictionary *conceptDictionary) (map[string]*specification, []*parseResult) {
 	specFiles := getSpecFiles(specSource)
-	if specFiles == nil  {
+	if specFiles == nil {
 		fmt.Printf("Spec file or directory does not exist: %s\n", specSource)
 		os.Exit(1)
 	} else if len(specFiles) == 0 {

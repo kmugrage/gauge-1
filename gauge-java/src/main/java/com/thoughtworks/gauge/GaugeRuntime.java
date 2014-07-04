@@ -105,6 +105,7 @@ public class GaugeRuntime {
             put(Messages.Message.MessageType.StepValidateRequest, new ValidateStepProcessor());
             put(Messages.Message.MessageType.StepNamesRequest, new StepNamesRequestProcessor());
             put(Messages.Message.MessageType.KillProcessRequest, new KillProcessProcessor());
+            put(Messages.Message.MessageType.RefactorRequest, new RefactorRequestProcessor());
         }};
 
         scanForStepImplementations();
