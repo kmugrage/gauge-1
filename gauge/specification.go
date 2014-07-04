@@ -27,6 +27,7 @@ const (
 )
 
 type stepArg struct {
+	name    string
 	value   string
 	argType argType
 	table   table
@@ -67,19 +68,19 @@ func createStepArgsFromProtoArguments(parameters []*Parameter) []*stepArg {
 		var arg *stepArg
 		switch parameter.GetParameterType() {
 		case Parameter_Static:
-			arg = &stepArg{argType: static, value: parameter.GetValue()}
+			arg = &stepArg{argType: static, value: parameter.GetValue(), name: parameter.GetName()}
 			break
 		case Parameter_Dynamic:
-			arg = &stepArg{argType: dynamic, value: parameter.GetValue()}
+			arg = &stepArg{argType: dynamic, value: parameter.GetValue(), name: parameter.GetName()}
 			break
 		case Parameter_Special_String:
-			arg = &stepArg{argType: specialString, value: parameter.GetValue()}
+			arg = &stepArg{argType: specialString, value: parameter.GetValue(), name: parameter.GetName()}
 			break
 		case Parameter_Table:
-			arg = &stepArg{argType: tableArg, table: *(tableFrom(parameter.GetTable()))}
+			arg = &stepArg{argType: tableArg, table: *(tableFrom(parameter.GetTable())), name: parameter.GetName()}
 			break
 		case Parameter_Special_Table:
-			arg = &stepArg{argType: specialTable, table: *(tableFrom(parameter.GetTable()))}
+			arg = &stepArg{argType: specialTable, table: *(tableFrom(parameter.GetTable())), name: parameter.GetName()}
 			break
 		}
 		stepArgs = append(stepArgs, arg)
@@ -508,7 +509,7 @@ func (step *step) populateFragments() {
 
 func (spec *specification) populateConceptLookup(lookup *argLookup, conceptArgs []*stepArg, stepArgs []*stepArg) {
 	for i, arg := range stepArgs {
-		lookup.addArgValue(conceptArgs[i].value, &stepArg{value: arg.value, argType: arg.argType, table: arg.table})
+		lookup.addArgValue(conceptArgs[i].value, &stepArg{value: arg.value, argType: arg.argType, table: arg.table, name: arg.name})
 	}
 }
 
@@ -526,7 +527,7 @@ func (spec *specification) createStepArg(argValue string, typeOfArg string, toke
 		if !isConceptHeader(lookup) && !lookup.containsArg(argValue) {
 			return nil, &parseError{lineNo: token.lineNo, message: fmt.Sprintf("Dynamic parameter <%s> could not be resolved", argValue), lineText: token.lineText}
 		}
-		stepArgument = &stepArg{argType: dynamic, value: argValue}
+		stepArgument = &stepArg{argType: dynamic, value: argValue, name: argValue}
 		return stepArgument, nil
 	}
 }
@@ -598,7 +599,7 @@ func (lookup *argLookup) getCopy() *argLookup {
 		lookupCopy.addArgName(key)
 		arg := lookup.getArg(key)
 		if arg != nil {
-			lookupCopy.addArgValue(key, &stepArg{value: arg.value, argType: arg.argType, table: arg.table})
+			lookupCopy.addArgValue(key, &stepArg{value: arg.value, argType: arg.argType, table: arg.table, name: arg.name})
 		}
 	}
 	return lookupCopy

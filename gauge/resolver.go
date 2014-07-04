@@ -22,12 +22,14 @@ func (paramResolver *paramResolver) getResolvedParams(stepArgs []*stepArg, looku
 	parameters := make([]*Parameter, 0)
 	for _, arg := range stepArgs {
 		parameter := new(Parameter)
+		parameter.Name = proto.String(arg.name)
 		if arg.argType == static {
 			parameter.ParameterType = Parameter_Static.Enum()
 			parameter.Value = proto.String(arg.value)
 		} else if arg.argType == dynamic {
 			resolvedArg := lookup.getArg(arg.value)
 			//In case a special table used in a concept, you will get a dynamic table value which has to be resolved from the concept lookup
+			parameter.Name = proto.String(resolvedArg.name)
 			if resolvedArg.table.isInitialized() {
 				parameter.ParameterType = Parameter_Special_Table.Enum()
 				parameter.Table = paramResolver.createProtoStepTable(&resolvedArg.table, lookup, dataTableLookup)
@@ -44,6 +46,7 @@ func (paramResolver *paramResolver) getResolvedParams(stepArgs []*stepArg, looku
 		} else {
 			parameter.ParameterType = Parameter_Table.Enum()
 			parameter.Table = paramResolver.createProtoStepTable(&arg.table, lookup, dataTableLookup)
+
 		}
 		parameters = append(parameters, parameter)
 	}
@@ -128,7 +131,11 @@ func (resolver *specialTypeResolver) resolve(arg string) (*stepArg, error) {
 	match := regEx.FindAllStringSubmatch(arg, -1)
 	specialType := strings.TrimSpace(match[0][1])
 	value := strings.TrimSpace(match[0][2])
-	return resolver.getStepArg(specialType, value, arg)
+	stepArg, err := resolver.getStepArg(specialType, value, arg)
+	if err == nil {
+		stepArg.name = arg
+	}
+	return stepArg, err
 }
 
 func (resolver *specialTypeResolver) getStepArg(specialType string, value string, arg string) (*stepArg, error) {

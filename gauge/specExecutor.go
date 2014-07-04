@@ -188,41 +188,51 @@ func (executor *specExecutor) executeScenario(scenario *scenario) *scenarioResul
 	getCurrentConsole().writeScenarioHeading(scenario.heading.value)
 
 	scenarioResult := &scenarioResult{newProtoScenario(scenario)}
+	executor.addAllItemsForScenarioExecution(scenario, scenarioResult)
 	beforeHookExecutionStatus := executor.executeBeforeScenarioHook(scenarioResult)
 	if beforeHookExecutionStatus.GetFailed() {
 		addPreHook(scenarioResult, beforeHookExecutionStatus)
 		executor.currentExecutionInfo.setScenarioFailure()
 	} else {
-		contextFailure := executor.executeContext(scenarioResult)
-		resolvedProtoItems := executor.resolveItems(scenario.items)
-		if !contextFailure {
-			isFailure := executor.executeItems(resolvedProtoItems)
-			if isFailure {
-				scenarioResult.setFailure()
-			}
-		} else {
-			scenarioResult.setFailure()
+		executor.executeContextItems(scenarioResult)
+		if !scenarioResult.getFailure() {
+			executor.executeScenarioItems(scenarioResult)
 		}
-		scenarioResult.addItems(resolvedProtoItems)
 	}
 
 	afterHookExecutionStatus := executor.executeAfterScenarioHook(scenarioResult)
 	addPostHook(scenarioResult, afterHookExecutionStatus)
-
+	scenarioResult.updateExecutionTime()
 	return scenarioResult
 }
 
-func (executor *specExecutor) executeContext(scenarioResult *scenarioResult) bool {
-	contextSteps := executor.specification.contexts
+func (executor *specExecutor) addAllItemsForScenarioExecution(scenario *scenario, scenarioResult *scenarioResult) {
+	scenarioResult.addContexts(executor.getContextItemsForScenarioExecution(executor.specification))
+	scenarioResult.addItems(executor.resolveItems(scenario.items))
+}
+
+func (executor *specExecutor) getContextItemsForScenarioExecution(specification *specification) []*ProtoItem {
+	contextSteps := specification.contexts
 	items := make([]item, len(contextSteps))
 	for i, context := range contextSteps {
 		items[i] = context
 	}
 	contextProtoItems := executor.resolveItems(items)
-	failed := executor.executeItems(contextProtoItems)
-	scenarioResult.addContexts(contextProtoItems)
+	return contextProtoItems
+}
 
-	return failed
+func (executor *specExecutor) executeContextItems(scenarioResult *scenarioResult) {
+	failure := executor.executeItems(scenarioResult.protoScenario.GetContexts())
+	if failure {
+		scenarioResult.setFailure()
+	}
+}
+
+func (executor *specExecutor) executeScenarioItems(scenarioResult *scenarioResult) {
+	failure := executor.executeItems(scenarioResult.protoScenario.GetScenarioItems())
+	if failure {
+		scenarioResult.setFailure()
+	}
 }
 
 func (executor *specExecutor) resolveItems(items []item) []*ProtoItem {
@@ -393,7 +403,7 @@ func addExecutionTimes(stepExecResult *ProtoStepExecutionResult, execResults ...
 		if currentScenarioExecTime == nil {
 			stepExecResult.ExecutionResult.ExecutionTime = proto.Int64(execResult.GetExecutionTime())
 		} else {
-			stepExecResult.ExecutionResult.ExecutionTime = proto.Int64(*currentScenarioExecTime+execResult.GetExecutionTime())
+			stepExecResult.ExecutionResult.ExecutionTime = proto.Int64(*currentScenarioExecTime + execResult.GetExecutionTime())
 		}
 	}
 }

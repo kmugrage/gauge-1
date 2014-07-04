@@ -135,6 +135,7 @@ func (s *MySuite) TestStepsWithParam(c *C) {
 	c.Assert(step.args[0].argType, Equals, static)
 	c.Assert(step.args[1].value, Equals, "id")
 	c.Assert(step.args[1].argType, Equals, dynamic)
+	c.Assert(step.args[1].name, Equals, "id")
 
 	escapedStep := spec.scenarios[0].steps[1]
 	c.Assert(escapedStep.value, Equals, "sample \\{static\\}")
@@ -622,8 +623,10 @@ func (s *MySuite) TestCreateStepFromConceptWithDynamicParameters(c *C) {
 	c.Assert(firstConcept.conceptSteps[0].value, Equals, "enter user {} and {}")
 	c.Assert(firstConcept.conceptSteps[0].args[0].argType, Equals, dynamic)
 	c.Assert(firstConcept.conceptSteps[0].args[0].value, Equals, "user-id")
+	c.Assert(firstConcept.conceptSteps[0].args[0].name, Equals, "user-id")
 	c.Assert(firstConcept.conceptSteps[0].args[1].argType, Equals, dynamic)
 	c.Assert(firstConcept.conceptSteps[0].args[1].value, Equals, "user-description")
+	c.Assert(firstConcept.conceptSteps[0].args[1].name, Equals, "user-description")
 	c.Assert(firstConcept.conceptSteps[1].value, Equals, "select {}")
 	c.Assert(firstConcept.conceptSteps[1].args[0].value, Equals, "finish")
 	c.Assert(firstConcept.conceptSteps[1].args[0].argType, Equals, static)
@@ -641,8 +644,10 @@ func (s *MySuite) TestCreateStepFromConceptWithDynamicParameters(c *C) {
 	c.Assert(secondConcept.conceptSteps[0].value, Equals, "enter user {} and {}")
 	c.Assert(secondConcept.conceptSteps[0].args[0].argType, Equals, dynamic)
 	c.Assert(secondConcept.conceptSteps[0].args[0].value, Equals, "user-id")
+	c.Assert(secondConcept.conceptSteps[0].args[0].name, Equals, "user-id")
 	c.Assert(secondConcept.conceptSteps[0].args[1].argType, Equals, dynamic)
 	c.Assert(secondConcept.conceptSteps[0].args[1].value, Equals, "user-description")
+	c.Assert(secondConcept.conceptSteps[0].args[1].name, Equals, "user-description")
 	c.Assert(secondConcept.conceptSteps[1].value, Equals, "select {}")
 	c.Assert(secondConcept.conceptSteps[1].args[0].value, Equals, "finish")
 	c.Assert(secondConcept.conceptSteps[1].args[0].argType, Equals, static)
@@ -733,19 +738,20 @@ func (s *MySuite) TestPopulateFragmentsForSimpleStep(c *C) {
 
 func (s *MySuite) TestPopulateFragmentsForStepWithParameters(c *C) {
 	arg1 := &stepArg{value: "first", argType: static}
-	arg2 := &stepArg{value: "second", argType: dynamic}
+	arg2 := &stepArg{value: "second", argType: dynamic, name: "second"}
 	argTable := new(table)
 	headers := []string{"header1", "header2"}
 	row1 := []string{"row1", "row2"}
 	argTable.addHeaders(headers)
 	argTable.addRowValues(row1)
-	arg3 := &stepArg{table: *argTable, argType: tableArg}
-	stepArgs := []*stepArg{arg1, arg2, arg3}
-	step := &step{value: "{} step with {}, {} works", args: stepArgs}
+	arg3 := &stepArg{argType: specialString, value: "text from file", name: "file:foo.txt"}
+	arg4 := &stepArg{table: *argTable, argType: tableArg}
+	stepArgs := []*stepArg{arg1, arg2, arg3, arg4}
+	step := &step{value: "{} step with {} and {}, {}", args: stepArgs}
 
 	step.populateFragments()
 
-	c.Assert(len(step.fragments), Equals, 6)
+	c.Assert(len(step.fragments), Equals, 7)
 	fragment1 := step.fragments[0]
 	c.Assert(fragment1.GetFragmentType(), Equals, Fragment_Parameter)
 	c.Assert(fragment1.GetParameter().GetValue(), Equals, "first")
@@ -761,13 +767,23 @@ func (s *MySuite) TestPopulateFragmentsForStepWithParameters(c *C) {
 	c.Assert(fragment3.GetParameter().GetParameterType(), Equals, Parameter_Dynamic)
 
 	fragment4 := step.fragments[3]
-	c.Assert(fragment4.GetText(), Equals, ", ")
+	c.Assert(fragment4.GetText(), Equals, " and ")
 	c.Assert(fragment4.GetFragmentType(), Equals, Fragment_Text)
 
 	fragment5 := step.fragments[4]
 	c.Assert(fragment5.GetFragmentType(), Equals, Fragment_Parameter)
-	c.Assert(fragment5.GetParameter().GetParameterType(), Equals, Parameter_Table)
-	protoTable := fragment5.GetParameter().GetTable()
+	c.Assert(fragment5.GetParameter().GetValue(), Equals, "text from file")
+	c.Assert(fragment5.GetParameter().GetParameterType(), Equals, Parameter_Special_String)
+	c.Assert(fragment5.GetParameter().GetName(), Equals, "file:foo.txt")
+
+	fragment6 := step.fragments[5]
+	c.Assert(fragment6.GetText(), Equals, ", ")
+	c.Assert(fragment6.GetFragmentType(), Equals, Fragment_Text)
+
+	fragment7 := step.fragments[6]
+	c.Assert(fragment7.GetFragmentType(), Equals, Fragment_Parameter)
+	c.Assert(fragment7.GetParameter().GetParameterType(), Equals, Parameter_Table)
+	protoTable := fragment7.GetParameter().GetTable()
 	c.Assert(protoTable.GetHeaders().GetCells(), DeepEquals, headers)
 	c.Assert(len(protoTable.GetRows()), Equals, 1)
 	c.Assert(protoTable.GetRows()[0].GetCells(), DeepEquals, row1)
