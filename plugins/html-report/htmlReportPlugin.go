@@ -89,14 +89,14 @@ func addDefaultPropertiesToProject() {
 type GaugeResultHandlerFn func(*SuiteExecutionResult)
 
 type GaugeListener struct {
-	connnection     net.Conn
+	connection     net.Conn
 	onResultHandler GaugeResultHandlerFn
 }
 
 func NewGaugeListener(host string, port string) (*GaugeListener, error) {
 	conn, err := net.Dial("tcp", fmt.Sprintf("%s:%s", host, port))
 	if err == nil {
-		return &GaugeListener{connnection: conn}, nil
+		return &GaugeListener{connection: conn}, nil
 	} else {
 		return nil, err
 	}
@@ -110,7 +110,7 @@ func (gaugeListener *GaugeListener) Start() {
 	buffer := new(bytes.Buffer)
 	data := make([]byte, 8192)
 	for {
-		n, err := gaugeListener.connnection.Read(data)
+		n, err := gaugeListener.connection.Read(data)
 		if err != nil {
 			if err == io.EOF {
 				return
@@ -128,7 +128,7 @@ func (gaugeListener *GaugeListener) Start() {
 				if *message.MessageType == Message_SuiteExecutionResult {
 					result := message.GetSuiteExecutionResult()
 					gaugeListener.onResultHandler(result)
-					gaugeListener.connnection.Close()
+					gaugeListener.connection.Close()
 					return
 				}
 				buffer.Reset()
