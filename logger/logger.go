@@ -45,6 +45,7 @@ type MyLogger interface {
 	StepStart(string)
 	StepEnd(bool)
 	writeSysoutBuffer(string)
+	Error(string, ...interface{})
 }
 
 var currentLogger MyLogger
